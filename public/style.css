@@ -1,61 +1,61 @@
 /* Root Variables for Theme Support */
 :root {
-    --bg-primary: #f8f9fa;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f8f9fa;
-    --text-primary: #333333;
-    --text-secondary: #6c757d;
-    --text-muted: #495057;
-    --border-color: #e9ecef;
-    --border-strong: #ced4da;
-    --accent-primary: #007bff;
-    --accent-success: #28a745;
-    --accent-warning: #ffc107;
-    --accent-danger: #dc3545;
-    --accent-info: #17a2b8;
-    --shadow-light: rgba(0, 0, 0, 0.1);
-    --shadow-medium: rgba(0, 0, 0, 0.15);
-    --gradient-header: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-primary: #faf8f5;
+    --bg-secondary: #f5f2ee;
+    --bg-tertiary: #ede8e0;
+    --text-primary: #3c3630;
+    --text-secondary: #6b6157;
+    --text-muted: #5a5048;
+    --border-color: #e0d9d1;
+    --border-strong: #c7beb3;
+    --accent-primary: #8b7355;
+    --accent-success: #7a8471;
+    --accent-warning: #c49660;
+    --accent-danger: #b85c5c;
+    --accent-info: #6b8e8a;
+    --shadow-light: rgba(60, 54, 48, 0.1);
+    --shadow-medium: rgba(60, 54, 48, 0.15);
+    --gradient-header: linear-gradient(135deg, #a5936b 0%, #8b7355 100%);
 }
 
 /* Dark Theme Variables */
 .dark-theme {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2d2d2d;
-    --bg-tertiary: #242424;
-    --text-primary: #ffffff;
-    --text-secondary: #b0b0b0;
-    --text-muted: #d0d0d0;
-    --border-color: #404040;
-    --border-strong: #555555;
-    --accent-primary: #0d6efd;
-    --accent-success: #198754;
-    --accent-warning: #fd7e14;
-    --accent-danger: #dc3545;
-    --accent-info: #20c997;
+    --bg-primary: #2b251f;
+    --bg-secondary: #3a342b;
+    --bg-tertiary: #332d26;
+    --text-primary: #f0ede8;
+    --text-secondary: #c7beb3;
+    --text-muted: #d4cbc0;
+    --border-color: #4a4136;
+    --border-strong: #5c5144;
+    --accent-primary: #a5936b;
+    --accent-success: #7a8471;
+    --accent-warning: #c49660;
+    --accent-danger: #b85c5c;
+    --accent-info: #6b8e8a;
     --shadow-light: rgba(0, 0, 0, 0.3);
     --shadow-medium: rgba(0, 0, 0, 0.4);
-    --gradient-header: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+    --gradient-header: linear-gradient(135deg, #6b5d47 0%, #4a4136 100%);
 }
 
 /* Light Theme Variables (explicit for system preference override) */
 .light-theme {
-    --bg-primary: #f8f9fa;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f8f9fa;
-    --text-primary: #333333;
-    --text-secondary: #6c757d;
-    --text-muted: #495057;
-    --border-color: #e9ecef;
-    --border-strong: #ced4da;
-    --accent-primary: #007bff;
-    --accent-success: #28a745;
-    --accent-warning: #ffc107;
-    --accent-danger: #dc3545;
-    --accent-info: #17a2b8;
-    --shadow-light: rgba(0, 0, 0, 0.1);
-    --shadow-medium: rgba(0, 0, 0, 0.15);
-    --gradient-header: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-primary: #faf8f5;
+    --bg-secondary: #f5f2ee;
+    --bg-tertiary: #ede8e0;
+    --text-primary: #3c3630;
+    --text-secondary: #6b6157;
+    --text-muted: #5a5048;
+    --border-color: #e0d9d1;
+    --border-strong: #c7beb3;
+    --accent-primary: #8b7355;
+    --accent-success: #7a8471;
+    --accent-warning: #c49660;
+    --accent-danger: #b85c5c;
+    --accent-info: #6b8e8a;
+    --shadow-light: rgba(60, 54, 48, 0.1);
+    --shadow-medium: rgba(60, 54, 48, 0.15);
+    --gradient-header: linear-gradient(135deg, #a5936b 0%, #8b7355 100%);
 }
 
 * {
@@ -530,13 +530,13 @@ input[type="text"]:focus, textarea:focus {
 }
 
 .add-to-grocery-btn {
-    background-color: var(--accent-success);
-    color: white;
+    background-color: var(--accent-warning);
+    color: var(--text-primary);
     flex: 1;
 }
 
 .add-to-grocery-btn:hover {
-    background-color: #218838;
+    background-color: #b8804a;
 }
 
 .edit-recipe-btn {
