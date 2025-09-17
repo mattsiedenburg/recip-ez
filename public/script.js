@@ -9,8 +9,10 @@ const showAddRecipeBtn = document.getElementById('showAddRecipeBtn');
 const showGroceryListBtn = document.getElementById('showGroceryListBtn');
 
 const addRecipeForm = document.getElementById('addRecipeForm');
+const recipeTitle = document.getElementById('recipeTitle');
 const ingredientsList = document.getElementById('ingredientsList');
 const addIngredientBtn = document.getElementById('addIngredientBtn');
+const cancelAddRecipeBtn = document.getElementById('cancelAddRecipeBtn');
 
 const editRecipeForm = document.getElementById('editRecipeForm');
 const editIngredientsList = document.getElementById('editIngredientsList');
@@ -95,6 +97,7 @@ function setupEventListeners() {
     // Recipe form
     addRecipeForm.addEventListener('submit', handleAddRecipe);
     addIngredientBtn.addEventListener('click', addIngredientInput);
+    cancelAddRecipeBtn.addEventListener('click', () => showSection('recipes'));
 
     // Edit recipe form
     editRecipeForm.addEventListener('submit', handleEditRecipe);
@@ -133,8 +136,14 @@ function setupEventListeners() {
     
     // Close modal with ESC key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && recipeModal.style.display === 'block') {
-            closeModal();
+        if (e.key === 'Escape') {
+            if (recipeModal.style.display === 'block') {
+                closeModal();
+            } else if (addRecipeSection.classList.contains('active')) {
+                showSection('recipes');
+            } else if (editRecipeSection.classList.contains('active')) {
+                showSection('recipes');
+            }
         }
     });
 
@@ -172,10 +181,14 @@ function showSection(section) {
             showRecipesBtn.classList.add('active');
             clearSearch(); // Reset search when returning to recipes
             loadRecipes();
+            // Focus the search input for immediate typing
+            setTimeout(() => searchInput.focus(), 100);
             break;
         case 'addRecipe':
             addRecipeSection.classList.add('active');
             showAddRecipeBtn.classList.add('active');
+            // Focus the recipe title field for immediate typing
+            setTimeout(() => recipeTitle.focus(), 100);
             break;
         case 'editRecipe':
             editRecipeSection.classList.add('active');
@@ -185,6 +198,8 @@ function showSection(section) {
             groceryListSection.classList.add('active');
             showGroceryListBtn.classList.add('active');
             loadGroceryList();
+            // Focus the grocery search field for immediate typing
+            setTimeout(() => grocerySearchInput.focus(), 100);
             break;
     }
 }
