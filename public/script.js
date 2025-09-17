@@ -52,6 +52,32 @@ let currentView = 'grid'; // 'grid' or 'list'
 // API Base URL
 const API_BASE = '/api';
 
+// Notification system
+function showNotification(message, type = 'success') {
+    // Remove any existing notifications
+    const existingNotification = document.querySelector('.notification');
+    if (existingNotification) {
+        existingNotification.remove();
+    }
+
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Trigger animation
+    setTimeout(() => notification.classList.add('show'), 10);
+    
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
@@ -561,16 +587,16 @@ async function addIngredientsToGroceryList(recipeId) {
         });
 
         if (response.ok) {
-            alert(`Ingredients from "${recipe.title}" added to grocery list!`);
+            showNotification(`Ingredients from "${recipe.title}" added to grocery list!`, 'success');
             if (groceryListSection.classList.contains('active')) {
                 loadGroceryList();
             }
         } else {
-            alert('Error adding ingredients to grocery list. Please try again.');
+            showNotification('Error adding ingredients to grocery list. Please try again.', 'error');
         }
     } catch (error) {
         console.error('Error adding ingredients to grocery list:', error);
-        alert('Error adding ingredients to grocery list. Please try again.');
+        showNotification('Error adding ingredients to grocery list. Please try again.', 'error');
     }
 }
 
