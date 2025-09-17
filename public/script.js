@@ -67,7 +67,7 @@ function setupEventListeners() {
 
     // Edit recipe form
     editRecipeForm.addEventListener('submit', handleEditRecipe);
-    addEditIngredientBtn.addEventListener('click', addEditIngredientInput);
+    addEditIngredientBtn.addEventListener('click', () => addEditIngredientInput());
     cancelEditBtn.addEventListener('click', () => showSection('recipes'));
 
     // Grocery list
