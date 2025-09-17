@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Spaghetti",
+    "amount": "",
+    "unit": "400grams",
+    "checked": true,
+    "addedAt": "2025-09-17T02:16:26.072Z"
+  },
+  {
+    "id": 2,
+    "name": "Eggs",
+    "amount": "",
+    "unit": "Eggs3pieces",
+    "checked": false,
+    "addedAt": "2025-09-17T02:16:26.072Z"
+  }
+]

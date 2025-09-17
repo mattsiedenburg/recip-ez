@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Spaghetti Carbonara",
+    "ingredients": [
+      {
+        "name": "Spaghetti",
+        "amount": "",
+        "unit": "400grams"
+      },
+      {
+        "name": "Eggs",
+        "amount": "",
+        "unit": "Eggs3pieces"
+      }
+    ],
+    "instructions": "1. Cook spaghetti according to package directions until al dente.\n2. Beat eggs in a large bowl, season with salt and pepper.\n3. Drain pasta and immediately add to the egg mixture, tossing quickly.\n4. Serve immediately with grated parmesan cheese.",
+    "createdAt": "2025-09-17T02:16:09.130Z"
+  }
+]
