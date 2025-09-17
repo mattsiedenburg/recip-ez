@@ -139,7 +139,7 @@ input[type="text"]:focus, textarea:focus {
     font-size: 12px;
 }
 
-#addIngredientBtn {
+#addIngredientBtn, #addEditIngredientBtn {
     background-color: #28a745;
     color: white;
     border: none;
@@ -148,6 +148,11 @@ input[type="text"]:focus, textarea:focus {
     cursor: pointer;
     font-size: 14px;
     margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+#addIngredientBtn:hover, #addEditIngredientBtn:hover {
+    background-color: #218838;
 }
 
 .submit-btn {
@@ -160,6 +165,10 @@ input[type="text"]:focus, textarea:focus {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 20px;
+}
+
+.form-actions .submit-btn {
+    margin-top: 0;
 }
 
 .submit-btn:hover {
