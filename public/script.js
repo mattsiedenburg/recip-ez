@@ -1,48 +1,150 @@
-// DOM elements
-const recipesSection = document.getElementById('recipesSection');
-const addRecipeSection = document.getElementById('addRecipeSection');
-const editRecipeSection = document.getElementById('editRecipeSection');
-const groceryListSection = document.getElementById('groceryListSection');
+// DOM Elements Cache - Optimized with single query
+const elements = {
+    // Sections
+    recipesSection: document.getElementById('recipesSection'),
+    addRecipeSection: document.getElementById('addRecipeSection'),
+    editRecipeSection: document.getElementById('editRecipeSection'),
+    groceryListSection: document.getElementById('groceryListSection'),
+    
+    // Navigation
+    showRecipesBtn: document.getElementById('showRecipesBtn'),
+    showAddRecipeBtn: document.getElementById('showAddRecipeBtn'),
+    showGroceryListBtn: document.getElementById('showGroceryListBtn'),
+    
+    // Recipe Forms
+    addRecipeForm: document.getElementById('addRecipeForm'),
+    recipeTitle: document.getElementById('recipeTitle'),
+    ingredientsList: document.getElementById('ingredientsList'),
+    addIngredientBtn: document.getElementById('addIngredientBtn'),
+    cancelAddRecipeBtn: document.getElementById('cancelAddRecipeBtn'),
+    
+    editRecipeForm: document.getElementById('editRecipeForm'),
+    editIngredientsList: document.getElementById('editIngredientsList'),
+    addEditIngredientBtn: document.getElementById('addEditIngredientBtn'),
+    cancelEditBtn: document.getElementById('cancelEditBtn'),
+    
+    // Display
+    recipesList: document.getElementById('recipesList'),
+    recipesGrid: document.getElementById('recipesGrid'),
+    
+    // Grocery List
+    groceryList: document.getElementById('groceryList'),
+    clearGroceryListBtn: document.getElementById('clearGroceryListBtn'),
+    removeCheckedBtn: document.getElementById('removeCheckedBtn'),
+    copyGroceryListBtn: document.getElementById('copyGroceryListBtn'),
+    addCustomItemBtn: document.getElementById('addCustomItemBtn'),
+    
+    // Custom Item Form
+    addCustomItemForm: document.getElementById('addCustomItemForm'),
+    customItemName: document.getElementById('customItemName'),
+    customItemAmount: document.getElementById('customItemAmount'),
+    customItemUnit: document.getElementById('customItemUnit'),
+    saveCustomItemBtn: document.getElementById('saveCustomItemBtn'),
+    cancelCustomItemBtn: document.getElementById('cancelCustomItemBtn'),
+    
+    // Search
+    searchInput: document.getElementById('searchInput'),
+    clearSearchBtn: document.getElementById('clearSearchBtn'),
+    grocerySearchInput: document.getElementById('grocerySearchInput'),
+    
+    // View Toggle
+    gridViewBtn: document.getElementById('gridViewBtn'),
+    listViewBtn: document.getElementById('listViewBtn'),
+    
+    // Modal
+    recipeModal: document.getElementById('recipeModal'),
+    recipeDetails: document.getElementById('recipeDetails')
+};
 
-const showRecipesBtn = document.getElementById('showRecipesBtn');
-const showAddRecipeBtn = document.getElementById('showAddRecipeBtn');
-const showGroceryListBtn = document.getElementById('showGroceryListBtn');
+// Utility Functions - Centralized API and DOM operations
+const api = {
+    async request(endpoint, options = {}) {
+        try {
+            const response = await fetch(`${API_BASE}${endpoint}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`API request failed for ${endpoint}:`, error);
+            throw error;
+        }
+    },
+    
+    // Recipe API methods
+    recipes: {
+        getAll: () => api.request('/recipes'),
+        getById: (id) => api.request(`/recipes/${id}`),
+        create: (data) => api.request('/recipes', { method: 'POST', body: JSON.stringify(data) }),
+        update: (id, data) => api.request(`/recipes/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+        delete: (id) => api.request(`/recipes/${id}`, { method: 'DELETE' })
+    },
+    
+    // Grocery List API methods
+    groceryList: {
+        get: () => api.request('/grocery-list'),
+        addIngredients: (ingredients) => api.request('/grocery-list', { 
+            method: 'POST', 
+            body: JSON.stringify({ ingredients }) 
+        }),
+        toggleItem: (id) => api.request(`/grocery-list/${id}/toggle`, { method: 'PUT' }),
+        removeItem: (id) => api.request(`/grocery-list/${id}`, { method: 'DELETE' }),
+        removeChecked: () => api.request('/grocery-list/checked', { method: 'DELETE' }),
+        clear: () => api.request('/grocery-list', { method: 'DELETE' })
+    }
+};
 
-const addRecipeForm = document.getElementById('addRecipeForm');
-const recipeTitle = document.getElementById('recipeTitle');
-const ingredientsList = document.getElementById('ingredientsList');
-const addIngredientBtn = document.getElementById('addIngredientBtn');
-const cancelAddRecipeBtn = document.getElementById('cancelAddRecipeBtn');
-
-const editRecipeForm = document.getElementById('editRecipeForm');
-const editIngredientsList = document.getElementById('editIngredientsList');
-const addEditIngredientBtn = document.getElementById('addEditIngredientBtn');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
-
-const recipesList = document.getElementById('recipesList');
-const groceryList = document.getElementById('groceryList');
-const clearGroceryListBtn = document.getElementById('clearGroceryListBtn');
-const removeCheckedBtn = document.getElementById('removeCheckedBtn');
-const copyGroceryListBtn = document.getElementById('copyGroceryListBtn');
-const addCustomItemBtn = document.getElementById('addCustomItemBtn');
-
-const addCustomItemForm = document.getElementById('addCustomItemForm');
-const customItemName = document.getElementById('customItemName');
-const customItemAmount = document.getElementById('customItemAmount');
-const customItemUnit = document.getElementById('customItemUnit');
-const saveCustomItemBtn = document.getElementById('saveCustomItemBtn');
-const cancelCustomItemBtn = document.getElementById('cancelCustomItemBtn');
-
-const searchInput = document.getElementById('searchInput');
-const clearSearchBtn = document.getElementById('clearSearchBtn');
-const grocerySearchInput = document.getElementById('grocerySearchInput');
-
-const gridViewBtn = document.getElementById('gridViewBtn');
-const listViewBtn = document.getElementById('listViewBtn');
-const recipesGrid = document.getElementById('recipesGrid');
-
-const recipeModal = document.getElementById('recipeModal');
-const recipeDetails = document.getElementById('recipeDetails');
+const ui = {
+    // Form validation
+    validateRecipeForm(title, instructions, ingredients) {
+        if (!title.trim() || !instructions.trim() || ingredients.length === 0) {
+            showNotification('Please fill in all required fields and add at least one ingredient.', 'error');
+            return false;
+        }
+        return true;
+    },
+    
+    // Ingredient collection helper
+    collectIngredients(container) {
+        const ingredientItems = container.querySelectorAll('.ingredient-item');
+        const ingredients = [];
+        
+        ingredientItems.forEach(item => {
+            const name = item.querySelector('.ingredient-name').value.trim();
+            const amount = item.querySelector('.ingredient-amount').value.trim();
+            const unit = item.querySelector('.ingredient-unit').value.trim();
+            
+            if (name) {
+                ingredients.push({ name, amount, unit });
+            }
+        });
+        
+        return ingredients;
+    },
+    
+    // Create ingredient input HTML
+    createIngredientInput(ingredient = null) {
+        return `
+            <input type="text" placeholder="Ingredient name" class="ingredient-name" required value="${ingredient ? ingredient.name : ''}">
+            <input type="text" placeholder="Amount" class="ingredient-amount" value="${ingredient ? ingredient.amount : ''}">
+            <input type="text" placeholder="Unit" class="ingredient-unit" value="${ingredient ? ingredient.unit : ''}">
+            <button type="button" class="remove-ingredient">✖</button>
+        `;
+    },
+    
+    // Focus management
+    focusElement(element, delay = 100) {
+        setTimeout(() => element.focus(), delay);
+    }
+};
 
 // State
 let recipes = [];
@@ -53,8 +155,6 @@ let currentView = 'grid'; // 'grid' or 'list'
 
 // API Base URL
 const API_BASE = '/api';
-
-// Notification system
 function showNotification(message, type = 'success') {
     // Remove any existing notifications
     const existingNotification = document.querySelector('.notification');
@@ -88,169 +188,181 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Event Listeners
+// Event Listeners - Optimized with event delegation where possible
 function setupEventListeners() {
     // Navigation
-    showRecipesBtn.addEventListener('click', () => showSection('recipes'));
-    showAddRecipeBtn.addEventListener('click', () => showSection('addRecipe'));
-    showGroceryListBtn.addEventListener('click', () => showSection('groceryList'));
+    elements.showRecipesBtn.addEventListener('click', () => showSection('recipes'));
+    elements.showAddRecipeBtn.addEventListener('click', () => showSection('addRecipe'));
+    elements.showGroceryListBtn.addEventListener('click', () => showSection('groceryList'));
 
-    // Recipe form
-    addRecipeForm.addEventListener('submit', handleAddRecipe);
-    addIngredientBtn.addEventListener('click', addIngredientInput);
-    cancelAddRecipeBtn.addEventListener('click', () => showSection('recipes'));
+    // Recipe forms
+    elements.addRecipeForm.addEventListener('submit', handleAddRecipe);
+    elements.addIngredientBtn.addEventListener('click', addIngredientInput);
+    elements.cancelAddRecipeBtn.addEventListener('click', () => showSection('recipes'));
 
     // Edit recipe form
-    editRecipeForm.addEventListener('submit', handleEditRecipe);
-    addEditIngredientBtn.addEventListener('click', () => addEditIngredientInput(null, true));
-    cancelEditBtn.addEventListener('click', () => showSection('recipes'));
+    elements.editRecipeForm.addEventListener('submit', handleEditRecipe);
+    elements.addEditIngredientBtn.addEventListener('click', () => addEditIngredientInput(null, true));
+    elements.cancelEditBtn.addEventListener('click', () => showSection('recipes'));
 
     // Grocery list
-    clearGroceryListBtn.addEventListener('click', clearGroceryList);
-    removeCheckedBtn.addEventListener('click', removeCheckedItems);
-    copyGroceryListBtn.addEventListener('click', copyGroceryListToClipboard);
-    addCustomItemBtn.addEventListener('click', showAddCustomItemForm);
+    elements.clearGroceryListBtn.addEventListener('click', clearGroceryList);
+    elements.removeCheckedBtn.addEventListener('click', removeCheckedItems);
+    elements.copyGroceryListBtn.addEventListener('click', copyGroceryListToClipboard);
+    elements.addCustomItemBtn.addEventListener('click', showAddCustomItemForm);
     
     // Custom item form
-    saveCustomItemBtn.addEventListener('click', saveCustomItem);
-    cancelCustomItemBtn.addEventListener('click', hideAddCustomItemForm);
-    customItemName.addEventListener('keypress', (e) => {
+    elements.saveCustomItemBtn.addEventListener('click', saveCustomItem);
+    elements.cancelCustomItemBtn.addEventListener('click', hideAddCustomItemForm);
+    elements.customItemName.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') saveCustomItem();
     });
 
     // Search functionality
-    searchInput.addEventListener('input', handleSearch);
-    clearSearchBtn.addEventListener('click', clearSearch);
-    grocerySearchInput.addEventListener('input', handleGrocerySearch);
+    elements.searchInput.addEventListener('input', handleSearch);
+    elements.clearSearchBtn.addEventListener('click', clearSearch);
+    elements.grocerySearchInput.addEventListener('input', handleGrocerySearch);
 
     // View toggle functionality
-    gridViewBtn.addEventListener('click', () => setView('grid'));
-    listViewBtn.addEventListener('click', () => setView('list'));
+    elements.gridViewBtn.addEventListener('click', () => setView('grid'));
+    elements.listViewBtn.addEventListener('click', () => setView('list'));
 
     // Modal
     document.querySelector('.close').addEventListener('click', closeModal);
+    
+    // Global event listeners with delegation
+    setupGlobalEventListeners();
+}
+
+function setupGlobalEventListeners() {
+    // Window click for modal
     window.addEventListener('click', (e) => {
-        if (e.target === recipeModal) {
+        if (e.target === elements.recipeModal) {
             closeModal();
         }
     });
     
-    // Close modal with ESC key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            if (recipeModal.style.display === 'block') {
-                closeModal();
-            } else if (!addCustomItemForm.classList.contains('hidden')) {
-                hideAddCustomItemForm();
-            } else if (addRecipeSection.classList.contains('active')) {
-                showSection('recipes');
-            } else if (editRecipeSection.classList.contains('active')) {
-                showSection('recipes');
-            }
-        }
-    });
+    // Global keyboard shortcuts
+    document.addEventListener('keydown', handleGlobalKeydown);
 
-    // Remove ingredient functionality
-    ingredientsList.addEventListener('click', (e) => {
-        if (e.target.classList.contains('remove-ingredient')) {
-            const ingredientItem = e.target.closest('.ingredient-item');
-            if (ingredientsList.children.length > 1) {
-                ingredientItem.remove();
+    // Event delegation for ingredient removal (both forms)
+    [elements.ingredientsList, elements.editIngredientsList].forEach(container => {
+        container.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove-ingredient')) {
+                const ingredientItem = e.target.closest('.ingredient-item');
+                if (container.children.length > 1) {
+                    ingredientItem.remove();
+                }
             }
-        }
-    });
-
-    // Remove ingredient functionality for edit form
-    editIngredientsList.addEventListener('click', (e) => {
-        if (e.target.classList.contains('remove-ingredient')) {
-            const ingredientItem = e.target.closest('.ingredient-item');
-            if (editIngredientsList.children.length > 1) {
-                ingredientItem.remove();
-            }
-        }
+        });
     });
 }
 
-// Navigation
-function showSection(section) {
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-
-    // Show selected section
-    switch (section) {
-        case 'recipes':
-            recipesSection.classList.add('active');
-            showRecipesBtn.classList.add('active');
-            clearSearch(); // Reset search when returning to recipes
-            loadRecipes();
-            // Focus the search input for immediate typing
-            setTimeout(() => searchInput.focus(), 100);
-            break;
-        case 'addRecipe':
-            addRecipeSection.classList.add('active');
-            showAddRecipeBtn.classList.add('active');
-            // Focus the recipe title field for immediate typing
-            setTimeout(() => recipeTitle.focus(), 100);
-            break;
-        case 'editRecipe':
-            editRecipeSection.classList.add('active');
-            // Don't highlight any nav button for edit mode
-            break;
-        case 'groceryList':
-            groceryListSection.classList.add('active');
-            showGroceryListBtn.classList.add('active');
-            loadGroceryList();
-            // Focus the grocery search field for immediate typing
-            setTimeout(() => grocerySearchInput.focus(), 100);
-            break;
+function handleGlobalKeydown(e) {
+    if (e.key === 'Escape') {
+        if (elements.recipeModal.style.display === 'block') {
+            closeModal();
+        } else if (!elements.addCustomItemForm.classList.contains('hidden')) {
+            hideAddCustomItemForm();
+        } else if (elements.addRecipeSection.classList.contains('active')) {
+            showSection('recipes');
+        } else if (elements.editRecipeSection.classList.contains('active')) {
+            showSection('recipes');
+        }
     }
 }
 
-// Recipe Management
+// Navigation - Optimized section management
+function showSection(section) {
+    // Hide all sections and nav buttons
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+    const sectionConfig = {
+        recipes: {
+            element: elements.recipesSection,
+            button: elements.showRecipesBtn,
+            onShow: () => {
+                clearSearch();
+                loadRecipes();
+                ui.focusElement(elements.searchInput);
+            }
+        },
+        addRecipe: {
+            element: elements.addRecipeSection,
+            button: elements.showAddRecipeBtn,
+            onShow: () => ui.focusElement(elements.recipeTitle)
+        },
+        editRecipe: {
+            element: elements.editRecipeSection,
+            button: null // No nav button for edit mode
+        },
+        groceryList: {
+            element: elements.groceryListSection,
+            button: elements.showGroceryListBtn,
+            onShow: () => {
+                loadGroceryList();
+                ui.focusElement(elements.grocerySearchInput);
+            }
+        }
+    };
+
+    const config = sectionConfig[section];
+    if (config) {
+        config.element.classList.add('active');
+        if (config.button) {
+            config.button.classList.add('active');
+        }
+        if (config.onShow) {
+            config.onShow();
+        }
+    }
+}
+
+// Recipe Management - Optimized with centralized API calls
 async function loadRecipes() {
     try {
-        const response = await fetch(`${API_BASE}/recipes`);
-        recipes = await response.json();
+        recipes = await api.recipes.getAll();
         filteredRecipes = [...recipes];
         displayRecipes();
     } catch (error) {
-        console.error('Error loading recipes:', error);
+        showNotification('Error loading recipes. Please try again.', 'error');
     }
 }
 
 function displayRecipes() {
-    const recipesToShow = filteredRecipes.length > 0 || searchInput.value.trim() ? filteredRecipes : recipes;
+    const recipesToShow = filteredRecipes.length > 0 || elements.searchInput.value.trim() ? filteredRecipes : recipes;
     
     if (recipes.length === 0) {
-        recipesGrid.innerHTML = `
+        elements.recipesGrid.innerHTML = `
             <div class="empty-state">
                 <h3>No recipes yet!</h3>
                 <p>Add your first recipe to get started.</p>
             </div>
         `;
-        recipesList.innerHTML = '';
+        elements.recipesList.innerHTML = '';
         return;
     }
 
-    if (recipesToShow.length === 0 && searchInput.value.trim()) {
-        recipesGrid.innerHTML = `
+    if (recipesToShow.length === 0 && elements.searchInput.value.trim()) {
+        elements.recipesGrid.innerHTML = `
             <div class="empty-state">
                 <h3>No recipes found</h3>
                 <p>No recipes match your search criteria. Try a different search term.</p>
             </div>
         `;
-        recipesList.innerHTML = '';
+        elements.recipesList.innerHTML = '';
         return;
     }
 
     // Show search results info
     let searchInfo = '';
-    if (searchInput.value.trim()) {
+    if (elements.searchInput.value.trim()) {
         searchInfo = `<div class="search-results-info">Showing ${recipesToShow.length} of ${recipes.length} recipes</div>`;
     }
 
     if (currentView === 'grid') {
-        recipesGrid.innerHTML = searchInfo + recipesToShow.map(recipe => `
+        elements.recipesGrid.innerHTML = searchInfo + recipesToShow.map(recipe => `
             <div class="recipe-card" onclick="showRecipeDetails(${recipe.id})">
                 <h3>${recipe.title}</h3>
                 <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
@@ -261,9 +373,9 @@ function displayRecipes() {
                 </div>
             </div>
         `).join('');
-        recipesList.innerHTML = '';
+        elements.recipesList.innerHTML = '';
     } else {
-        recipesList.innerHTML = searchInfo + recipesToShow.map(recipe => `
+        elements.recipesList.innerHTML = searchInfo + recipesToShow.map(recipe => `
             <div class="recipe-list-item" onclick="showRecipeDetails(${recipe.id})">
                 <div class="recipe-list-info">
                     <h3 class="recipe-list-name">${recipe.title}</h3>
@@ -276,7 +388,7 @@ function displayRecipes() {
                 </div>
             </div>
         `).join('');
-        recipesGrid.innerHTML = '';
+        elements.recipesGrid.innerHTML = '';
     }
 }
 
@@ -285,15 +397,15 @@ function setView(view) {
     
     // Update button states
     if (view === 'grid') {
-        gridViewBtn.classList.add('active');
-        listViewBtn.classList.remove('active');
-        recipesGrid.classList.add('active');
-        recipesList.classList.remove('active');
+        elements.gridViewBtn.classList.add('active');
+        elements.listViewBtn.classList.remove('active');
+        elements.recipesGrid.classList.add('active');
+        elements.recipesList.classList.remove('active');
     } else {
-        gridViewBtn.classList.remove('active');
-        listViewBtn.classList.add('active');
-        recipesGrid.classList.remove('active');
-        recipesList.classList.add('active');
+        elements.gridViewBtn.classList.remove('active');
+        elements.listViewBtn.classList.add('active');
+        elements.recipesGrid.classList.remove('active');
+        elements.recipesList.classList.add('active');
     }
     
     // Re-render recipes in the new view
@@ -348,43 +460,31 @@ async function handleAddRecipe(e) {
     }
 }
 
+// Ingredient Management - Consolidated functions
 function addIngredientInput() {
     const ingredientItem = document.createElement('div');
     ingredientItem.className = 'ingredient-item';
-    ingredientItem.innerHTML = `
-        <input type="text" placeholder="Ingredient name" class="ingredient-name" required>
-        <input type="text" placeholder="Amount" class="ingredient-amount">
-        <input type="text" placeholder="Unit" class="ingredient-unit">
-        <button type="button" class="remove-ingredient">✖</button>
-    `;
-    ingredientsList.appendChild(ingredientItem);
+    ingredientItem.innerHTML = ui.createIngredientInput();
+    elements.ingredientsList.appendChild(ingredientItem);
 }
 
 function addEditIngredientInput(ingredient = null, autoFocus = false) {
     const ingredientItem = document.createElement('div');
     ingredientItem.className = 'ingredient-item';
-    ingredientItem.innerHTML = `
-        <input type="text" placeholder="Ingredient name" class="ingredient-name" required value="${ingredient ? ingredient.name : ''}">
-        <input type="text" placeholder="Amount" class="ingredient-amount" value="${ingredient ? ingredient.amount : ''}">
-        <input type="text" placeholder="Unit" class="ingredient-unit" value="${ingredient ? ingredient.unit : ''}">
-        <button type="button" class="remove-ingredient">✖</button>
-    `;
-    editIngredientsList.appendChild(ingredientItem);
+    ingredientItem.innerHTML = ui.createIngredientInput(ingredient);
+    elements.editIngredientsList.appendChild(ingredientItem);
     
     // Only focus if explicitly requested (when user clicks add ingredient)
     if (autoFocus) {
         const nameField = ingredientItem.querySelector('.ingredient-name');
-        setTimeout(() => nameField.focus(), 10);
+        ui.focusElement(nameField, 10);
     }
 }
 
 function resetIngredientsList() {
-    ingredientsList.innerHTML = `
+    elements.ingredientsList.innerHTML = `
         <div class="ingredient-item">
-            <input type="text" placeholder="Ingredient name" class="ingredient-name" required>
-            <input type="text" placeholder="Amount" class="ingredient-amount">
-            <input type="text" placeholder="Unit" class="ingredient-unit">
-            <button type="button" class="remove-ingredient">✖</button>
+            ${ui.createIngredientInput()}
         </div>
     `;
 }
@@ -533,14 +633,13 @@ function closeModal() {
     recipeModal.style.display = 'none';
 }
 
-// Grocery List Management
+// Grocery List Management - Optimized with centralized API calls
 async function loadGroceryList() {
     try {
-        const response = await fetch(`${API_BASE}/grocery-list`);
-        groceryItems = await response.json();
+        groceryItems = await api.groceryList.get();
         displayGroceryList();
     } catch (error) {
-        console.error('Error loading grocery list:', error);
+        showNotification('Error loading grocery list. Please try again.', 'error');
     }
 }
 
@@ -555,30 +654,30 @@ function displayGroceryList(searchTerm = '') {
     }
     
     if (groceryItems.length === 0) {
-        groceryList.innerHTML = `
+        elements.groceryList.innerHTML = `
             <div class="empty-state">
                 <h3>Your grocery list is empty!</h3>
                 <p>Add ingredients from your recipes to build your shopping list.</p>
             </div>
         `;
-        removeCheckedBtn.disabled = true;
-        copyGroceryListBtn.disabled = true;
+        elements.removeCheckedBtn.disabled = true;
+        elements.copyGroceryListBtn.disabled = true;
         return;
     }
 
     if (itemsToDisplay.length === 0 && searchTerm) {
-        groceryList.innerHTML = `
+        elements.groceryList.innerHTML = `
             <div class="empty-state">
                 <h3>No items found</h3>
                 <p>No grocery items match your search for "${searchTerm}".</p>
             </div>
         `;
-        removeCheckedBtn.disabled = true;
-        copyGroceryListBtn.disabled = true;
+        elements.removeCheckedBtn.disabled = true;
+        elements.copyGroceryListBtn.disabled = true;
         return;
     }
 
-    groceryList.innerHTML = itemsToDisplay.map(item => `
+    elements.groceryList.innerHTML = itemsToDisplay.map(item => `
         <div class="grocery-item ${item.checked ? 'checked' : ''}">
             <input type="checkbox" ${item.checked ? 'checked' : ''} 
                    onchange="toggleGroceryItem(${item.id})">
@@ -592,8 +691,8 @@ function displayGroceryList(searchTerm = '') {
 
     // Update button states based on all items, not just filtered ones
     const hasCheckedItems = groceryItems.some(item => item.checked);
-    removeCheckedBtn.disabled = !hasCheckedItems;
-    copyGroceryListBtn.disabled = false;
+    elements.removeCheckedBtn.disabled = !hasCheckedItems;
+    elements.copyGroceryListBtn.disabled = false;
 }
 
 async function addIngredientsToGroceryList(recipeId) {
@@ -673,19 +772,7 @@ async function clearGroceryList() {
     }
 }
 
-async function toggleGroceryItem(itemId) {
-    try {
-        const response = await fetch(`${API_BASE}/grocery-list/${itemId}/toggle`, {
-            method: 'PUT',
-        });
 
-        if (response.ok) {
-            loadGroceryList();
-        }
-    } catch (error) {
-        console.error('Error toggling grocery item:', error);
-    }
-}
 
 async function removeCheckedItems() {
     const checkedItems = groceryItems.filter(item => item.checked);
@@ -711,32 +798,24 @@ async function removeCheckedItems() {
     }
 }
 
-// Search functionality
+// Search functionality - Optimized
 function handleSearch() {
-    const searchTerm = searchInput.value.trim().toLowerCase();
+    const searchTerm = elements.searchInput.value.trim().toLowerCase();
     
     // Show/hide clear button
-    if (searchTerm) {
-        clearSearchBtn.classList.add('show');
-    } else {
-        clearSearchBtn.classList.remove('show');
-    }
+    elements.clearSearchBtn.classList.toggle('show', !!searchTerm);
     
     if (!searchTerm) {
         filteredRecipes = [...recipes];
     } else {
         filteredRecipes = recipes.filter(recipe => {
-            // Search in recipe title
+            // Search in recipe title, ingredients, and instructions
             const titleMatch = recipe.title.toLowerCase().includes(searchTerm);
-            
-            // Search in ingredients
             const ingredientMatch = recipe.ingredients.some(ingredient => 
                 ingredient.name.toLowerCase().includes(searchTerm) ||
                 ingredient.amount.toLowerCase().includes(searchTerm) ||
                 ingredient.unit.toLowerCase().includes(searchTerm)
             );
-            
-            // Search in instructions
             const instructionMatch = recipe.instructions.toLowerCase().includes(searchTerm);
             
             return titleMatch || ingredientMatch || instructionMatch;
@@ -747,15 +826,15 @@ function handleSearch() {
 }
 
 function clearSearch() {
-    searchInput.value = '';
-    clearSearchBtn.classList.remove('show');
+    elements.searchInput.value = '';
+    elements.clearSearchBtn.classList.remove('show');
     filteredRecipes = [...recipes];
     displayRecipes();
 }
 
 // Grocery search functionality
 function handleGrocerySearch() {
-    const searchTerm = grocerySearchInput.value.trim().toLowerCase();
+    const searchTerm = elements.grocerySearchInput.value.trim().toLowerCase();
     displayGroceryList(searchTerm);
 }
 
