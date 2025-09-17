@@ -104,6 +104,13 @@ function setupEventListeners() {
             closeModal();
         }
     });
+    
+    // Close modal with ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && recipeModal.style.display === 'block') {
+            closeModal();
+        }
+    });
 
     // Remove ingredient functionality
     ingredientsList.addEventListener('click', (e) => {
