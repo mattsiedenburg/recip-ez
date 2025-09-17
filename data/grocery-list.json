@@ -2,17 +2,113 @@
   {
     "id": 1,
     "name": "Spaghetti",
-    "amount": "",
-    "unit": "400grams",
-    "checked": true,
-    "addedAt": "2025-09-17T02:16:26.072Z"
+    "amount": "400",
+    "unit": "grams",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:22.618Z"
   },
   {
     "id": 2,
     "name": "Eggs",
-    "amount": "",
-    "unit": "Eggs3pieces",
+    "amount": "2",
+    "unit": "pieces",
     "checked": false,
-    "addedAt": "2025-09-17T02:16:26.072Z"
+    "addedAt": "2025-09-17T02:39:22.618Z"
+  },
+  {
+    "id": 3,
+    "name": "Parmesan cheese",
+    "amount": "50",
+    "unit": "grams",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:22.618Z"
+  },
+  {
+    "id": 4,
+    "name": "Bacon",
+    "amount": "150",
+    "unit": "grams",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:22.618Z"
+  },
+  {
+    "id": 5,
+    "name": "Chicken breast",
+    "amount": "2",
+    "unit": "pieces",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:24.814Z"
+  },
+  {
+    "id": 6,
+    "name": "Romaine lettuce",
+    "amount": "1",
+    "unit": "head",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:24.814Z"
+  },
+  {
+    "id": 7,
+    "name": "Caesar dressing",
+    "amount": "4",
+    "unit": "tbsp",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:24.814Z"
+  },
+  {
+    "id": 8,
+    "name": "Croutons",
+    "amount": "1",
+    "unit": "cup",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:24.814Z"
+  },
+  {
+    "id": 9,
+    "name": "Flour",
+    "amount": "2",
+    "unit": "cups",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:27.411Z"
+  },
+  {
+    "id": 10,
+    "name": "Butter",
+    "amount": "1",
+    "unit": "cup",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:27.411Z"
+  },
+  {
+    "id": 11,
+    "name": "Brown sugar",
+    "amount": "3/4",
+    "unit": "cup",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:27.411Z"
+  },
+  {
+    "id": 12,
+    "name": "White sugar",
+    "amount": "1/4",
+    "unit": "cup",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:27.411Z"
+  },
+  {
+    "id": 13,
+    "name": "Chocolate chips",
+    "amount": "1",
+    "unit": "cup",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:27.411Z"
+  },
+  {
+    "id": 14,
+    "name": "Vanilla extract",
+    "amount": "1",
+    "unit": "tsp",
+    "checked": false,
+    "addedAt": "2025-09-17T02:39:27.411Z"
   }
 ]

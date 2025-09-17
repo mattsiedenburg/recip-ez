@@ -1,6 +1,7 @@
 // DOM elements
 const recipesSection = document.getElementById('recipesSection');
 const addRecipeSection = document.getElementById('addRecipeSection');
+const editRecipeSection = document.getElementById('editRecipeSection');
 const groceryListSection = document.getElementById('groceryListSection');
 
 const showRecipesBtn = document.getElementById('showRecipesBtn');
@@ -11,9 +12,17 @@ const addRecipeForm = document.getElementById('addRecipeForm');
 const ingredientsList = document.getElementById('ingredientsList');
 const addIngredientBtn = document.getElementById('addIngredientBtn');
 
+const editRecipeForm = document.getElementById('editRecipeForm');
+const editIngredientsList = document.getElementById('editIngredientsList');
+const addEditIngredientBtn = document.getElementById('addEditIngredientBtn');
+const cancelEditBtn = document.getElementById('cancelEditBtn');
+
 const recipesList = document.getElementById('recipesList');
 const groceryList = document.getElementById('groceryList');
 const clearGroceryListBtn = document.getElementById('clearGroceryListBtn');
+
+const searchInput = document.getElementById('searchInput');
+const clearSearchBtn = document.getElementById('clearSearchBtn');
 
 const recipeModal = document.getElementById('recipeModal');
 const recipeDetails = document.getElementById('recipeDetails');
@@ -21,6 +30,8 @@ const recipeDetails = document.getElementById('recipeDetails');
 // State
 let recipes = [];
 let groceryItems = [];
+let editingRecipeId = null;
+let filteredRecipes = [];
 
 // API Base URL
 const API_BASE = '/api';
@@ -43,8 +54,17 @@ function setupEventListeners() {
     addRecipeForm.addEventListener('submit', handleAddRecipe);
     addIngredientBtn.addEventListener('click', addIngredientInput);
 
+    // Edit recipe form
+    editRecipeForm.addEventListener('submit', handleEditRecipe);
+    addEditIngredientBtn.addEventListener('click', addEditIngredientInput);
+    cancelEditBtn.addEventListener('click', () => showSection('recipes'));
+
     // Grocery list
     clearGroceryListBtn.addEventListener('click', clearGroceryList);
+
+    // Search functionality
+    searchInput.addEventListener('input', handleSearch);
+    clearSearchBtn.addEventListener('click', clearSearch);
 
     // Modal
     document.querySelector('.close').addEventListener('click', closeModal);
@@ -63,6 +83,16 @@ function setupEventListeners() {
             }
         }
     });
+
+    // Remove ingredient functionality for edit form
+    editIngredientsList.addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove-ingredient')) {
+            const ingredientItem = e.target.closest('.ingredient-item');
+            if (editIngredientsList.children.length > 1) {
+                ingredientItem.remove();
+            }
+        }
+    });
 }
 
 // Navigation
@@ -76,11 +106,16 @@ function showSection(section) {
         case 'recipes':
             recipesSection.classList.add('active');
             showRecipesBtn.classList.add('active');
+            clearSearch(); // Reset search when returning to recipes
             loadRecipes();
             break;
         case 'addRecipe':
             addRecipeSection.classList.add('active');
             showAddRecipeBtn.classList.add('active');
+            break;
+        case 'editRecipe':
+            editRecipeSection.classList.add('active');
+            // Don't highlight any nav button for edit mode
             break;
         case 'groceryList':
             groceryListSection.classList.add('active');
@@ -95,6 +130,7 @@ async function loadRecipes() {
     try {
         const response = await fetch(`${API_BASE}/recipes`);
         recipes = await response.json();
+        filteredRecipes = [...recipes];
         displayRecipes();
     } catch (error) {
         console.error('Error loading recipes:', error);
@@ -102,6 +138,8 @@ async function loadRecipes() {
 }
 
 function displayRecipes() {
+    const recipesToShow = filteredRecipes.length > 0 || searchInput.value.trim() ? filteredRecipes : recipes;
+    
     if (recipes.length === 0) {
         recipesList.innerHTML = `
             <div class="empty-state">
@@ -112,13 +150,32 @@ function displayRecipes() {
         return;
     }
 
-    recipesList.innerHTML = recipes.map(recipe => `
+    if (recipesToShow.length === 0 && searchInput.value.trim()) {
+        recipesList.innerHTML = `
+            <div class="empty-state">
+                <h3>No recipes found</h3>
+                <p>No recipes match your search criteria. Try a different search term.</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Show search results info
+    let searchInfo = '';
+    if (searchInput.value.trim()) {
+        searchInfo = `<div class="search-results-info">Showing ${recipesToShow.length} of ${recipes.length} recipes</div>`;
+    }
+
+    recipesList.innerHTML = searchInfo + recipesToShow.map(recipe => `
         <div class="recipe-card" onclick="showRecipeDetails(${recipe.id})">
             <h3>${recipe.title}</h3>
             <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
             <div class="actions" onclick="event.stopPropagation()">
                 <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
                     🛒 Add to Grocery List
+                </button>
+                <button class="edit-recipe-btn" onclick="editRecipe(${recipe.id})">
+                    ✏️ Edit
                 </button>
                 <button class="delete-recipe-btn" onclick="deleteRecipe(${recipe.id})">
                     🗑️ Delete
@@ -188,6 +245,18 @@ function addIngredientInput() {
     ingredientsList.appendChild(ingredientItem);
 }
 
+function addEditIngredientInput(ingredient = null) {
+    const ingredientItem = document.createElement('div');
+    ingredientItem.className = 'ingredient-item';
+    ingredientItem.innerHTML = `
+        <input type="text" placeholder="Ingredient name" class="ingredient-name" required value="${ingredient ? ingredient.name : ''}">
+        <input type="text" placeholder="Amount" class="ingredient-amount" value="${ingredient ? ingredient.amount : ''}">
+        <input type="text" placeholder="Unit" class="ingredient-unit" value="${ingredient ? ingredient.unit : ''}">
+        <button type="button" class="remove-ingredient">✖</button>
+    `;
+    editIngredientsList.appendChild(ingredientItem);
+}
+
 function resetIngredientsList() {
     ingredientsList.innerHTML = `
         <div class="ingredient-item">
@@ -217,6 +286,86 @@ async function deleteRecipe(recipeId) {
     } catch (error) {
         console.error('Error deleting recipe:', error);
         alert('Error deleting recipe. Please try again.');
+    }
+}
+
+function editRecipe(recipeId) {
+    const recipe = recipes.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    editingRecipeId = recipeId;
+    
+    // Populate the edit form
+    document.getElementById('editRecipeTitle').value = recipe.title;
+    document.getElementById('editRecipeInstructions').value = recipe.instructions;
+    
+    // Clear and populate ingredients
+    editIngredientsList.innerHTML = '';
+    recipe.ingredients.forEach(ingredient => {
+        addEditIngredientInput(ingredient);
+    });
+    
+    // If no ingredients, add one empty ingredient
+    if (recipe.ingredients.length === 0) {
+        addEditIngredientInput();
+    }
+    
+    showSection('editRecipe');
+}
+
+async function handleEditRecipe(e) {
+    e.preventDefault();
+
+    const title = document.getElementById('editRecipeTitle').value.trim();
+    const instructions = document.getElementById('editRecipeInstructions').value.trim();
+
+    // Collect ingredients
+    const ingredientItems = editIngredientsList.querySelectorAll('.ingredient-item');
+    const ingredients = [];
+
+    ingredientItems.forEach(item => {
+        const name = item.querySelector('.ingredient-name').value.trim();
+        const amount = item.querySelector('.ingredient-amount').value.trim();
+        const unit = item.querySelector('.ingredient-unit').value.trim();
+
+        if (name) {
+            ingredients.push({ name, amount, unit });
+        }
+    });
+
+    if (ingredients.length === 0) {
+        alert('Please add at least one ingredient.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/recipes/${editingRecipeId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                title,
+                ingredients,
+                instructions,
+            }),
+        });
+
+        if (response.ok) {
+            // Clear form
+            editRecipeForm.reset();
+            editIngredientsList.innerHTML = '';
+            addEditIngredientInput();
+            editingRecipeId = null;
+            
+            // Show recipes section
+            showSection('recipes');
+        } else {
+            alert('Error updating recipe. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error updating recipe:', error);
+        alert('Error updating recipe. Please try again.');
     }
 }
 
@@ -361,4 +510,46 @@ async function clearGroceryList() {
     } catch (error) {
         console.error('Error clearing grocery list:', error);
     }
+}
+
+// Search functionality
+function handleSearch() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    
+    // Show/hide clear button
+    if (searchTerm) {
+        clearSearchBtn.classList.add('show');
+    } else {
+        clearSearchBtn.classList.remove('show');
+    }
+    
+    if (!searchTerm) {
+        filteredRecipes = [...recipes];
+    } else {
+        filteredRecipes = recipes.filter(recipe => {
+            // Search in recipe title
+            const titleMatch = recipe.title.toLowerCase().includes(searchTerm);
+            
+            // Search in ingredients
+            const ingredientMatch = recipe.ingredients.some(ingredient => 
+                ingredient.name.toLowerCase().includes(searchTerm) ||
+                ingredient.amount.toLowerCase().includes(searchTerm) ||
+                ingredient.unit.toLowerCase().includes(searchTerm)
+            );
+            
+            // Search in instructions
+            const instructionMatch = recipe.instructions.toLowerCase().includes(searchTerm);
+            
+            return titleMatch || ingredientMatch || instructionMatch;
+        });
+    }
+    
+    displayRecipes();
+}
+
+function clearSearch() {
+    searchInput.value = '';
+    clearSearchBtn.classList.remove('show');
+    filteredRecipes = [...recipes];
+    displayRecipes();
 }

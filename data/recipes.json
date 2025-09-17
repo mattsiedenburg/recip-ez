@@ -5,16 +5,102 @@
     "ingredients": [
       {
         "name": "Spaghetti",
-        "amount": "",
-        "unit": "400grams"
+        "amount": "400",
+        "unit": "grams"
       },
       {
         "name": "Eggs",
-        "amount": "",
-        "unit": "Eggs3pieces"
+        "amount": "3",
+        "unit": "pieces"
+      },
+      {
+        "name": "Parmesan cheese",
+        "amount": "100",
+        "unit": "grams"
+      },
+      {
+        "name": "Bacon",
+        "amount": "150",
+        "unit": "grams"
       }
     ],
-    "instructions": "1. Cook spaghetti according to package directions until al dente.\n2. Beat eggs in a large bowl, season with salt and pepper.\n3. Drain pasta and immediately add to the egg mixture, tossing quickly.\n4. Serve immediately with grated parmesan cheese.",
+    "instructions": "1. Cook spaghetti according to package directions until al dente.\n2. Beat eggs in a large bowl, season with salt and pepper.\n3. Cook bacon until crispy.\n4. Drain pasta and immediately add to the egg mixture, tossing quickly.\n5. Add bacon and serve immediately with grated parmesan cheese.",
     "createdAt": "2025-09-17T02:16:09.130Z"
+  },
+  {
+    "id": 2,
+    "title": "Chicken Caesar Salad",
+    "ingredients": [
+      {
+        "name": "Chicken breast",
+        "amount": "2",
+        "unit": "pieces"
+      },
+      {
+        "name": "Romaine lettuce",
+        "amount": "1",
+        "unit": "head"
+      },
+      {
+        "name": "Parmesan cheese",
+        "amount": "50",
+        "unit": "grams"
+      },
+      {
+        "name": "Caesar dressing",
+        "amount": "4",
+        "unit": "tbsp"
+      },
+      {
+        "name": "Croutons",
+        "amount": "1",
+        "unit": "cup"
+      }
+    ],
+    "instructions": "1. Season and grill chicken breast until cooked through.\n2. Slice chicken into strips.\n3. Wash and chop romaine lettuce.\n4. Toss lettuce with Caesar dressing.\n5. Top with sliced chicken, parmesan cheese, and croutons.",
+    "createdAt": "2025-09-17T02:20:00.000Z"
+  },
+  {
+    "id": 3,
+    "title": "Chocolate Chip Cookies",
+    "ingredients": [
+      {
+        "name": "Flour",
+        "amount": "2",
+        "unit": "cups"
+      },
+      {
+        "name": "Butter",
+        "amount": "1",
+        "unit": "cup"
+      },
+      {
+        "name": "Brown sugar",
+        "amount": "3/4",
+        "unit": "cup"
+      },
+      {
+        "name": "White sugar",
+        "amount": "1/4",
+        "unit": "cup"
+      },
+      {
+        "name": "Eggs",
+        "amount": "2",
+        "unit": "pieces"
+      },
+      {
+        "name": "Chocolate chips",
+        "amount": "1",
+        "unit": "cup"
+      },
+      {
+        "name": "Vanilla extract",
+        "amount": "1",
+        "unit": "tsp"
+      }
+    ],
+    "instructions": "1. Preheat oven to 375°F (190°C).\n2. Cream butter and sugars together.\n3. Beat in eggs and vanilla extract.\n4. Gradually mix in flour.\n5. Stir in chocolate chips.\n6. Drop spoonfuls onto baking sheet.\n7. Bake for 9-11 minutes until golden brown.",
+    "createdAt": "2025-09-17T02:25:00.000Z"
   }
 ]

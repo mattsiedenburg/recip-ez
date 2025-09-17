@@ -102,6 +102,40 @@ app.post('/api/recipes', (req, res) => {
     res.status(201).json(newRecipe);
 });
 
+// Update a recipe
+app.put('/api/recipes/:id', (req, res) => {
+    const { title, ingredients, instructions } = req.body;
+    
+    if (!title || !ingredients || !instructions) {
+        return res.status(400).json({ error: 'Title, ingredients, and instructions are required' });
+    }
+
+    const recipes = readRecipes();
+    const recipeIndex = recipes.findIndex(r => r.id === parseInt(req.params.id));
+    
+    if (recipeIndex === -1) {
+        return res.status(404).json({ error: 'Recipe not found' });
+    }
+
+    // Update the recipe while preserving id and createdAt
+    const updatedRecipe = {
+        ...recipes[recipeIndex],
+        title,
+        ingredients: ingredients.map(ing => ({
+            name: ing.name,
+            amount: ing.amount || '',
+            unit: ing.unit || ''
+        })),
+        instructions,
+        updatedAt: new Date().toISOString()
+    };
+
+    recipes[recipeIndex] = updatedRecipe;
+    writeRecipes(recipes);
+    
+    res.json(updatedRecipe);
+});
+
 // Delete a recipe
 app.delete('/api/recipes/:id', (req, res) => {
     const recipes = readRecipes();
