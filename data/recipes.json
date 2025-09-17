@@ -941,5 +941,49 @@
     ],
     "instructions": "1. Cook orzo\n2. Drain water\n3. Add tomato soup\n4. Bake crescent rolls",
     "createdAt": "2025-09-17T05:18:42.415Z"
+  },
+  {
+    "id": 22,
+    "title": "Ramen",
+    "ingredients": [
+      {
+        "name": "noodles",
+        "amount": "",
+        "unit": ""
+      },
+      {
+        "name": "broth",
+        "amount": "",
+        "unit": ""
+      },
+      {
+        "name": "pork belly",
+        "amount": "",
+        "unit": ""
+      },
+      {
+        "name": "green onion",
+        "amount": "",
+        "unit": ""
+      },
+      {
+        "name": "mushrooms",
+        "amount": "",
+        "unit": ""
+      },
+      {
+        "name": "garlic",
+        "amount": "",
+        "unit": ""
+      },
+      {
+        "name": "ginger",
+        "amount": "",
+        "unit": ""
+      }
+    ],
+    "instructions": ".",
+    "createdAt": "2025-09-17T18:09:04.554Z",
+    "updatedAt": "2025-09-17T18:14:40.609Z"
   }
 ]

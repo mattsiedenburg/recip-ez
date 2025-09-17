@@ -35,6 +35,10 @@ const searchInput = document.getElementById('searchInput');
 const clearSearchBtn = document.getElementById('clearSearchBtn');
 const grocerySearchInput = document.getElementById('grocerySearchInput');
 
+const gridViewBtn = document.getElementById('gridViewBtn');
+const listViewBtn = document.getElementById('listViewBtn');
+const recipesGrid = document.getElementById('recipesGrid');
+
 const recipeModal = document.getElementById('recipeModal');
 const recipeDetails = document.getElementById('recipeDetails');
 
@@ -43,6 +47,7 @@ let recipes = [];
 let groceryItems = [];
 let editingRecipeId = null;
 let filteredRecipes = [];
+let currentView = 'grid'; // 'grid' or 'list'
 
 // API Base URL
 const API_BASE = '/api';
@@ -87,6 +92,10 @@ function setupEventListeners() {
     searchInput.addEventListener('input', handleSearch);
     clearSearchBtn.addEventListener('click', clearSearch);
     grocerySearchInput.addEventListener('input', handleGrocerySearch);
+
+    // View toggle functionality
+    gridViewBtn.addEventListener('click', () => setView('grid'));
+    listViewBtn.addEventListener('click', () => setView('list'));
 
     // Modal
     document.querySelector('.close').addEventListener('click', closeModal);
@@ -163,22 +172,24 @@ function displayRecipes() {
     const recipesToShow = filteredRecipes.length > 0 || searchInput.value.trim() ? filteredRecipes : recipes;
     
     if (recipes.length === 0) {
-        recipesList.innerHTML = `
+        recipesGrid.innerHTML = `
             <div class="empty-state">
                 <h3>No recipes yet!</h3>
                 <p>Add your first recipe to get started.</p>
             </div>
         `;
+        recipesList.innerHTML = '';
         return;
     }
 
     if (recipesToShow.length === 0 && searchInput.value.trim()) {
-        recipesList.innerHTML = `
+        recipesGrid.innerHTML = `
             <div class="empty-state">
                 <h3>No recipes found</h3>
                 <p>No recipes match your search criteria. Try a different search term.</p>
             </div>
         `;
+        recipesList.innerHTML = '';
         return;
     }
 
@@ -188,17 +199,55 @@ function displayRecipes() {
         searchInfo = `<div class="search-results-info">Showing ${recipesToShow.length} of ${recipes.length} recipes</div>`;
     }
 
-    recipesList.innerHTML = searchInfo + recipesToShow.map(recipe => `
-        <div class="recipe-card" onclick="showRecipeDetails(${recipe.id})">
-            <h3>${recipe.title}</h3>
-            <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
-            <div class="actions" onclick="event.stopPropagation()">
-                <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
-                    🛒 Add to Grocery List
-                </button>
+    if (currentView === 'grid') {
+        recipesGrid.innerHTML = searchInfo + recipesToShow.map(recipe => `
+            <div class="recipe-card" onclick="showRecipeDetails(${recipe.id})">
+                <h3>${recipe.title}</h3>
+                <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
+                <div class="actions" onclick="event.stopPropagation()">
+                    <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
+                        🛒 Add to Grocery List
+                    </button>
+                </div>
             </div>
-        </div>
-    `).join('');
+        `).join('');
+        recipesList.innerHTML = '';
+    } else {
+        recipesList.innerHTML = searchInfo + recipesToShow.map(recipe => `
+            <div class="recipe-list-item" onclick="showRecipeDetails(${recipe.id})">
+                <div class="recipe-list-info">
+                    <h3 class="recipe-list-name">${recipe.title}</h3>
+                    <span class="recipe-list-ingredients">${recipe.ingredients.length} ingredients</span>
+                </div>
+                <div class="recipe-list-actions" onclick="event.stopPropagation()">
+                    <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
+                        🛒 Add to Grocery List
+                    </button>
+                </div>
+            </div>
+        `).join('');
+        recipesGrid.innerHTML = '';
+    }
+}
+
+function setView(view) {
+    currentView = view;
+    
+    // Update button states
+    if (view === 'grid') {
+        gridViewBtn.classList.add('active');
+        listViewBtn.classList.remove('active');
+        recipesGrid.classList.add('active');
+        recipesList.classList.remove('active');
+    } else {
+        gridViewBtn.classList.remove('active');
+        listViewBtn.classList.add('active');
+        recipesGrid.classList.remove('active');
+        recipesList.classList.add('active');
+    }
+    
+    // Re-render recipes in the new view
+    displayRecipes();
 }
 
 async function handleAddRecipe(e) {
