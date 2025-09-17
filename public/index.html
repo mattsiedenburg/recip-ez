@@ -32,8 +32,15 @@
             <h2>Your Recipes</h2>
             <div class="recipes-controls">
                 <div class="search-container">
-                    <input type="text" id="searchInput" placeholder="Search recipes by name, ingredient, or instructions..." class="search-input">
+                    <input type="text" id="searchInput" placeholder="Search by name, ingredient, instructions, or tags (e.g., 'pasta', 'chicken', or 'Italian')..." class="search-input">
                     <button id="clearSearchBtn" class="clear-search-btn">✖</button>
+                </div>
+                <div class="tag-filter-container">
+                    <label for="tagFilter">Filter by tag:</label>
+                    <select id="tagFilter" class="tag-filter">
+                        <option value="">All Tags</option>
+                    </select>
+                    <div id="selectedTags" class="selected-tags"></div>
                 </div>
                 <div class="view-toggle">
                     <button id="gridViewBtn" class="view-btn active" title="Grid View">
@@ -48,6 +55,7 @@
                     </button>
                 </div>
             </div>
+            <div id="searchResultsInfo" class="search-results-info"></div>
             <div id="recipesGrid" class="recipes-grid active"></div>
             <div id="recipesList" class="recipes-list"></div>
         </section>
@@ -59,6 +67,19 @@
                 <div class="form-group">
                     <label for="recipeTitle">Recipe Title:</label>
                     <input type="text" id="recipeTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeTags">Tags (comma-separated):</label>
+                    <input type="text" id="recipeTags" placeholder="e.g., Italian, Quick, Vegetarian">
+                    <div class="tag-suggestions">
+                        <span class="tag-suggestion" data-tag="Quick">Quick</span>
+                        <span class="tag-suggestion" data-tag="Healthy">Healthy</span>
+                        <span class="tag-suggestion" data-tag="Vegetarian">Vegetarian</span>
+                        <span class="tag-suggestion" data-tag="Italian">Italian</span>
+                        <span class="tag-suggestion" data-tag="Comfort Food">Comfort Food</span>
+                        <span class="tag-suggestion" data-tag="Dessert">Dessert</span>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -93,6 +114,19 @@
                 <div class="form-group">
                     <label for="editRecipeTitle">Recipe Title:</label>
                     <input type="text" id="editRecipeTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editRecipeTags">Tags (comma-separated):</label>
+                    <input type="text" id="editRecipeTags" placeholder="e.g., Italian, Quick, Vegetarian">
+                    <div class="tag-suggestions">
+                        <span class="tag-suggestion" data-tag="Quick">Quick</span>
+                        <span class="tag-suggestion" data-tag="Healthy">Healthy</span>
+                        <span class="tag-suggestion" data-tag="Vegetarian">Vegetarian</span>
+                        <span class="tag-suggestion" data-tag="Italian">Italian</span>
+                        <span class="tag-suggestion" data-tag="Comfort Food">Comfort Food</span>
+                        <span class="tag-suggestion" data-tag="Dessert">Dessert</span>
+                    </div>
                 </div>
 
                 <div class="form-group">

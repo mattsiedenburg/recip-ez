@@ -1032,6 +1032,72 @@ input[type="text"]:focus, textarea:focus {
     background-color: var(--accent-danger);
 }
 
+/* Tag System Styles */
+.recipe-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 8px 0;
+}
+
+.recipe-tag {
+    background-color: var(--accent-primary);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.tag-filter-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.tag-filter {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tag-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.tag-suggestion {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+}
+
+.tag-suggestion:hover {
+    background-color: var(--accent-primary);
+    color: white;
+}
+
+.tags-section {
+    margin-bottom: 20px;
+}
+
+.tags-section h4 {
+    margin-bottom: 10px;
+    color: var(--text-muted);
+}
+
 .notification-warning {
     background-color: var(--accent-warning);
     color: #212529;

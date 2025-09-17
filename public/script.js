@@ -26,6 +26,7 @@ const elements = {
     // Display
     recipesList: document.getElementById('recipesList'),
     recipesGrid: document.getElementById('recipesGrid'),
+    searchResultsInfo: document.getElementById('searchResultsInfo'),
     
     // Grocery List
     groceryList: document.getElementById('groceryList'),
@@ -44,6 +45,12 @@ const elements = {
     searchInput: document.getElementById('searchInput'),
     clearSearchBtn: document.getElementById('clearSearchBtn'),
     grocerySearchInput: document.getElementById('grocerySearchInput'),
+    
+    // Tag System
+    tagFilter: document.getElementById('tagFilter'),
+    selectedTags: document.getElementById('selectedTags'),
+    recipeTags: document.getElementById('recipeTags'),
+    editRecipeTags: document.getElementById('editRecipeTags'),
     
     // View Toggle
     gridViewBtn: document.getElementById('gridViewBtn'),
@@ -317,6 +324,22 @@ function setupEventListeners() {
     elements.searchInput.addEventListener('input', handleSearch);
     elements.clearSearchBtn.addEventListener('click', clearSearch);
     elements.grocerySearchInput.addEventListener('input', handleGrocerySearch);
+    
+    // Tag filtering
+    elements.tagFilter.addEventListener('change', handleTagFilter);
+    
+    // Tag suggestions click handlers
+    document.addEventListener('click', (e) => {
+        if (e.target.classList.contains('tag-suggestion')) {
+            const tag = e.target.dataset.tag;
+            const tagInput = e.target.closest('.form-group').querySelector('input[type="text"]');
+            if (tagInput) {
+                const currentTags = tagInput.value.trim();
+                const newValue = currentTags ? `${currentTags}, ${tag}` : tag;
+                tagInput.value = newValue;
+            }
+        }
+    });
 
     // View toggle functionality
     elements.gridViewBtn.addEventListener('click', () => setView('grid'));
@@ -427,6 +450,7 @@ async function loadRecipes() {
     try {
         recipes = await api.recipes.getAll();
         filteredRecipes = [...recipes];
+        populateTagFilter();
         displayRecipes();
     } catch (error) {
         showNotification('Error loading recipes. Please try again.', 'error');
@@ -444,6 +468,7 @@ function displayRecipes() {
             </div>
         `;
         elements.recipesList.innerHTML = '';
+        elements.searchResultsInfo.innerHTML = '';
         return;
     }
 
@@ -455,21 +480,24 @@ function displayRecipes() {
             </div>
         `;
         elements.recipesList.innerHTML = '';
+        elements.searchResultsInfo.innerHTML = '';
         return;
     }
 
-    // Show search results info
-    let searchInfo = '';
+    // Show search results info above the grid
     if (elements.searchInput.value.trim()) {
-        searchInfo = `<div class="search-results-info">Showing ${recipesToShow.length} of ${recipes.length} recipes</div>`;
+        elements.searchResultsInfo.innerHTML = `Showing ${recipesToShow.length} of ${recipes.length} recipes`;
+    } else {
+        elements.searchResultsInfo.innerHTML = '';
     }
 
     if (currentView === 'grid') {
-        elements.recipesGrid.innerHTML = searchInfo + recipesToShow.map(recipe => `
+        elements.recipesGrid.innerHTML = recipesToShow.map(recipe => `
             <div class="recipe-card" onclick="showRecipeDetails(${recipe.id})">
                 <button class="delete-recipe-small" onclick="event.stopPropagation(); deleteRecipe(${recipe.id})" title="Delete recipe">✖</button>
                 <h3>${recipe.title}</h3>
                 <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
+                ${recipe.tags ? `<div class="recipe-tags">${recipe.tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}</div>` : ''}
                 <div class="actions" onclick="event.stopPropagation()">
                     <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
                         🛒 Add to Grocery List
@@ -479,11 +507,12 @@ function displayRecipes() {
         `).join('');
         elements.recipesList.innerHTML = '';
     } else {
-        elements.recipesList.innerHTML = searchInfo + recipesToShow.map(recipe => `
+        elements.recipesList.innerHTML = recipesToShow.map(recipe => `
             <div class="recipe-list-item" onclick="showRecipeDetails(${recipe.id})">
                 <div class="recipe-list-info">
                     <h3 class="recipe-list-name">${recipe.title}</h3>
                     <span class="recipe-list-ingredients">${recipe.ingredients.length} ingredients</span>
+                    ${recipe.tags ? `<div class="recipe-tags">${recipe.tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}</div>` : ''}
                 </div>
                 <div class="recipe-list-actions" onclick="event.stopPropagation()">
                     <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
@@ -522,6 +551,10 @@ async function handleAddRecipe(e) {
 
     const title = document.getElementById('recipeTitle').value.trim();
     const instructions = document.getElementById('recipeInstructions').value.trim();
+    const tagsInput = document.getElementById('recipeTags').value.trim();
+    
+    // Parse tags from comma-separated string
+    const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : [];
 
     // Collect ingredients from the proper container
     const ingredients = ui.collectIngredients(elements.ingredientsList);
@@ -536,7 +569,7 @@ async function handleAddRecipe(e) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ title, ingredients, instructions }),
+            body: JSON.stringify({ title, ingredients, instructions, tags }),
         });
 
         if (response.ok) {
@@ -612,6 +645,7 @@ function editRecipe(recipeId) {
     // Populate the edit form
     document.getElementById('editRecipeTitle').value = recipe.title;
     document.getElementById('editRecipeInstructions').value = recipe.instructions;
+    document.getElementById('editRecipeTags').value = recipe.tags ? recipe.tags.join(', ') : '';
     
     // Clear and populate ingredients
     elements.editIngredientsList.innerHTML = '';
@@ -632,6 +666,10 @@ async function handleEditRecipe(e) {
 
     const title = document.getElementById('editRecipeTitle').value.trim();
     const instructions = document.getElementById('editRecipeInstructions').value.trim();
+    const tagsInput = document.getElementById('editRecipeTags').value.trim();
+    
+    // Parse tags from comma-separated string
+    const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0) : [];
 
     // Collect ingredients
     const ingredients = ui.collectIngredients(elements.editIngredientsList);
@@ -650,6 +688,7 @@ async function handleEditRecipe(e) {
                 title,
                 ingredients,
                 instructions,
+                tags,
             }),
         });
 
@@ -679,6 +718,15 @@ function showRecipeDetails(recipeId) {
     recipeDetails.innerHTML = `
         <div class="recipe-detail">
             <h3>${recipe.title}</h3>
+            
+            ${recipe.tags && recipe.tags.length > 0 ? `
+            <div class="tags-section">
+                <h4>🏷️ Tags</h4>
+                <div class="recipe-tags">
+                    ${recipe.tags.map(tag => `<span class="recipe-tag">${tag}</span>`).join('')}
+                </div>
+            </div>
+            ` : ''}
             
             <div class="ingredients-section">
                 <h4>🥘 Ingredients</h4>
@@ -922,18 +970,19 @@ async function removeCheckedItems() {
     }
 }
 
-// Search functionality - Optimized
+// Search functionality - Optimized with tag support
 function handleSearch() {
     const searchTerm = elements.searchInput.value.trim().toLowerCase();
+    const selectedTag = elements.tagFilter.value;
     
     // Show/hide clear button
     elements.clearSearchBtn.classList.toggle('show', !!searchTerm);
     
-    if (!searchTerm) {
+    if (!searchTerm && !selectedTag) {
         filteredRecipes = [...recipes];
     } else {
         filteredRecipes = recipes.filter(recipe => {
-            // Search in recipe title, ingredients, and instructions
+            // Search in recipe title, ingredients, instructions, and tags
             const titleMatch = recipe.title.toLowerCase().includes(searchTerm);
             const ingredientMatch = recipe.ingredients.some(ingredient => 
                 ingredient.name.toLowerCase().includes(searchTerm) ||
@@ -941,8 +990,16 @@ function handleSearch() {
                 ingredient.unit.toLowerCase().includes(searchTerm)
             );
             const instructionMatch = recipe.instructions.toLowerCase().includes(searchTerm);
+            const tagMatch = recipe.tags ? recipe.tags.some(tag => 
+                tag.toLowerCase().includes(searchTerm)
+            ) : false;
             
-            return titleMatch || ingredientMatch || instructionMatch;
+            const textMatch = !searchTerm || titleMatch || ingredientMatch || instructionMatch || tagMatch;
+            
+            // Tag filter
+            const tagFilterMatch = !selectedTag || (recipe.tags && recipe.tags.includes(selectedTag));
+            
+            return textMatch && tagFilterMatch;
         });
     }
     
@@ -952,8 +1009,28 @@ function handleSearch() {
 function clearSearch() {
     elements.searchInput.value = '';
     elements.clearSearchBtn.classList.remove('show');
+    elements.tagFilter.value = '';
     filteredRecipes = [...recipes];
     displayRecipes();
+}
+
+// Tag management functions
+function populateTagFilter() {
+    const allTags = new Set();
+    recipes.forEach(recipe => {
+        if (recipe.tags) {
+            recipe.tags.forEach(tag => allTags.add(tag));
+        }
+    });
+    
+    const sortedTags = Array.from(allTags).sort();
+    
+    elements.tagFilter.innerHTML = '<option value="">All Tags</option>' + 
+        sortedTags.map(tag => `<option value="${tag}">${tag}</option>`).join('');
+}
+
+function handleTagFilter() {
+    handleSearch(); // Reuse search function which now includes tag filtering
 }
 
 // Grocery search functionality

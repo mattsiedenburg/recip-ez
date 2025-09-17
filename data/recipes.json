@@ -2,6 +2,12 @@
   {
     "id": 1,
     "title": "Spaghetti Carbonara",
+    "tags": [
+      "Italian",
+      "Pasta",
+      "Quick",
+      "Comfort Food"
+    ],
     "ingredients": [
       {
         "name": "Spaghetti",
@@ -30,6 +36,12 @@
   {
     "id": 2,
     "title": "Chicken Caesar Salad",
+    "tags": [
+      "Salad",
+      "Chicken",
+      "Healthy",
+      "Quick"
+    ],
     "ingredients": [
       {
         "name": "Chicken breast",
@@ -63,6 +75,12 @@
   {
     "id": 3,
     "title": "Chocolate Chip Cookies",
+    "tags": [
+      "Dessert",
+      "Baking",
+      "Sweet",
+      "Family Friendly"
+    ],
     "ingredients": [
       {
         "name": "Flour",
@@ -106,6 +124,12 @@
   {
     "id": 4,
     "title": "Beef Tacos",
+    "tags": [
+      "Mexican",
+      "Beef",
+      "Quick",
+      "Family Friendly"
+    ],
     "ingredients": [
       {
         "name": "Ground beef",
@@ -154,6 +178,12 @@
   {
     "id": 5,
     "title": "Vegetable Stir Fry",
+    "tags": [
+      "Vegetarian",
+      "Asian",
+      "Healthy",
+      "Quick"
+    ],
     "ingredients": [
       {
         "name": "Broccoli",
@@ -202,6 +232,12 @@
   {
     "id": 6,
     "title": "Pancakes",
+    "tags": [
+      "Breakfast",
+      "Sweet",
+      "Family Friendly",
+      "Quick"
+    ],
     "ingredients": [
       {
         "name": "Flour",
@@ -245,6 +281,12 @@
   {
     "id": 7,
     "title": "Salmon with Lemon Herbs",
+    "tags": [
+      "Seafood",
+      "Healthy",
+      "Quick",
+      "Low Carb"
+    ],
     "ingredients": [
       {
         "name": "Salmon fillets",
@@ -293,6 +335,12 @@
   {
     "id": 8,
     "title": "Mushroom Risotto",
+    "tags": [
+      "Italian",
+      "Vegetarian",
+      "Comfort Food",
+      "Creamy"
+    ],
     "ingredients": [
       {
         "name": "Arborio rice",
@@ -384,7 +432,13 @@
       }
     ],
     "instructions": "1. Cut cucumbers and tomatoes into chunks.\n2. Slice red onion thinly.\n3. Combine vegetables in a large bowl.\n4. Add olives and crumbled feta cheese.\n5. Whisk together olive oil, vinegar, and oregano.\n6. Pour dressing over salad and toss gently.\n7. Let marinate for 15 minutes before serving.",
-    "createdAt": "2025-09-17T02:55:00.000Z"
+    "createdAt": "2025-09-17T02:55:00.000Z",
+    "tags": [
+      "Greek",
+      "Salad",
+      "Healthy",
+      "Vegetarian"
+    ]
   },
   {
     "id": 10,
@@ -432,7 +486,13 @@
       }
     ],
     "instructions": "1. Preheat oven to 350°F (175°C).\n2. Grease a 9x5 inch loaf pan.\n3. Mash bananas in a large bowl.\n4. Mix in melted butter, sugar, eggs, and vanilla.\n5. In separate bowl, combine flour, baking soda, and salt.\n6. Gradually add dry ingredients to banana mixture.\n7. Pour into prepared loaf pan.\n8. Bake for 60-65 minutes until toothpick comes out clean.",
-    "createdAt": "2025-09-17T03:00:00.000Z"
+    "createdAt": "2025-09-17T03:00:00.000Z",
+    "tags": [
+      "Dessert",
+      "Baking",
+      "Sweet",
+      "Comfort Food"
+    ]
   },
   {
     "id": 11,
@@ -480,7 +540,13 @@
       }
     ],
     "instructions": "1. Cut chicken into bite-sized pieces.\n2. Heat thick coconut milk in a wok and fry curry paste until fragrant.\n3. Add chicken and cook until almost done.\n4. Add remaining coconut milk, fish sauce, and palm sugar.\n5. Add chopped eggplant and chilies.\n6. Simmer until eggplant is tender.\n7. Stir in Thai basil leaves and serve with jasmine rice.",
-    "createdAt": "2025-09-17T03:05:00.000Z"
+    "createdAt": "2025-09-17T03:05:00.000Z",
+    "tags": [
+      "Thai",
+      "Spicy",
+      "Chicken",
+      "Curry"
+    ]
   },
   {
     "id": 12,
@@ -528,7 +594,13 @@
       }
     ],
     "instructions": "1. Slice onions thinly and caramelize in butter for 45 minutes.\n2. Add wine and cook until evaporated.\n3. Add broth, thyme, and bay leaf. Simmer 20 minutes.\n4. Toast bread slices and top with grated cheese.\n5. Ladle soup into oven-safe bowls.\n6. Float cheese toasts on top.\n7. Broil until cheese is bubbly and golden.",
-    "createdAt": "2025-09-17T03:10:00.000Z"
+    "createdAt": "2025-09-17T03:10:00.000Z",
+    "tags": [
+      "French",
+      "Soup",
+      "Comfort Food",
+      "Cheese"
+    ]
   },
   {
     "id": 13,
@@ -581,7 +653,13 @@
       }
     ],
     "instructions": "1. Cut chicken into chunks and marinate in yogurt and spices for 2 hours.\n2. Grill chicken pieces until charred and cooked through.\n3. Sauté minced ginger and garlic in oil.\n4. Add tomato sauce and simmer for 10 minutes.\n5. Stir in cream and remaining spices.\n6. Add grilled chicken and simmer for 5 minutes.\n7. Serve with basmati rice and naan bread.",
-    "createdAt": "2025-09-17T03:15:00.000Z"
+    "createdAt": "2025-09-17T03:15:00.000Z",
+    "tags": [
+      "Indian",
+      "Spicy",
+      "Chicken",
+      "Curry"
+    ]
   },
   {
     "id": 14,
@@ -629,7 +707,13 @@
       }
     ],
     "instructions": "1. Preheat oven to 425°F (220°C).\n2. Peel and slice apples thinly.\n3. Mix apples with sugar, cinnamon, nutmeg, flour, and lemon juice.\n4. Line pie dish with bottom crust.\n5. Fill with apple mixture and dot with butter.\n6. Cover with top crust and seal edges.\n7. Cut vents in top crust.\n8. Bake 45-50 minutes until golden brown.",
-    "createdAt": "2025-09-17T03:20:00.000Z"
+    "createdAt": "2025-09-17T03:20:00.000Z",
+    "tags": [
+      "Dessert",
+      "Baking",
+      "Sweet",
+      "American"
+    ]
   },
   {
     "id": 15,
@@ -677,7 +761,13 @@
       }
     ],
     "instructions": "1. Cut all vegetables into uniform chunks.\n2. Salt eggplant and let drain for 30 minutes.\n3. Sauté onion and garlic in olive oil until soft.\n4. Add peppers and cook for 5 minutes.\n5. Add eggplant and zucchini, cook 10 minutes.\n6. Add tomatoes and herbs, simmer 20 minutes.\n7. Season with salt and pepper, serve hot or cold.",
-    "createdAt": "2025-09-17T03:25:00.000Z"
+    "createdAt": "2025-09-17T03:25:00.000Z",
+    "tags": [
+      "French",
+      "Vegetarian",
+      "Healthy",
+      "Mediterranean"
+    ]
   },
   {
     "id": 16,
@@ -725,7 +815,13 @@
       }
     ],
     "instructions": "1. Season fish with cumin, chili powder, salt, and pepper.\n2. Grill fish until cooked through and flaky.\n3. Warm tortillas in a dry pan.\n4. Shred cabbage and slice avocado.\n5. Flake fish into chunks.\n6. Fill tortillas with fish, cabbage, and avocado.\n7. Top with cilantro and squeeze lime over tacos.",
-    "createdAt": "2025-09-17T03:30:00.000Z"
+    "createdAt": "2025-09-17T03:30:00.000Z",
+    "tags": [
+      "Mexican",
+      "Seafood",
+      "Quick",
+      "Healthy"
+    ]
   },
   {
     "id": 17,
@@ -773,7 +869,13 @@
       }
     ],
     "instructions": "1. Cut beef into thin strips and brown in batches.\n2. Sauté sliced onions and mushrooms until soft.\n3. Sprinkle flour over vegetables and cook 1 minute.\n4. Add broth and Worcestershire sauce, simmer until thick.\n5. Return beef to pan and heat through.\n6. Remove from heat and stir in sour cream.\n7. Serve over cooked egg noodles.",
-    "createdAt": "2025-09-17T03:35:00.000Z"
+    "createdAt": "2025-09-17T03:35:00.000Z",
+    "tags": [
+      "Comfort Food",
+      "Beef",
+      "Creamy",
+      "Pasta"
+    ]
   },
   {
     "id": 18,
@@ -816,7 +918,13 @@
       }
     ],
     "instructions": "1. Preheat oven to 475°F (245°C) with pizza stone if available.\n2. Roll out pizza dough into a circle.\n3. Mix tomato sauce with minced garlic and salt.\n4. Spread sauce over dough, leaving border for crust.\n5. Add torn mozzarella pieces evenly.\n6. Drizzle with olive oil.\n7. Bake 12-15 minutes until crust is golden.\n8. Top with fresh basil leaves before serving.",
-    "createdAt": "2025-09-17T03:40:00.000Z"
+    "createdAt": "2025-09-17T03:40:00.000Z",
+    "tags": [
+      "Italian",
+      "Pizza",
+      "Vegetarian",
+      "Quick"
+    ]
   },
   {
     "id": 19,
@@ -869,7 +977,13 @@
       }
     ],
     "instructions": "1. Soak rice noodles in warm water until soft.\n2. Mix fish sauce, tamarind paste, and palm sugar for sauce.\n3. Cut chicken into strips and stir-fry until cooked.\n4. Push chicken to one side, scramble eggs in same pan.\n5. Add drained noodles and sauce, toss to combine.\n6. Add bean sprouts and cook 1 minute.\n7. Serve with crushed peanuts and lime wedges.",
-    "createdAt": "2025-09-17T03:45:00.000Z"
+    "createdAt": "2025-09-17T03:45:00.000Z",
+    "tags": [
+      "Thai",
+      "Chicken",
+      "Asian",
+      "Noodles"
+    ]
   },
   {
     "id": 20,
@@ -912,6 +1026,12 @@
       }
     ],
     "instructions": "1. Preheat oven to 425°F (220°C).\n2. Butter 4 ramekins and dust with cocoa powder.\n3. Melt chocolate and butter together.\n4. Whisk in eggs, yolks, sugar, and vanilla.\n5. Fold in flour until just combined.\n6. Divide between ramekins.\n7. Bake 12-14 minutes until edges are firm but center jiggles.\n8. Let stand 1 minute, then invert onto plates.",
-    "createdAt": "2025-09-17T03:50:00.000Z"
+    "createdAt": "2025-09-17T03:50:00.000Z",
+    "tags": [
+      "Dessert",
+      "Chocolate",
+      "Sweet",
+      "Individual"
+    ]
   }
 ]
