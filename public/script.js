@@ -32,7 +32,6 @@ const elements = {
     clearGroceryListBtn: document.getElementById('clearGroceryListBtn'),
     removeCheckedBtn: document.getElementById('removeCheckedBtn'),
     copyGroceryListBtn: document.getElementById('copyGroceryListBtn'),
-    addCustomItemBtn: document.getElementById('addCustomItemBtn'),
     
     // Custom Item Form
     addCustomItemForm: document.getElementById('addCustomItemForm'),
@@ -40,7 +39,6 @@ const elements = {
     customItemAmount: document.getElementById('customItemAmount'),
     customItemUnit: document.getElementById('customItemUnit'),
     saveCustomItemBtn: document.getElementById('saveCustomItemBtn'),
-    cancelCustomItemBtn: document.getElementById('cancelCustomItemBtn'),
     
     // Search
     searchInput: document.getElementById('searchInput'),
@@ -50,6 +48,9 @@ const elements = {
     // View Toggle
     gridViewBtn: document.getElementById('gridViewBtn'),
     listViewBtn: document.getElementById('listViewBtn'),
+    
+    // Theme Toggle
+    themeSelect: document.getElementById('themeSelect'),
     
     // Modal
     recipeModal: document.getElementById('recipeModal'),
@@ -133,7 +134,7 @@ const ui = {
     // Create ingredient input HTML
     createIngredientInput(ingredient = null) {
         return `
-            <input type="text" placeholder="Ingredient name" class="ingredient-name" required value="${ingredient ? ingredient.name : ''}">
+            <input type="text" placeholder="Ingredient name" class="ingredient-name" value="${ingredient ? ingredient.name : ''}">
             <input type="text" placeholder="Amount" class="ingredient-amount" value="${ingredient ? ingredient.amount : ''}">
             <input type="text" placeholder="Unit" class="ingredient-unit" value="${ingredient ? ingredient.unit : ''}">
             <button type="button" class="remove-ingredient">✖</button>
@@ -152,9 +153,55 @@ let groceryItems = [];
 let editingRecipeId = null;
 let filteredRecipes = [];
 let currentView = 'grid'; // 'grid' or 'list'
+let currentTheme = 'system'; // 'system', 'light', or 'dark'
 
 // API Base URL
 const API_BASE = '/api';
+
+// Theme Management
+const themeManager = {
+    init() {
+        // Load saved theme or default to system
+        this.currentTheme = localStorage.getItem('recip-ez-theme') || 'system';
+        elements.themeSelect.value = this.currentTheme;
+        this.applyTheme(this.currentTheme);
+        
+        // Listen for system theme changes
+        if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (this.currentTheme === 'system') {
+                    this.applyTheme('system');
+                }
+            });
+        }
+    },
+    
+    setTheme(theme) {
+        this.currentTheme = theme;
+        localStorage.setItem('recip-ez-theme', theme);
+        elements.themeSelect.value = theme;
+        this.applyTheme(theme);
+    },
+    
+    applyTheme(theme) {
+        const html = document.documentElement;
+        html.classList.remove('light-theme', 'dark-theme');
+        
+        if (theme === 'light') {
+            html.classList.add('light-theme');
+        } else if (theme === 'dark') {
+            html.classList.add('dark-theme');
+        } else if (theme === 'system') {
+            // Use system preference
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (prefersDark) {
+                html.classList.add('dark-theme');
+            } else {
+                html.classList.add('light-theme');
+            }
+        }
+    }
+};
 function showNotification(message, type = 'success') {
     // Remove any existing notifications
     const existingNotification = document.querySelector('.notification');
@@ -182,6 +229,7 @@ function showNotification(message, type = 'success') {
 
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
+    themeManager.init();
     setupEventListeners();
     loadRecipes();
     loadGroceryList();
@@ -209,13 +257,60 @@ function setupEventListeners() {
     elements.clearGroceryListBtn.addEventListener('click', clearGroceryList);
     elements.removeCheckedBtn.addEventListener('click', removeCheckedItems);
     elements.copyGroceryListBtn.addEventListener('click', copyGroceryListToClipboard);
-    elements.addCustomItemBtn.addEventListener('click', showAddCustomItemForm);
     
     // Custom item form
     elements.saveCustomItemBtn.addEventListener('click', saveCustomItem);
-    elements.cancelCustomItemBtn.addEventListener('click', hideAddCustomItemForm);
     elements.customItemName.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') saveCustomItem();
+    });
+
+    // Ingredient input Enter key handling (using event delegation)
+    elements.ingredientsList.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && (
+            e.target.classList.contains('ingredient-name') ||
+            e.target.classList.contains('ingredient-amount') ||
+            e.target.classList.contains('ingredient-unit')
+        )) {
+            e.preventDefault();
+            
+            // Check if the last ingredient name field is empty
+            const lastIngredient = elements.ingredientsList.lastElementChild;
+            const lastNameField = lastIngredient.querySelector('.ingredient-name');
+            
+            if (lastNameField && lastNameField.value.trim() !== '') {
+                addIngredientInput();
+                // Focus the new ingredient name field
+                setTimeout(() => {
+                    const newLastIngredient = elements.ingredientsList.lastElementChild;
+                    const nameField = newLastIngredient.querySelector('.ingredient-name');
+                    if (nameField) nameField.focus();
+                }, 10);
+            } else {
+                // If empty, just focus the empty name field
+                if (lastNameField) lastNameField.focus();
+            }
+        }
+    });
+
+    elements.editIngredientsList.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && (
+            e.target.classList.contains('ingredient-name') ||
+            e.target.classList.contains('ingredient-amount') ||
+            e.target.classList.contains('ingredient-unit')
+        )) {
+            e.preventDefault();
+            
+            // Check if the last ingredient name field is empty
+            const lastIngredient = elements.editIngredientsList.lastElementChild;
+            const lastNameField = lastIngredient.querySelector('.ingredient-name');
+            
+            if (lastNameField && lastNameField.value.trim() !== '') {
+                addEditIngredientInput(null, true);
+            } else {
+                // If empty, just focus the empty name field
+                if (lastNameField) lastNameField.focus();
+            }
+        }
     });
 
     // Search functionality
@@ -226,6 +321,11 @@ function setupEventListeners() {
     // View toggle functionality
     elements.gridViewBtn.addEventListener('click', () => setView('grid'));
     elements.listViewBtn.addEventListener('click', () => setView('list'));
+
+    // Theme toggle functionality
+    elements.themeSelect.addEventListener('change', (e) => {
+        themeManager.setTheme(e.target.value);
+    });
 
     // Modal
     document.querySelector('.close').addEventListener('click', closeModal);
@@ -262,8 +362,11 @@ function handleGlobalKeydown(e) {
     if (e.key === 'Escape') {
         if (elements.recipeModal.style.display === 'block') {
             closeModal();
-        } else if (!elements.addCustomItemForm.classList.contains('hidden')) {
-            hideAddCustomItemForm();
+        } else if (elements.groceryListSection.classList.contains('active') && document.activeElement && 
+                   (document.activeElement === elements.customItemName || 
+                    document.activeElement === elements.customItemAmount || 
+                    document.activeElement === elements.customItemUnit)) {
+            clearCustomItemForm();
         } else if (elements.addRecipeSection.classList.contains('active')) {
             showSection('recipes');
         } else if (elements.editRecipeSection.classList.contains('active')) {
@@ -364,6 +467,7 @@ function displayRecipes() {
     if (currentView === 'grid') {
         elements.recipesGrid.innerHTML = searchInfo + recipesToShow.map(recipe => `
             <div class="recipe-card" onclick="showRecipeDetails(${recipe.id})">
+                <button class="delete-recipe-small" onclick="event.stopPropagation(); deleteRecipe(${recipe.id})" title="Delete recipe">✖</button>
                 <h3>${recipe.title}</h3>
                 <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
                 <div class="actions" onclick="event.stopPropagation()">
@@ -385,6 +489,7 @@ function displayRecipes() {
                     <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
                         🛒 Add to Grocery List
                     </button>
+                    <button class="delete-recipe-small" onclick="deleteRecipe(${recipe.id})" title="Delete recipe">✖</button>
                 </div>
             </div>
         `).join('');
@@ -418,8 +523,8 @@ async function handleAddRecipe(e) {
     const title = document.getElementById('recipeTitle').value.trim();
     const instructions = document.getElementById('recipeInstructions').value.trim();
 
-    // Collect ingredients
-    const ingredients = ui.collectIngredients(document.querySelectorAll('.ingredient-item'));
+    // Collect ingredients from the proper container
+    const ingredients = ui.collectIngredients(elements.ingredientsList);
 
     if (!ui.validateRecipeForm(title, instructions, ingredients)) {
         return;
@@ -897,16 +1002,11 @@ async function copyGroceryListToClipboard() {
 }
 
 // Custom item management
-function showAddCustomItemForm() {
-    elements.addCustomItemForm.classList.remove('hidden');
-    elements.customItemName.focus();
-}
-
-function hideAddCustomItemForm() {
-    elements.addCustomItemForm.classList.add('hidden');
+function clearCustomItemForm() {
     elements.customItemName.value = '';
     elements.customItemAmount.value = '';
     elements.customItemUnit.value = '';
+    elements.customItemName.focus();
 }
 
 async function saveCustomItem() {
@@ -936,7 +1036,7 @@ async function saveCustomItem() {
         });
 
         if (response.ok) {
-            hideAddCustomItemForm();
+            clearCustomItemForm();
             loadGroceryList();
             showNotification('Item added successfully!', 'success');
         } else {

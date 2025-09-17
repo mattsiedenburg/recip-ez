@@ -11,6 +11,14 @@
         <header>
             <h1>🍳 Recip-EZ</h1>
             <p>Your simple recipe manager with grocery list</p>
+            <div class="theme-controls">
+                <label for="themeSelect">Theme:</label>
+                <select id="themeSelect" class="theme-select">
+                    <option value="system">🌗 Follow System</option>
+                    <option value="light">☀️ Light Mode</option>
+                    <option value="dark">🌙 Dark Mode</option>
+                </select>
+            </div>
         </header>
 
         <nav>
@@ -57,7 +65,7 @@
                     <label>Ingredients:</label>
                     <div id="ingredientsList">
                         <div class="ingredient-item">
-                            <input type="text" placeholder="Ingredient name" class="ingredient-name" required>
+                            <input type="text" placeholder="Ingredient name" class="ingredient-name">
                             <input type="text" placeholder="Amount" class="ingredient-amount">
                             <input type="text" placeholder="Unit" class="ingredient-unit">
                             <button type="button" class="remove-ingredient">✖</button>
@@ -120,17 +128,15 @@
                 <button id="clearGroceryListBtn" class="clear-btn">Clear All</button>
                 <button id="removeCheckedBtn" class="remove-checked-btn">Remove Checked Items</button>
                 <button id="copyGroceryListBtn" class="copy-btn">📋 Copy List</button>
-                <button id="addCustomItemBtn" class="add-custom-btn">➕ Add Item</button>
             </div>
             
             <!-- Add Custom Item Form -->
-            <div id="addCustomItemForm" class="add-custom-form hidden">
+            <div id="addCustomItemForm" class="add-custom-form">
                 <div class="custom-item-inputs">
                     <input type="text" id="customItemName" placeholder="Item name" required>
                     <input type="text" id="customItemAmount" placeholder="Amount (optional)">
                     <input type="text" id="customItemUnit" placeholder="Unit (optional)">
                     <button id="saveCustomItemBtn" class="save-custom-btn">Add</button>
-                    <button id="cancelCustomItemBtn" class="cancel-custom-btn">Cancel</button>
                 </div>
             </div>
             
