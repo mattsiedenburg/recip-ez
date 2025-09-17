@@ -520,7 +520,7 @@ input[type="text"]:focus, textarea:focus {
     gap: 8px;
 }
 
-.add-to-grocery-btn, .delete-recipe-btn, .edit-recipe-btn {
+.add-to-grocery-btn, .delete-recipe-btn, .edit-recipe-btn, .copy-recipe-btn {
     padding: 8px 16px;
     border: none;
     border-radius: 5px;
@@ -537,6 +537,15 @@ input[type="text"]:focus, textarea:focus {
 
 .add-to-grocery-btn:hover {
     background-color: #b8804a;
+}
+
+.copy-recipe-btn {
+    background-color: var(--accent-info);
+    color: white;
+}
+
+.copy-recipe-btn:hover {
+    background-color: #5a7a75;
 }
 
 .edit-recipe-btn {

@@ -695,6 +695,9 @@ function showRecipeDetails(recipeId) {
             </div>
             
             <div class="modal-actions">
+                <button class="copy-recipe-btn" onclick="copyRecipeToClipboard(${recipe.id});">
+                    📋 Copy Recipe
+                </button>
                 <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id}); closeModal();">
                     🛒 Add to Grocery List
                 </button>
@@ -713,6 +716,45 @@ function showRecipeDetails(recipeId) {
 
 function closeModal() {
     elements.recipeModal.style.display = 'none';
+}
+
+// Copy recipe to clipboard
+async function copyRecipeToClipboard(recipeId) {
+    const recipe = recipes.find(r => r.id === recipeId);
+    if (!recipe) {
+        showNotification('Recipe not found', 'error');
+        return;
+    }
+
+    // Format the recipe text
+    let recipeText = `${recipe.title}\n\n`;
+    recipeText += `🥘 Ingredients:\n`;
+    recipe.ingredients.forEach(ingredient => {
+        recipeText += `• ${ingredient.name} - ${ingredient.amount} ${ingredient.unit}\n`;
+    });
+    recipeText += `\n📝 Instructions:\n${recipe.instructions}`;
+
+    try {
+        await navigator.clipboard.writeText(recipeText);
+        showNotification('Recipe copied to clipboard!', 'success');
+    } catch (err) {
+        // Fallback for browsers that don't support clipboard API
+        try {
+            const textArea = document.createElement('textarea');
+            textArea.value = recipeText;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showNotification('Recipe copied to clipboard!', 'success');
+        } catch (fallbackErr) {
+            showNotification('Unable to copy to clipboard', 'error');
+        }
+    }
 }
 
 // Grocery List Management - Optimized with centralized API calls
