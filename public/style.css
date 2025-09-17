@@ -320,18 +320,164 @@ input[type="text"]:focus, textarea:focus {
     background-color: #c82333;
 }
 
+/* Grocery Search Styles */
+.grocery-search-container {
+    position: relative;
+    margin-bottom: 20px;
+    max-width: 500px;
+}
+
 /* Grocery List Styles */
 .grocery-actions {
     margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-.clear-btn {
-    background-color: #dc3545;
+.clear-btn, .remove-checked-btn, .copy-btn, .add-custom-btn {
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-btn {
+    background-color: #dc3545;
+}
+
+.clear-btn:hover {
+    background-color: #c82333;
+}
+
+.remove-checked-btn {
+    background-color: #6c757d;
+}
+
+.remove-checked-btn:hover {
+    background-color: #5a6268;
+}
+
+.remove-checked-btn:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.copy-btn {
+    background-color: #17a2b8;
+}
+
+.copy-btn:hover {
+    background-color: #138496;
+}
+
+.copy-btn:disabled {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.copy-btn.copied {
+    background-color: #28a745;
+}
+
+.copy-btn.copied:hover {
+    background-color: #28a745;
+}
+
+.add-custom-btn {
+    background-color: #28a745;
+}
+
+.add-custom-btn:hover {
+    background-color: #218838;
+}
+
+/* Add Custom Item Form */
+.add-custom-form {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.add-custom-form.hidden {
+    display: none;
+}
+
+.custom-item-inputs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.custom-item-inputs input {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.custom-item-inputs input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+#customItemName {
+    flex: 2;
+    min-width: 200px;
+}
+
+#customItemAmount, #customItemUnit {
+    flex: 1;
+    min-width: 100px;
+}
+
+.save-custom-btn, .cancel-custom-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.save-custom-btn {
+    background-color: #007bff;
+    color: white;
+}
+
+.save-custom-btn:hover {
+    background-color: #0056b3;
+}
+
+.cancel-custom-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.cancel-custom-btn:hover {
+    background-color: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .custom-item-inputs {
+        flex-direction: column;
+    }
+    
+    .custom-item-inputs input,
+    #customItemName,
+    #customItemAmount,
+    #customItemUnit {
+        width: 100%;
+        min-width: unset;
+    }
 }
 
 .grocery-list {
@@ -453,6 +599,16 @@ input[type="text"]:focus, textarea:focus {
     white-space: pre-line;
     line-height: 1.8;
     color: #495057;
+}
+
+.modal-actions {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .empty-state {

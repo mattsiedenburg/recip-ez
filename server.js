@@ -211,6 +211,20 @@ app.put('/api/grocery-list/:id', (req, res) => {
     res.json(groceryList[itemIndex]);
 });
 
+// Remove checked grocery items (must come before /:id route)
+app.delete('/api/grocery-list/checked', (req, res) => {
+    const groceryList = readGroceryList();
+    const uncheckedItems = groceryList.filter(item => !item.checked);
+    const removedCount = groceryList.length - uncheckedItems.length;
+    
+    writeGroceryList(uncheckedItems);
+    
+    res.json({ 
+        message: `${removedCount} checked item(s) removed successfully`,
+        removedCount 
+    });
+});
+
 // Delete grocery list item
 app.delete('/api/grocery-list/:id', (req, res) => {
     const groceryList = readGroceryList();
@@ -224,6 +238,21 @@ app.delete('/api/grocery-list/:id', (req, res) => {
     writeGroceryList(groceryList);
     
     res.json({ message: 'Grocery item deleted successfully' });
+});
+
+// Toggle grocery item checked status
+app.put('/api/grocery-list/:id/toggle', (req, res) => {
+    const groceryList = readGroceryList();
+    const itemIndex = groceryList.findIndex(item => item.id === parseInt(req.params.id));
+    
+    if (itemIndex === -1) {
+        return res.status(404).json({ error: 'Grocery item not found' });
+    }
+
+    groceryList[itemIndex].checked = !groceryList[itemIndex].checked;
+    writeGroceryList(groceryList);
+    
+    res.json(groceryList[itemIndex]);
 });
 
 // Clear grocery list

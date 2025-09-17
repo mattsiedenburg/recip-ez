@@ -92,9 +92,30 @@
         <!-- Grocery List Section -->
         <section id="groceryListSection" class="section">
             <h2>Grocery List</h2>
+            
+            <!-- Grocery Search -->
+            <div class="grocery-search-container">
+                <input type="text" id="grocerySearchInput" placeholder="🔍 Search grocery items..." class="search-input">
+            </div>
+            
             <div class="grocery-actions">
                 <button id="clearGroceryListBtn" class="clear-btn">Clear All</button>
+                <button id="removeCheckedBtn" class="remove-checked-btn">Remove Checked Items</button>
+                <button id="copyGroceryListBtn" class="copy-btn">📋 Copy List</button>
+                <button id="addCustomItemBtn" class="add-custom-btn">➕ Add Item</button>
             </div>
+            
+            <!-- Add Custom Item Form -->
+            <div id="addCustomItemForm" class="add-custom-form hidden">
+                <div class="custom-item-inputs">
+                    <input type="text" id="customItemName" placeholder="Item name" required>
+                    <input type="text" id="customItemAmount" placeholder="Amount (optional)">
+                    <input type="text" id="customItemUnit" placeholder="Unit (optional)">
+                    <button id="saveCustomItemBtn" class="save-custom-btn">Add</button>
+                    <button id="cancelCustomItemBtn" class="cancel-custom-btn">Cancel</button>
+                </div>
+            </div>
+            
             <div id="groceryList" class="grocery-list"></div>
         </section>
 

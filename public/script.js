@@ -20,9 +20,20 @@ const cancelEditBtn = document.getElementById('cancelEditBtn');
 const recipesList = document.getElementById('recipesList');
 const groceryList = document.getElementById('groceryList');
 const clearGroceryListBtn = document.getElementById('clearGroceryListBtn');
+const removeCheckedBtn = document.getElementById('removeCheckedBtn');
+const copyGroceryListBtn = document.getElementById('copyGroceryListBtn');
+const addCustomItemBtn = document.getElementById('addCustomItemBtn');
+
+const addCustomItemForm = document.getElementById('addCustomItemForm');
+const customItemName = document.getElementById('customItemName');
+const customItemAmount = document.getElementById('customItemAmount');
+const customItemUnit = document.getElementById('customItemUnit');
+const saveCustomItemBtn = document.getElementById('saveCustomItemBtn');
+const cancelCustomItemBtn = document.getElementById('cancelCustomItemBtn');
 
 const searchInput = document.getElementById('searchInput');
 const clearSearchBtn = document.getElementById('clearSearchBtn');
+const grocerySearchInput = document.getElementById('grocerySearchInput');
 
 const recipeModal = document.getElementById('recipeModal');
 const recipeDetails = document.getElementById('recipeDetails');
@@ -61,10 +72,21 @@ function setupEventListeners() {
 
     // Grocery list
     clearGroceryListBtn.addEventListener('click', clearGroceryList);
+    removeCheckedBtn.addEventListener('click', removeCheckedItems);
+    copyGroceryListBtn.addEventListener('click', copyGroceryListToClipboard);
+    addCustomItemBtn.addEventListener('click', showAddCustomItemForm);
+    
+    // Custom item form
+    saveCustomItemBtn.addEventListener('click', saveCustomItem);
+    cancelCustomItemBtn.addEventListener('click', hideAddCustomItemForm);
+    customItemName.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') saveCustomItem();
+    });
 
     // Search functionality
     searchInput.addEventListener('input', handleSearch);
     clearSearchBtn.addEventListener('click', clearSearch);
+    grocerySearchInput.addEventListener('input', handleGrocerySearch);
 
     // Modal
     document.querySelector('.close').addEventListener('click', closeModal);
@@ -173,12 +195,6 @@ function displayRecipes() {
             <div class="actions" onclick="event.stopPropagation()">
                 <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
                     🛒 Add to Grocery List
-                </button>
-                <button class="edit-recipe-btn" onclick="editRecipe(${recipe.id})">
-                    ✏️ Edit
-                </button>
-                <button class="delete-recipe-btn" onclick="deleteRecipe(${recipe.id})">
-                    🗑️ Delete
                 </button>
             </div>
         </div>
@@ -390,6 +406,18 @@ function showRecipeDetails(recipeId) {
                 <h4>📝 Instructions</h4>
                 <div class="instructions">${recipe.instructions}</div>
             </div>
+            
+            <div class="modal-actions">
+                <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id}); closeModal();">
+                    🛒 Add to Grocery List
+                </button>
+                <button class="edit-recipe-btn" onclick="editRecipe(${recipe.id}); closeModal();">
+                    ✏️ Edit Recipe
+                </button>
+                <button class="delete-recipe-btn" onclick="deleteRecipe(${recipe.id}); closeModal();">
+                    🗑️ Delete Recipe
+                </button>
+            </div>
         </div>
     `;
 
@@ -411,7 +439,16 @@ async function loadGroceryList() {
     }
 }
 
-function displayGroceryList() {
+function displayGroceryList(searchTerm = '') {
+    let itemsToDisplay = groceryItems;
+    
+    // Filter items if search term is provided
+    if (searchTerm) {
+        itemsToDisplay = groceryItems.filter(item => 
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
+    
     if (groceryItems.length === 0) {
         groceryList.innerHTML = `
             <div class="empty-state">
@@ -419,10 +456,24 @@ function displayGroceryList() {
                 <p>Add ingredients from your recipes to build your shopping list.</p>
             </div>
         `;
+        removeCheckedBtn.disabled = true;
+        copyGroceryListBtn.disabled = true;
         return;
     }
 
-    groceryList.innerHTML = groceryItems.map(item => `
+    if (itemsToDisplay.length === 0 && searchTerm) {
+        groceryList.innerHTML = `
+            <div class="empty-state">
+                <h3>No items found</h3>
+                <p>No grocery items match your search for "${searchTerm}".</p>
+            </div>
+        `;
+        removeCheckedBtn.disabled = true;
+        copyGroceryListBtn.disabled = true;
+        return;
+    }
+
+    groceryList.innerHTML = itemsToDisplay.map(item => `
         <div class="grocery-item ${item.checked ? 'checked' : ''}">
             <input type="checkbox" ${item.checked ? 'checked' : ''} 
                    onchange="toggleGroceryItem(${item.id})">
@@ -433,6 +484,11 @@ function displayGroceryList() {
             <button class="remove-grocery-btn" onclick="removeGroceryItem(${item.id})">✖</button>
         </div>
     `).join('');
+
+    // Update button states based on all items, not just filtered ones
+    const hasCheckedItems = groceryItems.some(item => item.checked);
+    removeCheckedBtn.disabled = !hasCheckedItems;
+    copyGroceryListBtn.disabled = false;
 }
 
 async function addIngredientsToGroceryList(recipeId) {
@@ -512,6 +568,44 @@ async function clearGroceryList() {
     }
 }
 
+async function toggleGroceryItem(itemId) {
+    try {
+        const response = await fetch(`${API_BASE}/grocery-list/${itemId}/toggle`, {
+            method: 'PUT',
+        });
+
+        if (response.ok) {
+            loadGroceryList();
+        }
+    } catch (error) {
+        console.error('Error toggling grocery item:', error);
+    }
+}
+
+async function removeCheckedItems() {
+    const checkedItems = groceryItems.filter(item => item.checked);
+    
+    if (checkedItems.length === 0) {
+        return;
+    }
+
+    if (!confirm(`Are you sure you want to remove ${checkedItems.length} checked item(s)?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/grocery-list/checked`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            loadGroceryList();
+        }
+    } catch (error) {
+        console.error('Error removing checked items:', error);
+    }
+}
+
 // Search functionality
 function handleSearch() {
     const searchTerm = searchInput.value.trim().toLowerCase();
@@ -552,4 +646,142 @@ function clearSearch() {
     clearSearchBtn.classList.remove('show');
     filteredRecipes = [...recipes];
     displayRecipes();
+}
+
+// Grocery search functionality
+function handleGrocerySearch() {
+    const searchTerm = grocerySearchInput.value.trim().toLowerCase();
+    displayGroceryList(searchTerm);
+}
+
+// Copy grocery list to clipboard
+async function copyGroceryListToClipboard() {
+    if (groceryItems.length === 0) {
+        return;
+    }
+
+    // Create a formatted grocery list text
+    const uncheckedItems = groceryItems.filter(item => !item.checked);
+    const checkedItems = groceryItems.filter(item => item.checked);
+    
+    let listText = "🛒 Grocery List\n";
+    listText += "====================\n\n";
+    
+    if (uncheckedItems.length > 0) {
+        listText += "📝 To Buy:\n";
+        uncheckedItems.forEach(item => {
+            const amount = item.amount && item.unit ? ` (${item.amount} ${item.unit})` : '';
+            listText += `• ${item.name}${amount}\n`;
+        });
+        listText += "\n";
+    }
+    
+    if (checkedItems.length > 0) {
+        listText += "✅ Already Got:\n";
+        checkedItems.forEach(item => {
+            const amount = item.amount && item.unit ? ` (${item.amount} ${item.unit})` : '';
+            listText += `• ${item.name}${amount}\n`;
+        });
+    }
+    
+    listText += `\nGenerated by Recip-EZ on ${new Date().toLocaleDateString()}`;
+
+    try {
+        await navigator.clipboard.writeText(listText);
+        
+        // Show visual feedback
+        const originalText = copyGroceryListBtn.textContent;
+        copyGroceryListBtn.textContent = "✓ Copied!";
+        copyGroceryListBtn.classList.add('copied');
+        
+        setTimeout(() => {
+            copyGroceryListBtn.textContent = originalText;
+            copyGroceryListBtn.classList.remove('copied');
+        }, 2000);
+        
+    } catch (err) {
+        // Fallback for browsers that don't support clipboard API
+        console.error('Failed to copy to clipboard:', err);
+        
+        // Create a temporary textarea for fallback copy
+        const textArea = document.createElement('textarea');
+        textArea.value = listText;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            textArea.remove();
+            
+            // Show visual feedback
+            const originalText = copyGroceryListBtn.textContent;
+            copyGroceryListBtn.textContent = "✓ Copied!";
+            copyGroceryListBtn.classList.add('copied');
+            
+            setTimeout(() => {
+                copyGroceryListBtn.textContent = originalText;
+                copyGroceryListBtn.classList.remove('copied');
+            }, 2000);
+            
+        } catch (fallbackErr) {
+            textArea.remove();
+            alert('Unable to copy to clipboard. Please manually select and copy the list.');
+            console.error('Fallback copy failed:', fallbackErr);
+        }
+    }
+}
+
+// Custom item management
+function showAddCustomItemForm() {
+    addCustomItemForm.classList.remove('hidden');
+    customItemName.focus();
+}
+
+function hideAddCustomItemForm() {
+    addCustomItemForm.classList.add('hidden');
+    customItemName.value = '';
+    customItemAmount.value = '';
+    customItemUnit.value = '';
+}
+
+async function saveCustomItem() {
+    const name = customItemName.value.trim();
+    const amount = customItemAmount.value.trim();
+    const unit = customItemUnit.value.trim();
+    
+    if (!name) {
+        alert('Please enter an item name.');
+        customItemName.focus();
+        return;
+    }
+    
+    try {
+        const response = await fetch(`${API_BASE}/grocery-list`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                ingredients: [{
+                    name: name,
+                    amount: amount,
+                    unit: unit
+                }]
+            }),
+        });
+
+        if (response.ok) {
+            hideAddCustomItemForm();
+            loadGroceryList();
+        } else {
+            alert('Error adding item. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error adding custom item:', error);
+        alert('Error adding item. Please try again.');
+    }
 }
