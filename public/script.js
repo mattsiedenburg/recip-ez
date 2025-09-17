@@ -419,21 +419,9 @@ async function handleAddRecipe(e) {
     const instructions = document.getElementById('recipeInstructions').value.trim();
 
     // Collect ingredients
-    const ingredientItems = document.querySelectorAll('.ingredient-item');
-    const ingredients = [];
+    const ingredients = ui.collectIngredients(document.querySelectorAll('.ingredient-item'));
 
-    ingredientItems.forEach(item => {
-        const name = item.querySelector('.ingredient-name').value.trim();
-        const amount = item.querySelector('.ingredient-amount').value.trim();
-        const unit = item.querySelector('.ingredient-unit').value.trim();
-
-        if (name) {
-            ingredients.push({ name, amount, unit });
-        }
-    });
-
-    if (!title || !instructions || ingredients.length === 0) {
-        alert('Please fill in all required fields and add at least one ingredient.');
+    if (!ui.validateRecipeForm(title, instructions, ingredients)) {
         return;
     }
 
@@ -447,16 +435,16 @@ async function handleAddRecipe(e) {
         });
 
         if (response.ok) {
-            addRecipeForm.reset();
+            elements.addRecipeForm.reset();
             resetIngredientsList();
             showSection('recipes');
-            alert('Recipe added successfully!');
+            showNotification('Recipe added successfully!', 'success');
         } else {
-            alert('Error adding recipe. Please try again.');
+            showNotification('Error adding recipe. Please try again.', 'error');
         }
     } catch (error) {
         console.error('Error adding recipe:', error);
-        alert('Error adding recipe. Please try again.');
+        showNotification('Error adding recipe. Please try again.', 'error');
     }
 }
 
@@ -502,11 +490,11 @@ async function deleteRecipe(recipeId) {
         if (response.ok) {
             loadRecipes();
         } else {
-            alert('Error deleting recipe. Please try again.');
+            showNotification('Error deleting recipe. Please try again.', 'error');
         }
     } catch (error) {
         console.error('Error deleting recipe:', error);
-        alert('Error deleting recipe. Please try again.');
+        showNotification('Error deleting recipe. Please try again.', 'error');
     }
 }
 
@@ -521,7 +509,7 @@ function editRecipe(recipeId) {
     document.getElementById('editRecipeInstructions').value = recipe.instructions;
     
     // Clear and populate ingredients
-    editIngredientsList.innerHTML = '';
+    elements.editIngredientsList.innerHTML = '';
     recipe.ingredients.forEach(ingredient => {
         addEditIngredientInput(ingredient);
     });
@@ -541,21 +529,9 @@ async function handleEditRecipe(e) {
     const instructions = document.getElementById('editRecipeInstructions').value.trim();
 
     // Collect ingredients
-    const ingredientItems = editIngredientsList.querySelectorAll('.ingredient-item');
-    const ingredients = [];
+    const ingredients = ui.collectIngredients(elements.editIngredientsList);
 
-    ingredientItems.forEach(item => {
-        const name = item.querySelector('.ingredient-name').value.trim();
-        const amount = item.querySelector('.ingredient-amount').value.trim();
-        const unit = item.querySelector('.ingredient-unit').value.trim();
-
-        if (name) {
-            ingredients.push({ name, amount, unit });
-        }
-    });
-
-    if (ingredients.length === 0) {
-        alert('Please add at least one ingredient.');
+    if (!ui.validateRecipeForm(title, instructions, ingredients)) {
         return;
     }
 
@@ -574,19 +550,20 @@ async function handleEditRecipe(e) {
 
         if (response.ok) {
             // Clear form
-            editRecipeForm.reset();
-            editIngredientsList.innerHTML = '';
+            elements.editRecipeForm.reset();
+            elements.editIngredientsList.innerHTML = '';
             addEditIngredientInput();
             editingRecipeId = null;
             
             // Show recipes section
             showSection('recipes');
+            showNotification('Recipe updated successfully!', 'success');
         } else {
-            alert('Error updating recipe. Please try again.');
+            showNotification('Error updating recipe. Please try again.', 'error');
         }
     } catch (error) {
         console.error('Error updating recipe:', error);
-        alert('Error updating recipe. Please try again.');
+        showNotification('Error updating recipe. Please try again.', 'error');
     }
 }
 
@@ -626,11 +603,11 @@ function showRecipeDetails(recipeId) {
         </div>
     `;
 
-    recipeModal.style.display = 'block';
+    elements.recipeModal.style.display = 'block';
 }
 
 function closeModal() {
-    recipeModal.style.display = 'none';
+    elements.recipeModal.style.display = 'none';
 }
 
 // Grocery List Management - Optimized with centralized API calls
@@ -710,7 +687,7 @@ async function addIngredientsToGroceryList(recipeId) {
 
         if (response.ok) {
             showNotification(`Ingredients from "${recipe.title}" added to grocery list!`, 'success');
-            if (groceryListSection.classList.contains('active')) {
+            if (elements.groceryListSection.classList.contains('active')) {
                 loadGroceryList();
             }
         } else {
@@ -874,13 +851,13 @@ async function copyGroceryListToClipboard() {
         await navigator.clipboard.writeText(listText);
         
         // Show visual feedback
-        const originalText = copyGroceryListBtn.textContent;
-        copyGroceryListBtn.textContent = "✓ Copied!";
-        copyGroceryListBtn.classList.add('copied');
+        const originalText = elements.copyGroceryListBtn.textContent;
+        elements.copyGroceryListBtn.textContent = "✓ Copied!";
+        elements.copyGroceryListBtn.classList.add('copied');
         
         setTimeout(() => {
-            copyGroceryListBtn.textContent = originalText;
-            copyGroceryListBtn.classList.remove('copied');
+            elements.copyGroceryListBtn.textContent = originalText;
+            elements.copyGroceryListBtn.classList.remove('copied');
         }, 2000);
         
     } catch (err) {
@@ -902,18 +879,18 @@ async function copyGroceryListToClipboard() {
             textArea.remove();
             
             // Show visual feedback
-            const originalText = copyGroceryListBtn.textContent;
-            copyGroceryListBtn.textContent = "✓ Copied!";
-            copyGroceryListBtn.classList.add('copied');
+            const originalText = elements.copyGroceryListBtn.textContent;
+            elements.copyGroceryListBtn.textContent = "✓ Copied!";
+            elements.copyGroceryListBtn.classList.add('copied');
             
             setTimeout(() => {
-                copyGroceryListBtn.textContent = originalText;
-                copyGroceryListBtn.classList.remove('copied');
+                elements.copyGroceryListBtn.textContent = originalText;
+                elements.copyGroceryListBtn.classList.remove('copied');
             }, 2000);
             
         } catch (fallbackErr) {
             textArea.remove();
-            alert('Unable to copy to clipboard. Please manually select and copy the list.');
+            showNotification('Unable to copy to clipboard. Please manually select and copy the list.', 'error');
             console.error('Fallback copy failed:', fallbackErr);
         }
     }
@@ -921,25 +898,25 @@ async function copyGroceryListToClipboard() {
 
 // Custom item management
 function showAddCustomItemForm() {
-    addCustomItemForm.classList.remove('hidden');
-    customItemName.focus();
+    elements.addCustomItemForm.classList.remove('hidden');
+    elements.customItemName.focus();
 }
 
 function hideAddCustomItemForm() {
-    addCustomItemForm.classList.add('hidden');
-    customItemName.value = '';
-    customItemAmount.value = '';
-    customItemUnit.value = '';
+    elements.addCustomItemForm.classList.add('hidden');
+    elements.customItemName.value = '';
+    elements.customItemAmount.value = '';
+    elements.customItemUnit.value = '';
 }
 
 async function saveCustomItem() {
-    const name = customItemName.value.trim();
-    const amount = customItemAmount.value.trim();
-    const unit = customItemUnit.value.trim();
+    const name = elements.customItemName.value.trim();
+    const amount = elements.customItemAmount.value.trim();
+    const unit = elements.customItemUnit.value.trim();
     
     if (!name) {
-        alert('Please enter an item name.');
-        customItemName.focus();
+        showNotification('Please enter an item name.', 'error');
+        elements.customItemName.focus();
         return;
     }
     
@@ -961,11 +938,12 @@ async function saveCustomItem() {
         if (response.ok) {
             hideAddCustomItemForm();
             loadGroceryList();
+            showNotification('Item added successfully!', 'success');
         } else {
-            alert('Error adding item. Please try again.');
+            showNotification('Error adding item. Please try again.', 'error');
         }
     } catch (error) {
         console.error('Error adding custom item:', error);
-        alert('Error adding item. Please try again.');
+        showNotification('Error adding item. Please try again.', 'error');
     }
 }
