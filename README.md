@@ -2,7 +2,7 @@
 
 A simple and elegant recipe management application with grocery list functionality. Built with Node.js, Express, and vanilla JavaScript.
 
-![Recip-EZ Application](https://github.com/user-attachments/assets/d29b0735-d52f-49b7-8418-d5038600fe19)
+![Recip-EZ Application](https://github.com/user-attachments/assets/733c0147-c4ff-425d-b85f-6a422fcd3535)
 
 ## Features ✨
 
