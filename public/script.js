@@ -101,7 +101,7 @@ function setupEventListeners() {
 
     // Edit recipe form
     editRecipeForm.addEventListener('submit', handleEditRecipe);
-    addEditIngredientBtn.addEventListener('click', () => addEditIngredientInput());
+    addEditIngredientBtn.addEventListener('click', () => addEditIngredientInput(null, true));
     cancelEditBtn.addEventListener('click', () => showSection('recipes'));
 
     // Grocery list
@@ -139,6 +139,8 @@ function setupEventListeners() {
         if (e.key === 'Escape') {
             if (recipeModal.style.display === 'block') {
                 closeModal();
+            } else if (!addCustomItemForm.classList.contains('hidden')) {
+                hideAddCustomItemForm();
             } else if (addRecipeSection.classList.contains('active')) {
                 showSection('recipes');
             } else if (editRecipeSection.classList.contains('active')) {
@@ -358,7 +360,7 @@ function addIngredientInput() {
     ingredientsList.appendChild(ingredientItem);
 }
 
-function addEditIngredientInput(ingredient = null) {
+function addEditIngredientInput(ingredient = null, autoFocus = false) {
     const ingredientItem = document.createElement('div');
     ingredientItem.className = 'ingredient-item';
     ingredientItem.innerHTML = `
@@ -368,6 +370,12 @@ function addEditIngredientInput(ingredient = null) {
         <button type="button" class="remove-ingredient">✖</button>
     `;
     editIngredientsList.appendChild(ingredientItem);
+    
+    // Only focus if explicitly requested (when user clicks add ingredient)
+    if (autoFocus) {
+        const nameField = ingredientItem.querySelector('.ingredient-name');
+        setTimeout(() => nameField.focus(), 10);
+    }
 }
 
 function resetIngredientsList() {
