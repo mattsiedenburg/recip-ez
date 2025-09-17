@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recip-EZ - Recipe Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍳 Recip-EZ</h1>
+            <p>Your simple recipe manager with grocery list</p>
+        </header>
+
+        <nav>
+            <button id="showRecipesBtn" class="nav-btn active">📖 View Recipes</button>
+            <button id="showAddRecipeBtn" class="nav-btn">➕ Add Recipe</button>
+            <button id="showGroceryListBtn" class="nav-btn">🛒 Grocery List</button>
+        </nav>
+
+        <!-- View Recipes Section -->
+        <section id="recipesSection" class="section active">
+            <h2>Your Recipes</h2>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search recipes by name, ingredient, or instructions..." class="search-input">
+                <button id="clearSearchBtn" class="clear-search-btn">✖</button>
+            </div>
+            <div id="recipesList" class="recipes-grid"></div>
+        </section>
+
+        <!-- Add Recipe Section -->
+        <section id="addRecipeSection" class="section">
+            <h2>Add New Recipe</h2>
+            <form id="addRecipeForm" class="recipe-form">
+                <div class="form-group">
+                    <label for="recipeTitle">Recipe Title:</label>
+                    <input type="text" id="recipeTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Ingredients:</label>
+                    <div id="ingredientsList">
+                        <div class="ingredient-item">
+                            <input type="text" placeholder="Ingredient name" class="ingredient-name" required>
+                            <input type="text" placeholder="Amount" class="ingredient-amount">
+                            <input type="text" placeholder="Unit" class="ingredient-unit">
+                            <button type="button" class="remove-ingredient">✖</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addIngredientBtn">+ Add Ingredient</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="recipeInstructions">Instructions:</label>
+                    <textarea id="recipeInstructions" rows="6" required></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Save Recipe</button>
+            </form>
+        </section>
+
+        <!-- Edit Recipe Section -->
+        <section id="editRecipeSection" class="section">
+            <h2>Edit Recipe</h2>
+            <form id="editRecipeForm" class="recipe-form">
+                <div class="form-group">
+                    <label for="editRecipeTitle">Recipe Title:</label>
+                    <input type="text" id="editRecipeTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Ingredients:</label>
+                    <div id="editIngredientsList">
+                        <!-- Ingredients will be populated dynamically -->
+                    </div>
+                    <button type="button" id="addEditIngredientBtn">+ Add Ingredient</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="editRecipeInstructions">Instructions:</label>
+                    <textarea id="editRecipeInstructions" rows="6" required></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">Update Recipe</button>
+                    <button type="button" id="cancelEditBtn" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Grocery List Section -->
+        <section id="groceryListSection" class="section">
+            <h2>Grocery List</h2>
+            <div class="grocery-actions">
+                <button id="clearGroceryListBtn" class="clear-btn">Clear All</button>
+            </div>
+            <div id="groceryList" class="grocery-list"></div>
+        </section>
+
+        <!-- Recipe Detail Modal -->
+        <div id="recipeModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="recipeDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
