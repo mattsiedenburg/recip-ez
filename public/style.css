@@ -1089,6 +1089,12 @@ input[type="text"]:focus, textarea:focus {
     color: white;
 }
 
+.tag-suggestion.active {
+    background-color: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
 .tags-section {
     margin-bottom: 20px;
 }

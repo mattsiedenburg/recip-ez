@@ -123,7 +123,7 @@ app.get('/api/recipes/:id', (req, res) => {
 
 // Create a new recipe
 app.post('/api/recipes', (req, res) => {
-    const { title, ingredients, instructions } = req.body;
+    const { title, ingredients, instructions, tags } = req.body;
     
     const validation_result = validation.validateRecipe(title, ingredients, instructions);
     if (!validation_result.isValid) {
@@ -137,6 +137,7 @@ app.post('/api/recipes', (req, res) => {
             title,
             ingredients: validation.processIngredients(ingredients),
             instructions,
+            tags: tags || [], // Include tags with empty array as default
             createdAt: new Date().toISOString()
         };
 
@@ -151,7 +152,7 @@ app.post('/api/recipes', (req, res) => {
 
 // Update a recipe
 app.put('/api/recipes/:id', (req, res) => {
-    const { title, ingredients, instructions } = req.body;
+    const { title, ingredients, instructions, tags } = req.body;
     
     const validation_result = validation.validateRecipe(title, ingredients, instructions);
     if (!validation_result.isValid) {
@@ -172,6 +173,7 @@ app.put('/api/recipes/:id', (req, res) => {
             title,
             ingredients: validation.processIngredients(ingredients),
             instructions,
+            tags: tags || [], // Include tags with empty array as default
             updatedAt: new Date().toISOString()
         };
 

@@ -328,15 +328,22 @@ function setupEventListeners() {
     // Tag filtering
     elements.tagFilter.addEventListener('change', handleTagFilter);
     
+    // Tag input change listeners for highlighting
+    elements.recipeTags.addEventListener('input', (e) => {
+        updateTagHighlighting(e.target);
+    });
+    
+    elements.editRecipeTags.addEventListener('input', (e) => {
+        updateTagHighlighting(e.target);
+    });
+    
     // Tag suggestions click handlers
     document.addEventListener('click', (e) => {
         if (e.target.classList.contains('tag-suggestion')) {
             const tag = e.target.dataset.tag;
             const tagInput = e.target.closest('.form-group').querySelector('input[type="text"]');
             if (tagInput) {
-                const currentTags = tagInput.value.trim();
-                const newValue = currentTags ? `${currentTags}, ${tag}` : tag;
-                tagInput.value = newValue;
+                toggleTag(tagInput, tag);
             }
         }
     });
@@ -451,6 +458,7 @@ async function loadRecipes() {
         recipes = await api.recipes.getAll();
         filteredRecipes = [...recipes];
         populateTagFilter();
+        updateTagSuggestions();
         displayRecipes();
     } catch (error) {
         showNotification('Error loading recipes. Please try again.', 'error');
@@ -575,6 +583,16 @@ async function handleAddRecipe(e) {
         if (response.ok) {
             elements.addRecipeForm.reset();
             resetIngredientsList();
+            
+            // Clear tag highlighting after form reset
+            setTimeout(() => {
+                updateTagHighlighting(elements.recipeTags);
+            }, 0);
+            
+            // Refresh recipes data and update tag systems
+            await loadRecipes(); // This will update the recipes array and call populateTagFilter
+            updateTagSuggestions(); // Update the tag suggestions with any new tags
+            
             showSection('recipes');
             showNotification('Recipe added successfully!', 'success');
         } else {
@@ -647,6 +665,11 @@ function editRecipe(recipeId) {
     document.getElementById('editRecipeInstructions').value = recipe.instructions;
     document.getElementById('editRecipeTags').value = recipe.tags ? recipe.tags.join(', ') : '';
     
+    // Update tag highlighting after populating tags
+    setTimeout(() => {
+        updateTagHighlighting(document.getElementById('editRecipeTags'));
+    }, 0);
+    
     // Clear and populate ingredients
     elements.editIngredientsList.innerHTML = '';
     recipe.ingredients.forEach(ingredient => {
@@ -698,6 +721,15 @@ async function handleEditRecipe(e) {
             elements.editIngredientsList.innerHTML = '';
             addEditIngredientInput();
             editingRecipeId = null;
+            
+            // Clear tag highlighting after form reset
+            setTimeout(() => {
+                updateTagHighlighting(elements.editRecipeTags);
+            }, 0);
+            
+            // Refresh recipes data and update tag systems
+            await loadRecipes(); // This will update the recipes array and call populateTagFilter
+            updateTagSuggestions(); // Update the tag suggestions with any new tags
             
             // Show recipes section
             showSection('recipes');
@@ -1027,6 +1059,71 @@ function populateTagFilter() {
     
     elements.tagFilter.innerHTML = '<option value="">All Tags</option>' + 
         sortedTags.map(tag => `<option value="${tag}">${tag}</option>`).join('');
+}
+
+function updateTagSuggestions() {
+    // Get all unique tags from all recipes
+    const allTags = new Set();
+    recipes.forEach(recipe => {
+        if (recipe.tags) {
+            recipe.tags.forEach(tag => allTags.add(tag));
+        }
+    });
+    
+    const sortedTags = Array.from(allTags).sort();
+    
+    // Update tag suggestions in both add and edit forms
+    const tagSuggestionContainers = document.querySelectorAll('.tag-suggestions');
+    tagSuggestionContainers.forEach(container => {
+        container.innerHTML = sortedTags.map(tag => 
+            `<span class="tag-suggestion" data-tag="${tag}">${tag}</span>`
+        ).join('');
+    });
+    
+    // Update highlighting for both forms after updating suggestions
+    setTimeout(() => {
+        updateTagHighlighting(elements.recipeTags);
+        updateTagHighlighting(elements.editRecipeTags);
+    }, 0);
+}
+
+// Tag highlighting functions
+function getTagsFromInput(input) {
+    return input.value.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+}
+
+function updateTagHighlighting(tagInput) {
+    const appliedTags = getTagsFromInput(tagInput);
+    const container = tagInput.closest('.form-group').querySelector('.tag-suggestions');
+    
+    if (container) {
+        const suggestions = container.querySelectorAll('.tag-suggestion');
+        suggestions.forEach(suggestion => {
+            const tagName = suggestion.dataset.tag;
+            if (appliedTags.includes(tagName)) {
+                suggestion.classList.add('active');
+            } else {
+                suggestion.classList.remove('active');
+            }
+        });
+    }
+}
+
+function toggleTag(tagInput, tagName) {
+    const appliedTags = getTagsFromInput(tagInput);
+    
+    if (appliedTags.includes(tagName)) {
+        // Remove the tag
+        const filteredTags = appliedTags.filter(tag => tag !== tagName);
+        tagInput.value = filteredTags.join(', ');
+    } else {
+        // Add the tag
+        const newValue = appliedTags.length > 0 ? `${tagInput.value.trim()}, ${tagName}` : tagName;
+        tagInput.value = newValue;
+    }
+    
+    // Update highlighting after toggling
+    updateTagHighlighting(tagInput);
 }
 
 function handleTagFilter() {
