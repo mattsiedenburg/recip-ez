@@ -926,7 +926,7 @@ input[type="text"]:focus, textarea:focus {
 }
 
 .recipe-detail h4 {
-    color: #6c757d;
+    color: var(--text-secondary);
     margin-bottom: 15px;
     font-size: 1.3em;
 }
@@ -938,19 +938,19 @@ input[type="text"]:focus, textarea:focus {
 
 .recipe-detail li {
     padding: 8px 0;
-    border-bottom: 1px solid #e9ecef;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .recipe-detail .instructions {
     white-space: pre-line;
     line-height: 1.8;
-    color: #495057;
+    color: var(--text-primary);
 }
 
 .modal-actions {
     margin-top: 30px;
     padding-top: 20px;
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid var(--border-color);
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
