@@ -2,8 +2,7 @@
 
 A simple and elegant recipe management application with grocery list functionality. Built with Node.js, Express, and vanilla JavaScript.
 
-<img width="3810" height="3120" alt="Screenshot 2025-09-17 at 16-20-28 Recip-EZ - Recipe Manager" src="https://github.com/user-attachments/assets/81add5c5-0273-4560-bc2f-5d7be72bb7ab" />
-
+<img width="1187" height="899" alt="Screenshot 2025-09-17 at 7 48 15 PM" src="https://github.com/user-attachments/assets/abc36a8a-f6ed-477a-b36c-7e0415b2cb68" />
 
 ## Features ✨
 
