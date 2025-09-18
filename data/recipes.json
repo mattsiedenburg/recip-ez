@@ -1047,11 +1047,18 @@
         "name": "Broth",
         "amount": "",
         "unit": ""
+      },
+      {
+        "name": "Pork belly",
+        "amount": "",
+        "unit": ""
       }
     ],
     "instructions": ".",
     "createdAt": "2025-09-18T00:00:01.237Z",
-    "updatedAt": "2025-09-18T00:13:11.249Z",
-    "tags": []
+    "updatedAt": "2025-09-18T02:45:01.497Z",
+    "tags": [
+      "Pork"
+    ]
   }
 ]

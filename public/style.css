@@ -1104,6 +1104,38 @@ input[type="text"]:focus, textarea:focus {
     color: var(--text-muted);
 }
 
+/* CSS-based View Toggle Icons */
+.grid-icon::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    mask-image: 
+        radial-gradient(circle at 3px 3px, transparent 2px, currentColor 2px),
+        radial-gradient(circle at 11px 3px, transparent 2px, currentColor 2px),
+        radial-gradient(circle at 3px 11px, transparent 2px, currentColor 2px),
+        radial-gradient(circle at 11px 11px, transparent 2px, currentColor 2px);
+    mask-size: 6px 6px, 6px 6px, 6px 6px, 6px 6px;
+    mask-position: 0 0, 8px 0, 0 8px, 8px 8px;
+    mask-repeat: no-repeat;
+}
+
+.list-icon::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 16px;
+    background: currentColor;
+    mask-image: 
+        linear-gradient(currentColor, currentColor),
+        linear-gradient(currentColor, currentColor),
+        linear-gradient(currentColor, currentColor);
+    mask-size: 100% 2px, 100% 2px, 100% 2px;
+    mask-position: 0 2px, 0 7px, 0 12px;
+    mask-repeat: no-repeat;
+}
+
 .notification-warning {
     background-color: var(--accent-warning);
     color: #212529;
