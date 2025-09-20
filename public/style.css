@@ -70,6 +70,10 @@ body {
     color: var(--text-primary);
     background-color: var(--bg-primary);
     transition: background-color 0.3s ease, color 0.3s ease;
+    /* Mobile improvements */
+    -webkit-text-size-adjust: 100%; /* Prevent iOS text zoom */
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlights */
+    touch-action: manipulation; /* Improve touch responsiveness */
 }
 
 .container {
@@ -969,37 +973,383 @@ input[type="text"]:focus, textarea:focus {
     color: var(--text-muted);
 }
 
-/* Responsive Design */
+/* Responsive Design - Enhanced Mobile Support */
 @media (max-width: 768px) {
     .container {
         padding: 10px;
+        margin: 0;
+    }
+    
+    header {
+        text-align: center;
+        padding: 15px 0;
     }
     
     header h1 {
         font-size: 2em;
+        margin-bottom: 8px;
     }
     
-    .ingredient-item {
+    header p {
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    
+    .theme-controls {
+        position: static;
+        justify-content: center;
+        margin-top: 15px;
+    }
+    
+    /* Mobile Navigation */
+    nav {
+        gap: 8px;
+        margin-bottom: 20px;
+        padding: 0 5px;
+    }
+    
+    .nav-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        flex: 1;
+        min-height: 44px; /* Apple's recommended touch target */
+        border-radius: 20px;
+    }
+    
+    /* Mobile Search and Controls */
+    .recipes-controls {
         flex-direction: column;
-        gap: 5px;
+        gap: 15px;
+        margin-bottom: 20px;
     }
     
-    .ingredient-name, .ingredient-amount, .ingredient-unit {
-        min-width: auto;
+    .search-container {
+        width: 100%;
     }
     
+    .search-input {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 12px 16px;
+        border-radius: 20px;
+        min-height: 44px;
+    }
+    
+    .clear-search-btn {
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        min-height: 32px;
+        min-width: 32px;
+    }
+    
+    .tag-filter-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .tag-filter {
+        font-size: 16px;
+        padding: 12px;
+        min-height: 44px;
+    }
+    
+    .view-toggle {
+        justify-content: center;
+    }
+    
+    .view-btn {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 10px;
+    }
+    
+    /* Mobile Recipe Grid/List */
     .recipes-grid {
         grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .recipe-card {
+        padding: 16px;
+        border-radius: 12px;
+    }
+    
+    .recipe-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
     }
     
     .recipe-card .actions {
         flex-direction: column;
+        gap: 8px;
+        margin-top: 15px;
+    }
+    
+    .recipe-card .actions button {
+        width: 100%;
+        min-height: 44px;
+        padding: 12px;
+        font-size: 14px;
+    }
+    
+    /* Mobile Forms */
+    .ingredient-item {
+        flex-direction: column;
+        gap: 10px;
+        padding: 15px;
+    }
+    
+    .ingredient-name, .ingredient-amount, .ingredient-unit {
+        min-width: auto;
+        width: 100%;
+        font-size: 16px;
+        padding: 12px;
+        min-height: 44px;
+    }
+    
+    .remove-ingredient-btn {
+        min-height: 44px;
+        min-width: 44px;
+        margin-top: 5px;
+        align-self: flex-end;
+    }
+    
+    /* Mobile Modal */
+    .modal-content {
+        margin: 5% auto;
+        width: 95%;
+        max-width: 95vw;
+        max-height: 90vh;
+        padding: 20px;
+        border-radius: 12px;
+        overflow-y: auto;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .modal-actions button {
+        width: 100%;
+        min-height: 44px;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 8px;
+    }
+    
+    /* Mobile Grocery List */
+    .grocery-item {
+        padding: 15px;
+        font-size: 16px;
+    }
+    
+    .grocery-item .actions {
+        gap: 10px;
+    }
+    
+    .grocery-item .actions button {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 10px;
+    }
+    
+    .grocery-actions {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .grocery-actions button {
+        width: 100%;
+        min-height: 44px;
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    /* Mobile Add Custom Item */
+    .add-custom-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .add-custom-container input {
+        font-size: 16px;
+        padding: 12px;
+        min-height: 44px;
+        border-radius: 8px;
+    }
+    
+    .add-custom-container button {
+        min-height: 44px;
+        padding: 12px;
+        font-size: 16px;
+    }
+    
+    /* Mobile Form Buttons */
+    input[type="text"], 
+    input[type="email"], 
+    input[type="tel"],
+    textarea, 
+    select {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+        padding: 12px;
+        min-height: 44px;
+        border-radius: 8px;
+    }
+    
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    button {
+        min-height: 44px;
+        padding: 12px 16px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    /* Mobile Notifications */
+    .notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        transform: translateY(-100px);
+        max-width: none;
+    }
+    
+    .notification.show {
+        transform: translateY(0);
+    }
+    
+    /* Mobile Tags */
+    .recipe-tags {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .recipe-tag {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+    
+    .selected-tags {
+        gap: 6px;
+    }
+    
+    .tag-item {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+    
+    /* Mobile SMS Modal */
+    .sms-modal .modal-content {
+        padding: 20px;
+    }
+    
+    .phone-input {
+        font-size: 16px !important;
+        padding: 12px;
+        min-height: 44px;
+    }
+    
+    .sms-preview {
+        max-height: 200px;
+        font-size: 14px;
+        padding: 15px;
+    }
+    
+    /* Mobile List View */
+    .recipes-list .recipe-item {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    
+    .recipes-list .recipe-item h3 {
+        font-size: 16px;
+    }
+    
+    .recipes-list .recipe-item .actions {
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+    }
+    
+    .recipes-list .recipe-item .actions button {
+        width: 100%;
+        min-height: 40px;
+        font-size: 14px;
+    }
+}
+
+/* Extra Mobile Support for Smaller Screens */
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+    }
+    
+    header h1 {
+        font-size: 1.8em;
+    }
+    
+    .nav-btn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    
+    .search-input {
+        padding: 10px 14px;
+    }
+    
+    .recipe-card {
+        padding: 12px;
     }
     
     .modal-content {
-        margin: 10% auto;
-        width: 95%;
-        padding: 20px;
+        margin: 2% auto;
+        width: 98%;
+        padding: 15px;
+        border-radius: 8px;
+    }
+    
+    .modal-actions button {
+        padding: 10px;
+        font-size: 15px;
+    }
+    
+    .grocery-item {
+        padding: 12px;
+        font-size: 15px;
+    }
+    
+    .notification {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}
+
+/* Touch Improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Touch device specific styles */
+    button:hover {
+        transform: none; /* Disable hover transforms on touch devices */
+    }
+    
+    .recipe-card:hover {
+        transform: none;
+    }
+    
+    /* Larger touch targets for better accessibility */
+    .remove-ingredient-btn,
+    .clear-search-btn,
+    .view-btn {
+        min-height: 48px;
+        min-width: 48px;
     }
 }
 

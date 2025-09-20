@@ -148,9 +148,18 @@ const ui = {
         `;
     },
     
-    // Focus management
+    // Mobile detection utility
+    isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+               || (navigator.maxTouchPoints && navigator.maxTouchPoints > 1)
+               || window.matchMedia('(max-width: 768px)').matches;
+    },
+    
+    // Focus management - skip auto-focus on mobile devices
     focusElement(element, delay = 100) {
-        setTimeout(() => element.focus(), delay);
+        if (!this.isMobileDevice()) {
+            setTimeout(() => element.focus(), delay);
+        }
     }
 };
 
@@ -290,11 +299,11 @@ function setupEventListeners() {
                 setTimeout(() => {
                     const newLastIngredient = elements.ingredientsList.lastElementChild;
                     const nameField = newLastIngredient.querySelector('.ingredient-name');
-                    if (nameField) nameField.focus();
+                    if (nameField) ui.focusElement(nameField, 10);
                 }, 10);
             } else {
                 // If empty, just focus the empty name field
-                if (lastNameField) lastNameField.focus();
+                if (lastNameField) ui.focusElement(lastNameField, 10);
             }
         }
     });
@@ -315,7 +324,7 @@ function setupEventListeners() {
                 addEditIngredientInput(null, true);
             } else {
                 // If empty, just focus the empty name field
-                if (lastNameField) lastNameField.focus();
+                if (lastNameField) ui.focusElement(lastNameField, 10);
             }
         }
     });
@@ -1222,7 +1231,7 @@ function clearCustomItemForm() {
     elements.customItemName.value = '';
     elements.customItemAmount.value = '';
     elements.customItemUnit.value = '';
-    elements.customItemName.focus();
+    ui.focusElement(elements.customItemName, 10);
 }
 
 async function saveCustomItem() {
@@ -1232,7 +1241,7 @@ async function saveCustomItem() {
     
     if (!name) {
         showNotification('Please enter an item name.', 'error');
-        elements.customItemName.focus();
+        ui.focusElement(elements.customItemName, 10);
         return;
     }
     
