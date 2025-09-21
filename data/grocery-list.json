@@ -1,114 +1,202 @@
 [
   {
     "id": 1,
-    "name": "Spaghetti",
-    "amount": "400",
+    "name": "Chicken thighs",
+    "amount": "600",
     "unit": "grams",
-    "checked": true,
-    "addedAt": "2025-09-21T04:55:50.756Z"
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 2,
-    "name": "Eggs",
-    "amount": "2",
-    "unit": "pieces",
-    "checked": true,
-    "addedAt": "2025-09-21T04:55:50.756Z"
+    "name": "Coconut milk",
+    "amount": "400",
+    "unit": "ml",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 3,
-    "name": "Parmesan cheese",
-    "amount": "50",
-    "unit": "grams",
-    "checked": true,
-    "addedAt": "2025-09-21T04:55:50.756Z"
+    "name": "Green curry paste",
+    "amount": "3",
+    "unit": "tbsp",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 4,
-    "name": "Bacon",
-    "amount": "150",
-    "unit": "grams",
+    "name": "Thai basil",
+    "amount": "1",
+    "unit": "bunch",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:50.756Z"
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 5,
-    "name": "Chicken breast",
+    "name": "Eggplant",
     "amount": "2",
-    "unit": "pieces",
+    "unit": "small",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.155Z"
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 6,
-    "name": "Romaine lettuce",
-    "amount": "1",
-    "unit": "head",
-    "checked": true,
-    "addedAt": "2025-09-21T04:55:51.155Z"
+    "name": "Fish sauce",
+    "amount": "2",
+    "unit": "tbsp",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 7,
-    "name": "Caesar dressing",
-    "amount": "4",
+    "name": "Palm sugar",
+    "amount": "1",
     "unit": "tbsp",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.155Z"
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 8,
-    "name": "Croutons",
-    "amount": "1",
-    "unit": "cup",
+    "name": "Thai chilies",
+    "amount": "2",
+    "unit": "pieces",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.155Z"
+    "addedAt": "2025-09-21T05:15:11.497Z"
   },
   {
     "id": 9,
-    "name": "Flour",
-    "amount": "2",
-    "unit": "cups",
+    "name": "Chicken breast",
+    "amount": "700",
+    "unit": "grams",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.674Z"
+    "addedAt": "2025-09-21T05:15:12.610Z"
   },
   {
     "id": 10,
-    "name": "Butter",
-    "amount": "1",
+    "name": "Yogurt",
+    "amount": "1/2",
     "unit": "cup",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.674Z"
+    "addedAt": "2025-09-21T05:15:12.610Z"
   },
   {
     "id": 11,
-    "name": "Brown sugar",
-    "amount": "3/4",
-    "unit": "cup",
+    "name": "Tomato sauce",
+    "amount": "400",
+    "unit": "ml",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.674Z"
+    "addedAt": "2025-09-21T05:15:12.610Z"
   },
   {
     "id": 12,
-    "name": "White sugar",
-    "amount": "1/4",
+    "name": "Heavy cream",
+    "amount": "1/2",
     "unit": "cup",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.674Z"
+    "addedAt": "2025-09-21T05:15:12.610Z"
   },
   {
     "id": 13,
-    "name": "Chocolate chips",
-    "amount": "1",
-    "unit": "cup",
+    "name": "Garam masala",
+    "amount": "2",
+    "unit": "tsp",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.674Z"
+    "addedAt": "2025-09-21T05:15:12.610Z"
   },
   {
     "id": 14,
-    "name": "Vanilla extract",
+    "name": "Cumin",
     "amount": "1",
     "unit": "tsp",
     "checked": false,
-    "addedAt": "2025-09-21T04:55:51.674Z"
+    "addedAt": "2025-09-21T05:15:12.610Z"
+  },
+  {
+    "id": 15,
+    "name": "Paprika",
+    "amount": "1",
+    "unit": "tsp",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:12.610Z"
+  },
+  {
+    "id": 16,
+    "name": "Ginger",
+    "amount": "1",
+    "unit": "tbsp",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:12.610Z"
+  },
+  {
+    "id": 17,
+    "name": "Garlic",
+    "amount": "4",
+    "unit": "cloves",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:12.610Z"
+  },
+  {
+    "id": 18,
+    "name": "Beef sirloin",
+    "amount": "600",
+    "unit": "grams",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
+  },
+  {
+    "id": 19,
+    "name": "Mushrooms",
+    "amount": "300",
+    "unit": "grams",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
+  },
+  {
+    "id": 20,
+    "name": "Sour cream",
+    "amount": "1",
+    "unit": "cup",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
+  },
+  {
+    "id": 21,
+    "name": "Egg noodles",
+    "amount": "300",
+    "unit": "grams",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
+  },
+  {
+    "id": 22,
+    "name": "Onion",
+    "amount": "1",
+    "unit": "medium",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
+  },
+  {
+    "id": 23,
+    "name": "Beef broth",
+    "amount": "1",
+    "unit": "cup",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
+  },
+  {
+    "id": 24,
+    "name": "Flour",
+    "amount": "2",
+    "unit": "tbsp",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
+  },
+  {
+    "id": 25,
+    "name": "Worcestershire sauce",
+    "amount": "1",
+    "unit": "tbsp",
+    "checked": false,
+    "addedAt": "2025-09-21T05:15:15.374Z"
   }
 ]

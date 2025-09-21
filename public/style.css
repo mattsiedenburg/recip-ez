@@ -1,61 +1,371 @@
-/* Root Variables for Theme Support */
-:root {
-    --bg-primary: #faf8f5;
-    --bg-secondary: #f5f2ee;
-    --bg-tertiary: #ede8e0;
-    --text-primary: #3c3630;
-    --text-secondary: #6b6157;
-    --text-muted: #5a5048;
-    --border-color: #e0d9d1;
-    --border-strong: #c7beb3;
-    --accent-primary: #8b7355;
-    --accent-success: #7a8471;
-    --accent-warning: #c49660;
-    --accent-danger: #b85c5c;
-    --accent-info: #6b8e8a;
-    --shadow-light: rgba(60, 54, 48, 0.1);
-    --shadow-medium: rgba(60, 54, 48, 0.15);
-    --gradient-header: linear-gradient(135deg, #a5936b 0%, #8b7355 100%);
+/* Seasonal Color Schemes - Spring (March-May) */
+:root.season-spring {
+    --bg-primary: #f8fbf4;
+    --bg-secondary: #f0f7e8;
+    --bg-tertiary: #e8f2d9;
+    --text-primary: #2d4a22;
+    --text-secondary: #5a7548;
+    --text-muted: #4a6136;
+    --border-color: #d4e6c1;
+    --border-strong: #b8d39a;
+    --accent-primary: #6b9440;
+    --accent-success: #7db46c;
+    --accent-warning: #d4a853;
+    --accent-danger: #c75757;
+    --accent-info: #5a9aa0;
+    --shadow-light: rgba(45, 74, 34, 0.1);
+    --shadow-medium: rgba(45, 74, 34, 0.15);
+    --gradient-header: linear-gradient(135deg, #8bb55c 0%, #6b9440 100%);
 }
 
-/* Dark Theme Variables */
-.dark-theme {
-    --bg-primary: #2b251f;
-    --bg-secondary: #3a342b;
-    --bg-tertiary: #332d26;
-    --text-primary: #f0ede8;
-    --text-secondary: #c7beb3;
-    --text-muted: #d4cbc0;
-    --border-color: #4a4136;
-    --border-strong: #5c5144;
-    --accent-primary: #a5936b;
-    --accent-success: #7a8471;
-    --accent-warning: #c49660;
-    --accent-danger: #b85c5c;
-    --accent-info: #6b8e8a;
+/* Seasonal Color Schemes - Summer (June-August) */
+:root.season-summer {
+    --bg-primary: #fffcf7;
+    --bg-secondary: #fff7e6;
+    --bg-tertiary: #ffedd1;
+    --text-primary: #8b4513;
+    --text-secondary: #cd853f;
+    --text-muted: #a0522d;
+    --border-color: #f4e4bc;
+    --border-strong: #e6cc80;
+    --accent-primary: #ff8c42;
+    --accent-success: #8fbc8f;
+    --accent-warning: #ffb347;
+    --accent-danger: #dc143c;
+    --accent-info: #20b2aa;
+    --shadow-light: rgba(139, 69, 19, 0.1);
+    --shadow-medium: rgba(139, 69, 19, 0.15);
+    --gradient-header: linear-gradient(135deg, #ffa366 0%, #ff8c42 100%);
+}
+
+/* Seasonal Color Schemes - Autumn (September-November) */
+:root.season-autumn {
+    --bg-primary: #faf6f0;
+    --bg-secondary: #f5ece0;
+    --bg-tertiary: #ede0ce;
+    --text-primary: #704214;
+    --text-secondary: #a0673a;
+    --text-muted: #8b5a2b;
+    --border-color: #e6d0b8;
+    --border-strong: #d4b896;
+    --accent-primary: #d2691e;
+    --accent-success: #cd853f;
+    --accent-warning: #ff8c00;
+    --accent-danger: #b22222;
+    --accent-info: #4682b4;
+    --shadow-light: rgba(112, 66, 20, 0.1);
+    --shadow-medium: rgba(112, 66, 20, 0.15);
+    --gradient-header: linear-gradient(135deg, #daa520 0%, #d2691e 100%);
+}
+
+/* Seasonal Color Schemes - Winter (December-February) */
+:root.season-winter {
+    --bg-primary: #f8f9fa;
+    --bg-secondary: #e9ecef;
+    --bg-tertiary: #dee2e6;
+    --text-primary: #212529;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    --border-color: #ced4da;
+    --border-strong: #adb5bd;
+    --accent-primary: #6c757d;
+    --accent-success: #28a745;
+    --accent-warning: #ffc107;
+    --accent-danger: #dc3545;
+    --accent-info: #17a2b8;
+    --shadow-light: rgba(33, 37, 41, 0.1);
+    --shadow-medium: rgba(33, 37, 41, 0.15);
+    --gradient-header: linear-gradient(135deg, #868e96 0%, #6c757d 100%);
+}
+
+/* Dark Theme Seasonal Variations - Spring Dark */
+.dark-theme.season-spring {
+    --bg-primary: #1a2e1a;
+    --bg-secondary: #243324;
+    --bg-tertiary: #2e3d2e;
+    --text-primary: #c8e6c8;
+    --text-secondary: #a8d1a8;
+    --text-muted: #94c794;
+    --border-color: #3d543d;
+    --border-strong: #4a634a;
+    --accent-primary: #7fb069;
+    --accent-success: #8fbc8f;
+    --accent-warning: #ffd60a;
+    --accent-danger: #e63946;
+    --accent-info: #6faadb;
     --shadow-light: rgba(0, 0, 0, 0.3);
     --shadow-medium: rgba(0, 0, 0, 0.4);
-    --gradient-header: linear-gradient(135deg, #6b5d47 0%, #4a4136 100%);
+    --gradient-header: linear-gradient(135deg, #52796f 0%, #354f52 100%);
 }
 
-/* Light Theme Variables (explicit for system preference override) */
-.light-theme {
-    --bg-primary: #faf8f5;
-    --bg-secondary: #f5f2ee;
-    --bg-tertiary: #ede8e0;
-    --text-primary: #3c3630;
-    --text-secondary: #6b6157;
-    --text-muted: #5a5048;
-    --border-color: #e0d9d1;
-    --border-strong: #c7beb3;
-    --accent-primary: #8b7355;
-    --accent-success: #7a8471;
-    --accent-warning: #c49660;
-    --accent-danger: #b85c5c;
-    --accent-info: #6b8e8a;
-    --shadow-light: rgba(60, 54, 48, 0.1);
-    --shadow-medium: rgba(60, 54, 48, 0.15);
-    --gradient-header: linear-gradient(135deg, #a5936b 0%, #8b7355 100%);
+/* Dark Theme Seasonal Variations - Summer Dark */
+.dark-theme.season-summer {
+    --bg-primary: #2a1f0a;
+    --bg-secondary: #3d2f1a;
+    --bg-tertiary: #4a3621;
+    --text-primary: #ffeaa7;
+    --text-secondary: #fdcb6e;
+    --text-muted: #e17055;
+    --border-color: #5d4e37;
+    --border-strong: #6b5b47;
+    --accent-primary: #fd7921;
+    --accent-success: #00b894;
+    --accent-warning: #fdcb6e;
+    --accent-danger: #e84393;
+    --accent-info: #0984e3;
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --gradient-header: linear-gradient(135deg, #e17055 0%, #2d3436 100%);
+}
+
+/* Dark Theme Seasonal Variations - Autumn Dark */
+.dark-theme.season-autumn {
+    --bg-primary: #2c1810;
+    --bg-secondary: #3d241a;
+    --bg-tertiary: #4a2c1d;
+    --text-primary: #f4e4c1;
+    --text-secondary: #d4a574;
+    --text-muted: #bc8a5f;
+    --border-color: #5d3a1a;
+    --border-strong: #6b4423;
+    --accent-primary: #e17055;
+    --accent-success: #6c5ce7;
+    --accent-warning: #fdcb6e;
+    --accent-danger: #e84393;
+    --accent-info: #74b9ff;
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --gradient-header: linear-gradient(135deg, #d63031 0%, #2d3436 100%);
+}
+
+/* Dark Theme Seasonal Variations - Winter Dark */
+.dark-theme.season-winter {
+    --bg-primary: #212529;
+    --bg-secondary: #343a40;
+    --bg-tertiary: #495057;
+    --text-primary: #f8f9fa;
+    --text-secondary: #e9ecef;
+    --text-muted: #ced4da;
+    --border-color: #495057;
+    --border-strong: #6c757d;
+    --accent-primary: #adb5bd;
+    --accent-success: #20c997;
+    --accent-warning: #ffc107;
+    --accent-danger: #fd7e14;
+    --accent-info: #6f42c1;
+    --shadow-light: rgba(0, 0, 0, 0.3);
+    --shadow-medium: rgba(0, 0, 0, 0.4);
+    --gradient-header: linear-gradient(135deg, #6f42c1 0%, #495057 100%);
+}
+
+/* Enhanced Button Contrast for Icon Visibility */
+button {
+    position: relative;
+    color: var(--text-primary);
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+/* Ensure button text and icons are always visible */
+.btn, .nav-btn, .recipe-card .actions button, .recipe-list-actions button {
+    background: var(--accent-primary);
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-strong);
+    font-weight: 600;
+}
+
+.btn:hover, .nav-btn:hover, .recipe-card .actions button:hover, .recipe-list-actions button:hover {
+    background: var(--accent-primary);
+    filter: brightness(1.15) saturate(1.1);
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Special contrast for danger buttons */
+.delete-recipe-btn, .delete-recipe-small {
+    background: var(--accent-danger) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    font-weight: 600;
+}
+
+.delete-recipe-btn:hover, .delete-recipe-small:hover {
+    background: var(--accent-danger) !important;
+    filter: brightness(1.2) saturate(1.1);
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Enhanced contrast for success buttons */
+.add-to-grocery-btn {
+    background: var(--accent-success) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
+
+.add-to-grocery-btn:hover {
+    background: var(--accent-success) !important;
+    filter: brightness(1.15) saturate(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Warning buttons */
+.edit-recipe-btn, .copy-recipe-btn {
+    background: var(--accent-warning) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
+
+.edit-recipe-btn:hover, .copy-recipe-btn:hover {
+    background: var(--accent-warning) !important;
+    filter: brightness(1.15) saturate(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Info buttons */
+.view-btn {
+    background: var(--accent-info) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.view-btn:hover {
+    background: var(--accent-info) !important;
+    filter: brightness(1.15) saturate(1.1);
+}
+
+.view-btn.active {
+    background: var(--accent-primary) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Form buttons */
+input[type="submit"], .form-btn {
+    background: var(--accent-primary) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
+
+input[type="submit"]:hover, .form-btn:hover {
+    background: var(--accent-primary) !important;
+    filter: brightness(1.15) saturate(1.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Clear button styling */
+.clear-search-btn {
+    background: var(--accent-danger) !important;
+    color: white !important;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.clear-search-btn:hover {
+    background: var(--accent-danger) !important;
+    filter: brightness(1.2);
+    transform: scale(1.1);
+}
+
+/* Seasonal Visual Enhancements */
+.season-spring .container {
+    background: linear-gradient(135deg, rgba(107, 148, 64, 0.02) 0%, rgba(139, 195, 74, 0.05) 100%);
+}
+
+.season-summer .container {
+    background: linear-gradient(135deg, rgba(255, 140, 66, 0.02) 0%, rgba(255, 193, 7, 0.05) 100%);
+}
+
+.season-autumn .container {
+    background: linear-gradient(135deg, rgba(210, 105, 30, 0.02) 0%, rgba(218, 165, 32, 0.05) 100%);
+}
+
+.season-winter .container {
+    background: linear-gradient(135deg, rgba(108, 117, 125, 0.02) 0%, rgba(173, 181, 189, 0.05) 100%);
+}
+
+/* Seasonal Header Effects */
+.season-spring header {
+    border-bottom: 3px solid var(--accent-success);
+    background: var(--gradient-header);
+    position: relative;
+    overflow: hidden;
+}
+
+.season-summer header {
+    border-bottom: 3px solid var(--accent-warning);
+    background: var(--gradient-header);
+}
+
+.season-autumn header {
+    border-bottom: 3px solid var(--accent-primary);
+    background: var(--gradient-header);
+}
+
+.season-winter header {
+    border-bottom: 3px solid var(--accent-info);
+    background: var(--gradient-header);
+}
+
+/* Seasonal Accent Animations */
+@keyframes seasonalPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.season-spring .nav-btn.active,
+.season-summer .nav-btn.active,
+.season-autumn .nav-btn.active,
+.season-winter .nav-btn.active {
+    animation: seasonalPulse 3s ease-in-out infinite;
+}
+
+/* Seasonal Recipe Card Enhancements */
+.season-spring .recipe-card {
+    border-left: 4px solid var(--accent-success);
+}
+
+.season-summer .recipe-card {
+    border-left: 4px solid var(--accent-warning);
+}
+
+.season-autumn .recipe-card {
+    border-left: 4px solid var(--accent-primary);
+}
+
+.season-winter .recipe-card {
+    border-left: 4px solid var(--accent-info);
+}
+
+/* Seasonal Notification Styling */
+.season-spring .notification-success {
+    background: linear-gradient(135deg, var(--accent-success) 0%, #8fbc8f 100%);
+}
+
+.season-summer .notification-success {
+    background: linear-gradient(135deg, var(--accent-warning) 0%, #ffb347 100%);
+}
+
+.season-autumn .notification-success {
+    background: linear-gradient(135deg, var(--accent-primary) 0%, #daa520 100%);
+}
+
+.season-winter .notification-success {
+    background: linear-gradient(135deg, var(--accent-info) 0%, #6f42c1 100%);
 }
 
 * {
@@ -845,6 +1155,53 @@ input[type="text"]:focus, textarea:focus {
 .grocery-item.dragging {
     opacity: 0.5;
     transform: rotate(2deg);
+}
+
+/* Recipe drag and drop styles */
+.recipe-card.dragging,
+.recipe-list-item.dragging {
+    opacity: 0.5;
+    transform: rotate(1deg);
+    box-shadow: 0 8px 16px var(--shadow-medium);
+    z-index: 1000;
+}
+
+.recipe-card[draggable="true"],
+.recipe-list-item[draggable="true"] {
+    cursor: grab;
+}
+
+.recipe-card[draggable="true"]:active,
+.recipe-list-item[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+.recipe-card .drag-handle {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 10;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 4px;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.recipe-card:hover .drag-handle {
+    opacity: 1;
+}
+
+.recipe-list-item .drag-handle {
+    margin-right: 12px;
+    flex-shrink: 0;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.recipe-list-item:hover .drag-handle {
+    opacity: 1;
 }
 
 .drag-handle {

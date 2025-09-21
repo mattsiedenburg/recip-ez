@@ -205,9 +205,12 @@ let currentView = 'grid'; // 'grid' or 'list'
 // API Base URL
 const API_BASE = '/api';
 
-// Theme Management
+// Enhanced Theme Management with Seasonal Support
 const themeManager = {
     init() {
+        // Initialize seasonal themes first
+        this.seasonalTheme = new SeasonalTheme();
+        
         // Load saved theme or default to system
         this.currentTheme = localStorage.getItem('recip-ez-theme') || 'system';
         elements.themeSelect.value = this.currentTheme;
@@ -221,6 +224,9 @@ const themeManager = {
                 }
             });
         }
+        
+        // Update header with seasonal info
+        this.updateSeasonalHeader();
     },
     
     setTheme(theme) {
@@ -232,20 +238,41 @@ const themeManager = {
     
     applyTheme(theme) {
         const html = document.documentElement;
+        const body = document.body;
+        const currentSeason = this.seasonalTheme ? this.seasonalTheme.currentSeason : 'spring';
+        
+        // Clear existing theme classes
         html.classList.remove('light-theme', 'dark-theme');
+        body.classList.remove('light-theme', 'dark-theme');
         
         if (theme === 'light') {
-            html.classList.add('light-theme');
+            html.classList.add('light-theme', `season-${currentSeason}`);
+            body.classList.add('light-theme', `season-${currentSeason}`);
         } else if (theme === 'dark') {
-            html.classList.add('dark-theme');
+            html.classList.add('dark-theme', `season-${currentSeason}`);
+            body.classList.add('dark-theme', `season-${currentSeason}`);
         } else if (theme === 'system') {
             // Use system preference
             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
             if (prefersDark) {
-                html.classList.add('dark-theme');
+                html.classList.add('dark-theme', `season-${currentSeason}`);
+                body.classList.add('dark-theme', `season-${currentSeason}`);
             } else {
-                html.classList.add('light-theme');
+                html.classList.add('light-theme', `season-${currentSeason}`);
+                body.classList.add('light-theme', `season-${currentSeason}`);
             }
+        }
+    },
+
+    updateSeasonalHeader() {
+        const header = document.querySelector('header h1');
+        if (header && this.seasonalTheme) {
+            const seasonEmoji = this.seasonalTheme.getSeasonEmoji();
+            const seasonName = this.seasonalTheme.getSeasonName();
+            
+            // Completely reset the header to avoid any character encoding issues
+            header.textContent = `${seasonEmoji} Recip-EZ`;
+            header.title = `Welcome to ${seasonName}! Enjoy cooking with seasonal flavors.`;
         }
     }
 };
@@ -549,7 +576,15 @@ function displayRecipes() {
 
     if (currentView === 'grid') {
         elements.recipesGrid.innerHTML = recipesToShow.map(recipe => `
-            <div class="recipe-card" onclick="showRecipeDetails(${recipe.id})">
+            <div class="recipe-card" 
+                 data-recipe-id="${recipe.id}" 
+                 ${!searchValue ? 'draggable="true"' : ''} 
+                 onclick="showRecipeDetails(${recipe.id})"
+                 ${!searchValue ? `ondragstart="handleRecipeDragStart(event)"
+                 ondragover="handleRecipeDragOver(event)"
+                 ondrop="handleRecipeDrop(event)"
+                 ondragend="handleRecipeDragEnd(event)"` : ''}>
+                ${!searchValue ? '<div class="drag-handle" title="Drag to reorder">⋮⋮</div>' : ''}
                 <button class="delete-recipe-small" onclick="event.stopPropagation(); deleteRecipe(${recipe.id})" title="Delete recipe">✖</button>
                 <h3>${recipe.title}</h3>
                 <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
@@ -564,7 +599,15 @@ function displayRecipes() {
         elements.recipesList.innerHTML = '';
     } else {
         elements.recipesList.innerHTML = recipesToShow.map(recipe => `
-            <div class="recipe-list-item" onclick="showRecipeDetails(${recipe.id})">
+            <div class="recipe-list-item" 
+                 data-recipe-id="${recipe.id}" 
+                 ${!searchValue ? 'draggable="true"' : ''} 
+                 onclick="showRecipeDetails(${recipe.id})"
+                 ${!searchValue ? `ondragstart="handleRecipeDragStart(event)"
+                 ondragover="handleRecipeDragOver(event)"
+                 ondrop="handleRecipeDrop(event)"
+                 ondragend="handleRecipeDragEnd(event)"` : ''}>
+                ${!searchValue ? '<div class="drag-handle" title="Drag to reorder">⋮⋮</div>' : ''}
                 <div class="recipe-list-info">
                     <h3 class="recipe-list-name">${recipe.title}</h3>
                     <span class="recipe-list-ingredients">${recipe.ingredients.length} ingredients</span>
@@ -1428,5 +1471,174 @@ async function updateGroceryListOrder(itemIds) {
         showNotification('Error reordering list. Please try again.', 'error');
         // Reload the list to restore original order
         loadGroceryList();
+    }
+}
+
+// Recipe Drag and Drop functionality for reordering
+let draggedRecipe = null;
+
+function handleRecipeDragStart(e) {
+    draggedRecipe = e.target;
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.target.outerHTML);
+}
+
+function handleRecipeDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    
+    const isRecipeCard = e.target.classList.contains('recipe-card') || e.target.closest('.recipe-card');
+    const isRecipeListItem = e.target.classList.contains('recipe-list-item') || e.target.closest('.recipe-list-item');
+    
+    if ((isRecipeCard || isRecipeListItem) && e.target !== draggedRecipe) {
+        const container = currentView === 'grid' ? elements.recipesGrid : elements.recipesList;
+        const afterElement = getRecipeDragAfterElement(container, e.clientY);
+        
+        if (afterElement == null) {
+            container.appendChild(draggedRecipe);
+        } else {
+            container.insertBefore(draggedRecipe, afterElement);
+        }
+    }
+}
+
+function handleRecipeDrop(e) {
+    e.preventDefault();
+    
+    // Get the new order of recipes
+    const container = currentView === 'grid' ? elements.recipesGrid : elements.recipesList;
+    const recipeElements = Array.from(container.children);
+    const newOrder = recipeElements
+        .filter(item => item.dataset.recipeId && (item.classList.contains('recipe-card') || item.classList.contains('recipe-list-item')))
+        .map(item => parseInt(item.dataset.recipeId));
+    
+    // Only update if the order actually changed
+    if (newOrder.length > 0) {
+        updateRecipeOrder(newOrder);
+    }
+}
+
+function handleRecipeDragEnd(e) {
+    e.target.classList.remove('dragging');
+    draggedRecipe = null;
+}
+
+function getRecipeDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.recipe-card:not(.dragging), .recipe-list-item:not(.dragging)')];
+    
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+async function updateRecipeOrder(recipeIds) {
+    try {
+        const response = await fetch(`${API_BASE}/recipes/reorder`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ recipeIds }),
+        });
+
+        if (response.ok) {
+            // Update the local recipes array to match the new order
+            const reorderedRecipes = await response.json();
+            recipes = reorderedRecipes;
+            showNotification('Recipes reordered successfully!', 'success');
+        } else {
+            showNotification('Error reordering recipes. Please try again.', 'error');
+            // Reload the recipes to restore original order
+            loadRecipes();
+        }
+    } catch (error) {
+        console.error('Error reordering recipes:', error);
+        showNotification('Error reordering recipes. Please try again.', 'error');
+        // Reload the recipes to restore original order
+        loadRecipes();
+    }
+}
+
+// Seasonal Theme System
+class SeasonalTheme {
+    constructor() {
+        this.seasons = {
+            spring: { start: { month: 3, day: 20 }, end: { month: 6, day: 20 } },
+            summer: { start: { month: 6, day: 21 }, end: { month: 9, day: 22 } },
+            autumn: { start: { month: 9, day: 23 }, end: { month: 12, day: 20 } },
+            winter: { start: { month: 12, day: 21 }, end: { month: 3, day: 19 } }
+        };
+        this.currentSeason = this.getCurrentSeason();
+        this.applySeasonalTheme();
+        
+        // Update theme daily
+        setInterval(() => {
+            const newSeason = this.getCurrentSeason();
+            if (newSeason !== this.currentSeason) {
+                this.currentSeason = newSeason;
+                this.applySeasonalTheme();
+                showNotification(`🌸 Welcome to ${newSeason}! Enjoy the new seasonal theme.`, 'success');
+            }
+        }, 86400000); // Check daily (24 hours)
+    }
+
+    getCurrentSeason() {
+        const now = new Date();
+        const month = now.getMonth() + 1; // getMonth() returns 0-11
+        const day = now.getDate();
+        
+        // Spring: March 20 - June 20
+        if ((month === 3 && day >= 20) || month === 4 || month === 5 || (month === 6 && day <= 20)) {
+            return 'spring';
+        }
+        // Summer: June 21 - September 22
+        else if ((month === 6 && day >= 21) || month === 7 || month === 8 || (month === 9 && day <= 22)) {
+            return 'summer';
+        }
+        // Autumn: September 23 - December 20
+        else if ((month === 9 && day >= 23) || month === 10 || month === 11 || (month === 12 && day <= 20)) {
+            return 'autumn';
+        }
+        // Winter: December 21 - March 19
+        else {
+            return 'winter';
+        }
+    }
+
+    applySeasonalTheme() {
+        const root = document.documentElement;
+        
+        // Remove all existing seasonal classes
+        root.classList.remove('season-spring', 'season-summer', 'season-autumn', 'season-winter');
+        
+        // Add current seasonal class
+        root.classList.add(`season-${this.currentSeason}`);
+        
+        // Store in localStorage for consistency
+        localStorage.setItem('currentSeason', this.currentSeason);
+        
+        console.log(`🌟 Seasonal theme applied: ${this.currentSeason}`);
+    }
+
+    getSeasonEmoji() {
+        const emojis = {
+            spring: '🌸',
+            summer: '☀️',
+            autumn: '🍂',
+            winter: '❄️'
+        };
+        return emojis[this.currentSeason] || '🌟';
+    }
+
+    getSeasonName() {
+        return this.currentSeason.charAt(0).toUpperCase() + this.currentSeason.slice(1);
     }
 }
