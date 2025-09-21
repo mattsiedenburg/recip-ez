@@ -45,6 +45,7 @@ const elements = {
     searchInput: document.getElementById('searchInput'),
     clearSearchBtn: document.getElementById('clearSearchBtn'),
     grocerySearchInput: document.getElementById('grocerySearchInput'),
+    clearGrocerySearchBtn: document.getElementById('clearGrocerySearchBtn'),
     
     // Tag System
     tagFilter: document.getElementById('tagFilter'),
@@ -393,6 +394,7 @@ function setupEventListeners() {
     elements.searchInput.addEventListener('input', handleSearch);
     elements.clearSearchBtn.addEventListener('click', clearSearch);
     elements.grocerySearchInput.addEventListener('input', handleGrocerySearch);
+    elements.clearGrocerySearchBtn.addEventListener('click', clearGrocerySearch);
     
     // Tag filtering
     elements.tagFilter.addEventListener('change', handleTagFilter);
@@ -1256,6 +1258,19 @@ function handleTagFilter() {
 function handleGrocerySearch() {
     const searchTerm = elements.grocerySearchInput.value.trim().toLowerCase();
     displayGroceryList(searchTerm);
+    
+    // Show/hide clear button based on input content
+    if (searchTerm) {
+        elements.clearGrocerySearchBtn.classList.add('show');
+    } else {
+        elements.clearGrocerySearchBtn.classList.remove('show');
+    }
+}
+
+function clearGrocerySearch() {
+    elements.grocerySearchInput.value = '';
+    elements.clearGrocerySearchBtn.classList.remove('show');
+    displayGroceryList('');
 }
 
 // Copy grocery list to clipboard
