@@ -1641,8 +1641,6 @@ class SeasonalTheme {
         
         // Store in localStorage for consistency
         localStorage.setItem('currentSeason', this.currentSeason);
-        
-        console.log(`🌟 Seasonal theme applied: ${this.currentSeason}`);
     }
 
     getSeasonEmoji() {

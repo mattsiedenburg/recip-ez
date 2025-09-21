@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static('public'));
 
 // Data storage files
@@ -125,9 +124,9 @@ app.get('/api/recipes/:id', (req, res) => {
 app.post('/api/recipes', (req, res) => {
     const { title, ingredients, instructions, tags } = req.body;
     
-    const validation_result = validation.validateRecipe(title, ingredients, instructions);
-    if (!validation_result.isValid) {
-        return res.status(400).json({ error: validation_result.error });
+    const validationResult = validation.validateRecipe(title, ingredients, instructions);
+    if (!validationResult.isValid) {
+        return res.status(400).json({ error: validationResult.error });
     }
 
     try {
@@ -187,9 +186,9 @@ app.put('/api/recipes/reorder', (req, res) => {
 app.put('/api/recipes/:id', (req, res) => {
     const { title, ingredients, instructions, tags } = req.body;
     
-    const validation_result = validation.validateRecipe(title, ingredients, instructions);
-    if (!validation_result.isValid) {
-        return res.status(400).json({ error: validation_result.error });
+    const validationResult = validation.validateRecipe(title, ingredients, instructions);
+    if (!validationResult.isValid) {
+        return res.status(400).json({ error: validationResult.error });
     }
 
     try {
@@ -252,9 +251,9 @@ app.get('/api/grocery-list', (req, res) => {
 app.post('/api/grocery-list', (req, res) => {
     const { ingredients } = req.body;
     
-    const validation_result = validation.validateGroceryIngredients(ingredients);
-    if (!validation_result.isValid) {
-        return res.status(400).json({ error: validation_result.error });
+    const validationResult = validation.validateGroceryIngredients(ingredients);
+    if (!validationResult.isValid) {
+        return res.status(400).json({ error: validationResult.error });
     }
 
     try {
