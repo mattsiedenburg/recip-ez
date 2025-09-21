@@ -999,10 +999,82 @@ input[type="text"]:focus, textarea:focus {
     color: var(--text-muted);
 }
 
-/* Responsive Design */
+/* Responsive Design - Compact Mobile Interface */
 @media (max-width: 768px) {
     .container {
-        padding: 10px;
+        padding: 8px; /* Reduced from 10px */
+    }
+    
+    /* More compact sections on mobile */
+    .section {
+        padding: 16px; /* Reduced from 30px */
+        margin-bottom: 12px; /* Reduced from 20px */
+        border-radius: 6px; /* Smaller border radius */
+    }
+    
+    .section h2 {
+        font-size: 1.4em; /* Reduced from 1.8em */
+        margin-bottom: 12px; /* Reduced from 20px */
+        line-height: 1.2;
+    }
+    
+    /* Compact form elements */
+    .recipe-form input,
+    .recipe-form textarea,
+    .recipe-form select {
+        padding: 8px 10px; /* Reduced padding */
+        font-size: 14px; /* Smaller font */
+        border-radius: 4px; /* Smaller border radius */
+        margin-bottom: 8px; /* Reduced margin */
+    }
+    
+    .recipe-form label {
+        font-size: 13px; /* Smaller label text */
+        margin-bottom: 4px; /* Reduced margin */
+        font-weight: 500;
+    }
+    
+    /* Compact buttons */
+    .recipe-form button,
+    .btn {
+        padding: 8px 14px; /* Reduced padding */
+        font-size: 14px; /* Smaller font */
+        border-radius: 4px; /* Smaller border radius */
+        min-height: 36px; /* Reduced height */
+    }
+    
+    /* Ingredient form compacting */
+    .ingredient-item {
+        margin-bottom: 6px; /* Reduced spacing */
+        gap: 6px; /* Smaller gap */
+        flex-direction: column; /* Stack on mobile for compactness */
+        align-items: stretch; /* Full width on mobile */
+    }
+    
+    .ingredient-item input {
+        padding: 6px 8px; /* More compact inputs */
+        font-size: 13px; /* Smaller text */
+        min-width: auto; /* Remove min-width constraint */
+        width: 100%; /* Full width on mobile */
+    }
+    
+    .ingredient-item button {
+        padding: 6px 8px; /* Compact remove buttons */
+        font-size: 12px;
+        min-height: 30px;
+        align-self: flex-end; /* Align to right */
+        width: auto; /* Don't stretch button */
+        max-width: 80px; /* Limit button width */
+    }
+    
+    /* Compact form groups */
+    .form-group {
+        margin-bottom: 12px; /* Reduced from 20px */
+    }
+    
+    .form-group label {
+        margin-bottom: 3px; /* Reduced from 5px */
+        font-size: 13px; /* Smaller label text */
     }
     
     /* Compact header on mobile */
@@ -1050,75 +1122,192 @@ input[type="text"]:focus, textarea:focus {
     
     .ingredient-name, .ingredient-amount, .ingredient-unit {
         min-width: auto;
+        width: 100%; /* Full width on mobile for better layout */
     }
     
     .recipes-grid {
         grid-template-columns: 1fr;
-        gap: 12px; /* Reduced gap between cards */
+        gap: 8px; /* Further reduced from 12px */
     }
     
     /* Compact recipe cards on mobile */
     .recipe-card {
-        padding: 10px 12px; /* Reduced from 15px */
-        min-height: 100px; /* Reduced from 200px */
-        border-radius: 6px; /* Smaller border radius */
+        padding: 8px 10px; /* Further reduced from 10px 12px */
+        min-height: 80px; /* Further reduced from 100px */
+        border-radius: 4px; /* Consistent smaller border radius */
         border-width: 1px; /* Thinner border */
     }
     
     .recipe-card h3 {
-        font-size: 1.1em; /* Reduced from 1.2em */
-        margin-bottom: 6px; /* Reduced from 8px */
-        line-height: 1.3; /* Tighter line height */
+        font-size: 1em; /* Further reduced from 1.1em */
+        margin-bottom: 4px; /* Further reduced from 6px */
+        line-height: 1.2; /* Tighter line height */
+        font-weight: 600; /* Consistent weight */
+    }
+    
+    .recipe-card .ingredients-count {
+        font-size: 12px; /* Smaller ingredient count */
+        margin-bottom: 4px; /* Reduced margin */
     }
     
     .recipe-card .actions {
         flex-direction: column;
-        gap: 6px; /* Reduced from 8px */
-        margin-top: 8px; /* Reduced margin */
+        gap: 4px; /* Further reduced from 6px */
+        margin-top: 6px; /* Reduced margin */
     }
     
     .recipe-card .actions button {
-        padding: 8px 12px; /* Compact button padding */
-        font-size: 14px; /* Smaller button text */
-        min-height: 36px; /* Reduced button height */
-        border-radius: 4px; /* Smaller button border radius */
+        padding: 6px 10px; /* Further reduced from 8px 12px */
+        font-size: 13px; /* Further reduced from 14px */
+        min-height: 32px; /* Further reduced from 36px */
+        border-radius: 3px; /* Smaller border radius */
     }
     
     /* Compact list view items on mobile */
     .recipe-list-item {
-        padding: 8px 12px; /* Reduced padding */
-        margin-bottom: 6px; /* Reduced margin between items */
-        border-radius: 4px; /* Smaller border radius */
+        padding: 6px 8px; /* Further reduced from 8px 12px */
+        margin-bottom: 4px; /* Further reduced from 6px */
+        border-radius: 3px; /* Smaller border radius */
+        min-height: 50px; /* Set minimum height for consistent layout */
+    }
+    
+    .recipe-list-info {
+        gap: 8px; /* Reduced from 15px */
     }
     
     .recipe-list-name {
-        font-size: 1.1em; /* Smaller title in list view */
-        margin-bottom: 4px;
-        line-height: 1.3;
+        font-size: 1em; /* Reduced from 1.1em */
+        margin-bottom: 2px; /* Further reduced from 4px */
+        line-height: 1.2; /* Tighter line height */
+        font-weight: 600; /* Slightly lighter weight */
+    }
+    
+    .recipe-list-ingredients {
+        font-size: 0.75em; /* Reduced from 0.85em */
+        line-height: 1.2;
+        margin: 0;
     }
     
     .recipe-list-actions {
-        gap: 6px; /* Reduced gap between action buttons */
+        gap: 4px; /* Further reduced from 6px */
+        flex-shrink: 0; /* Prevent shrinking */
     }
     
     .recipe-list-actions button {
-        padding: 6px 8px; /* Smaller button padding */
-        font-size: 13px; /* Smaller button text */
-        min-height: 32px; /* Reduced button height */
-        border-radius: 4px;
+        padding: 4px 6px; /* Further reduced from 6px 8px */
+        font-size: 12px; /* Further reduced from 13px */
+        min-height: 28px; /* Further reduced from 32px */
+        border-radius: 3px; /* Smaller border radius */
+        min-width: 32px; /* Ensure adequate touch target */
     }
     
     .modal-content {
-        margin: 10% auto;
-        width: 95%;
-        padding: 20px;
+        margin: 5% auto; /* Reduced top margin for more space */
+        width: 98%; /* Nearly full width */
+        padding: 12px; /* Much more compact padding */
+        border-radius: 6px; /* Smaller border radius */
+        max-height: 90vh; /* More screen usage */
+    }
+    
+    /* Compact recipe detail view on mobile */
+    .recipe-detail h3 {
+        font-size: 1.3em; /* Reduced from 1.8em */
+        margin-bottom: 10px; /* Reduced from 20px */
+        line-height: 1.2;
+    }
+    
+    .recipe-detail .ingredients-section,
+    .recipe-detail .instructions-section {
+        margin-bottom: 15px; /* Reduced from 25px */
+    }
+    
+    .recipe-detail h4 {
+        font-size: 1.1em; /* Reduced from 1.3em */
+        margin-bottom: 8px; /* Reduced from 15px */
+        font-weight: 600;
+    }
+    
+    .recipe-detail li {
+        padding: 4px 0; /* Reduced from 8px */
+        font-size: 14px; /* Smaller ingredient text */
+        line-height: 1.3;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .recipe-detail .instructions {
+        font-size: 14px; /* Smaller instruction text */
+        line-height: 1.5; /* Reduced from 1.8 */
+        margin-bottom: 0;
+    }
+    
+    .modal-actions {
+        margin-top: 15px; /* Reduced from 30px */
+        padding-top: 12px; /* Reduced from 20px */
+        gap: 8px; /* Smaller gap between buttons */
+    }
+    
+    .modal-actions button {
+        padding: 8px 12px; /* Compact modal action buttons */
+        font-size: 14px;
+        border-radius: 4px;
+        min-height: 36px;
+    }
+    
+    /* Compact close button */
+    .close {
+        right: 12px; /* Closer to edge */
+        top: 8px; /* Higher up */
+        font-size: 24px; /* Smaller close button */
     }
     
     /* Make emoji-only grocery buttons more compact in list view on mobile */
     .recipe-list-actions .add-to-grocery-btn {
-        font-size: 16px; /* Larger emoji for visibility */
-        padding: 6px 8px; /* Compact padding for emoji-only button */
-        min-width: 36px; /* Minimum width for touch target */
+        font-size: 14px; /* Reduced from 16px for compactness */
+        padding: 4px 6px; /* More compact padding */
+        min-width: 28px; /* Smaller minimum width */
+        min-height: 28px; /* Consistent with other buttons */
+    }
+    
+    /* Compact search and controls on mobile */
+    .recipes-controls {
+        margin-bottom: 12px; /* Reduced from 20px */
+        gap: 12px; /* Reduced from 20px */
+    }
+    
+    .search-container {
+        flex: 1;
+    }
+    
+    .search-input {
+        padding: 8px 32px 8px 12px; /* Reduced padding */
+        font-size: 14px; /* Smaller font */
+        border-radius: 20px; /* Smaller border radius */
+        border-width: 1px; /* Thinner border */
+    }
+    
+    .clear-search-btn {
+        right: 8px; /* Closer to edge */
+        font-size: 14px; /* Smaller clear button */
+        padding: 2px; /* Smaller padding */
+    }
+    
+    .view-toggle {
+        padding: 2px; /* Reduced from 4px */
+        gap: 2px; /* Reduced from 5px */
+        border-radius: 6px; /* Smaller border radius */
+    }
+    
+    .view-btn {
+        padding: 6px; /* Reduced from 8px */
+        width: 32px; /* Reduced from 36px */
+        height: 32px; /* Reduced from 36px */
+        font-size: 14px; /* Smaller icons */
+        border-radius: 3px; /* Smaller border radius */
+    }
+    
+    .search-results-info {
+        margin-bottom: 8px; /* Reduced from 15px */
+        font-size: 13px; /* Smaller font */
     }
     
     /* Hide ingredient count and tags on mobile for cleaner recipe cards */
@@ -1126,6 +1315,35 @@ input[type="text"]:focus, textarea:focus {
     .recipe-list-ingredients,
     .recipe-tags {
         display: none !important;
+    }
+    
+    /* Compact empty states on mobile */
+    .empty-state {
+        padding: 30px 15px; /* Reduced from 60px 20px */
+    }
+    
+    .empty-state h3 {
+        font-size: 1.2em; /* Reduced from 1.5em */
+        margin-bottom: 8px;
+    }
+    
+    /* Mobile tags section in recipe details - keep but make compact */
+    .recipe-detail .tags-section {
+        margin-bottom: 12px;
+    }
+    
+    .recipe-detail .tags-section h4 {
+        margin-bottom: 6px;
+    }
+    
+    .recipe-detail .recipe-tags {
+        gap: 4px; /* Smaller gap between tags */
+    }
+    
+    .recipe-detail .recipe-tag {
+        font-size: 11px; /* Smaller tag text */
+        padding: 2px 6px; /* More compact tag padding */
+        border-radius: 8px; /* Smaller border radius */
     }
     
     /* Mobile drag handle optimization */
@@ -1137,18 +1355,346 @@ input[type="text"]:focus, textarea:focus {
     
     /* Improve grocery item spacing on mobile */
     .grocery-item {
-        padding: 12px 8px; /* Slightly more padding for touch targets */
-        margin-bottom: 8px; /* More space between items */
+        padding: 8px 6px; /* Reduced from 12px 8px */
+        margin-bottom: 4px; /* Reduced from 8px */
+        font-size: 14px; /* Smaller font */
+        border-radius: 4px; /* Smaller border radius */
     }
     
     .grocery-item input[type="checkbox"] {
-        margin-right: 8px; /* Reduced margin */
-        transform: scale(1.2); /* Larger checkbox for touch */
+        margin-right: 6px; /* Reduced margin */
+        transform: scale(1.1); /* Slightly smaller but still touch-friendly */
+    }
+    
+    .grocery-item .item-text {
+        font-size: 14px; /* Consistent smaller font */
+        line-height: 1.3; /* Tighter line height */
+    }
+    
+    .grocery-item .item-amount {
+        font-size: 12px; /* Smaller amount text */
+        color: var(--text-secondary);
+    }
+    
+    /* Compact grocery list controls */
+    .grocery-controls {
+        margin-bottom: 12px; /* Reduced spacing */
+        gap: 8px; /* Smaller gap between buttons */
+    }
+    
+    .grocery-controls button {
+        padding: 6px 12px; /* More compact control buttons */
+        font-size: 13px;
+        min-height: 32px;
+    }
+    
+    /* Compact SMS section */
+    .sms-section {
+        padding: 12px; /* Reduced padding */
+        margin-top: 12px; /* Reduced margin */
+    }
+    
+    .sms-section button {
+        padding: 8px 14px; /* Compact SMS button */
+        font-size: 14px;
     }
     
     /* Hide delete buttons on mobile for cleaner interface */
     .delete-recipe-small {
         display: none !important;
+    }
+}
+
+/* Ultra-compact mobile styles for small phones */
+@media (max-width: 480px) {
+    .container {
+        padding: 6px; /* Even more compact */
+    }
+    
+    /* Ultra-compact header */
+    header {
+        padding: 10px; /* Minimal padding */
+        margin-bottom: 15px;
+    }
+    
+    header h1 {
+        font-size: 1.6em; /* Even smaller title */
+        margin-bottom: 3px;
+    }
+    
+    /* Ultra-compact navigation */
+    nav {
+        gap: 6px; /* Minimal gap */
+        margin-bottom: 15px;
+    }
+    
+    .nav-btn {
+        padding: 8px 12px; /* More compact */
+        font-size: 13px; /* Smaller text */
+        border-radius: 16px;
+    }
+    
+    /* Ultra-compact sections */
+    .section {
+        padding: 12px; /* Minimal padding */
+        margin-bottom: 10px;
+    }
+    
+    .section h2 {
+        font-size: 1.2em; /* Smaller section headers */
+        margin-bottom: 10px;
+    }
+    
+    /* Ultra-compact forms */
+    .recipe-form input,
+    .recipe-form textarea,
+    .recipe-form select {
+        padding: 6px 8px; /* Minimal padding */
+        font-size: 13px; /* Smaller text */
+        margin-bottom: 6px;
+    }
+    
+    .recipe-form label {
+        font-size: 12px; /* Smaller labels */
+        margin-bottom: 3px;
+    }
+    
+    /* Ultra-compact buttons */
+    .recipe-form button,
+    .btn {
+        padding: 6px 10px; /* Minimal button padding */
+        font-size: 13px;
+        min-height: 32px;
+    }
+    
+    /* Ultra-compact recipe cards */
+    .recipe-card {
+        padding: 6px 8px; /* Further reduced from 8px 10px */
+        min-height: 70px; /* Further reduced from 80px */
+        border-radius: 2px; /* Minimal border radius */
+    }
+    
+    .recipe-card h3 {
+        font-size: 0.9em; /* Further reduced from 1em */
+        margin-bottom: 3px; /* Further reduced from 4px */
+        line-height: 1.1; /* Very tight line height */
+    }
+    
+    .recipe-card .ingredients-count {
+        font-size: 11px; /* Very small ingredient count */
+        margin-bottom: 3px; /* Minimal margin */
+    }
+    
+    .recipe-card .actions {
+        gap: 3px; /* Minimal gap */
+        margin-top: 4px; /* Minimal margin */
+    }
+    
+    .recipe-card .actions button {
+        padding: 5px 8px; /* Minimal button padding */
+        font-size: 12px; /* Smaller button text */
+        min-height: 28px; /* Smaller buttons */
+        border-radius: 2px; /* Minimal border radius */
+    }
+    
+    .recipes-grid {
+        gap: 6px; /* Minimal gap between cards */
+    }
+    
+    /* Ultra-compact grocery items */
+    .grocery-item {
+        padding: 6px 4px; /* Minimal grocery item padding */
+        margin-bottom: 3px; /* Minimal spacing */
+        font-size: 13px;
+    }
+    
+    .grocery-item .item-amount {
+        font-size: 11px; /* Very small amount text */
+    }
+    
+    /* Ultra-compact drag handles */
+    .drag-handle {
+        font-size: 12px;
+        padding: 4px 3px;
+        margin-right: 4px;
+    }
+    
+    /* Ultra-compact controls */
+    .grocery-controls {
+        margin-bottom: 10px;
+        gap: 6px;
+    }
+    
+    .grocery-controls button {
+        padding: 5px 8px; /* Minimal control buttons */
+        font-size: 12px;
+        min-height: 28px;
+    }
+    
+    /* Ultra-compact recipe detail modals */
+    .modal-content {
+        margin: 2% auto; /* Minimal top margin */
+        width: 100%; /* Full width */
+        padding: 8px; /* Minimal padding */
+        border-radius: 0; /* No border radius for max space */
+        max-height: 96vh; /* Almost full screen */
+    }
+    
+    .recipe-detail h3 {
+        font-size: 1.2em; /* Even smaller title */
+        margin-bottom: 8px;
+        line-height: 1.1;
+    }
+    
+    .recipe-detail h4 {
+        font-size: 1em; /* Smaller section headers */
+        margin-bottom: 6px;
+        font-weight: 600;
+    }
+    
+    .recipe-detail .ingredients-section,
+    .recipe-detail .instructions-section {
+        margin-bottom: 10px; /* Minimal section spacing */
+    }
+    
+    .recipe-detail li {
+        padding: 3px 0; /* Minimal ingredient padding */
+        font-size: 13px; /* Smaller ingredient text */
+        line-height: 1.2;
+    }
+    
+    .recipe-detail .instructions {
+        font-size: 13px; /* Smaller instruction text */
+        line-height: 1.4; /* Tighter line spacing */
+    }
+    
+    .modal-actions {
+        margin-top: 10px; /* Minimal top margin */
+        padding-top: 8px; /* Minimal padding */
+        gap: 6px; /* Minimal gap */
+        flex-direction: column; /* Stack buttons vertically for more space */
+    }
+    
+    .modal-actions button {
+        padding: 8px 12px; /* Consistent button padding */
+        font-size: 13px; /* Smaller button text */
+        width: 100%; /* Full width buttons on small screens */
+        min-height: 40px; /* Adequate touch target */
+    }
+    
+    .close {
+        right: 8px; /* Very close to edge */
+        top: 6px; /* Minimal top margin */
+        font-size: 20px; /* Smaller close button */
+    }
+    
+    /* Ultra-compact tags in recipe details */
+    .recipe-detail .tags-section {
+        margin-bottom: 8px; /* Minimal spacing */
+    }
+    
+    .recipe-detail .tags-section h4 {
+        margin-bottom: 4px; /* Minimal spacing */
+        font-size: 0.9em; /* Smaller header */
+    }
+    
+    .recipe-detail .recipe-tags {
+        gap: 3px; /* Minimal gap */
+    }
+    
+    .recipe-detail .recipe-tag {
+        font-size: 10px; /* Very small tag text */
+        padding: 1px 4px; /* Minimal tag padding */
+        border-radius: 6px; /* Smaller border radius */
+    }
+    
+    /* Ultra-compact empty states */
+    .empty-state {
+        padding: 20px 10px; /* Minimal padding */
+    }
+    
+    .empty-state h3 {
+        font-size: 1.1em; /* Smaller empty state title */
+        margin-bottom: 6px;
+    }
+    
+    /* Ultra-compact recipe list on small phones */
+    .recipe-list-item {
+        padding: 4px 6px; /* Minimal padding */
+        margin-bottom: 2px; /* Minimal spacing */
+        min-height: 44px; /* Smaller minimum height */
+        border-radius: 2px; /* Minimal border radius */
+    }
+    
+    .recipe-list-info {
+        gap: 6px; /* Minimal gap */
+    }
+    
+    .recipe-list-name {
+        font-size: 0.9em; /* Smaller title */
+        margin-bottom: 1px; /* Minimal margin */
+        line-height: 1.1; /* Very tight line height */
+    }
+    
+    .recipe-list-ingredients {
+        font-size: 0.7em; /* Very small ingredient text */
+        line-height: 1.1;
+    }
+    
+    .recipe-list-actions {
+        gap: 3px; /* Minimal gap between buttons */
+    }
+    
+    .recipe-list-actions button {
+        padding: 3px 5px; /* Minimal button padding */
+        font-size: 11px; /* Very small button text */
+        min-height: 26px; /* Smaller buttons but still touch-friendly */
+        min-width: 28px; /* Minimal width */
+        border-radius: 2px; /* Minimal border radius */
+    }
+    
+    .recipe-list-actions .add-to-grocery-btn {
+        font-size: 12px; /* Slightly larger emoji */
+        padding: 3px 5px; /* Consistent padding */
+        min-width: 26px; /* Minimal width */
+        min-height: 26px; /* Consistent height */
+    }
+    
+    /* Ultra-compact search and controls */
+    .recipes-controls {
+        margin-bottom: 8px; /* Minimal margin */
+        gap: 8px; /* Minimal gap */
+    }
+    
+    .search-input {
+        padding: 6px 28px 6px 10px; /* Minimal padding */
+        font-size: 13px; /* Smaller font */
+        border-radius: 16px; /* Smaller border radius */
+    }
+    
+    .clear-search-btn {
+        right: 6px; /* Very close to edge */
+        font-size: 12px; /* Smaller clear button */
+        padding: 1px; /* Minimal padding */
+    }
+    
+    .view-toggle {
+        padding: 1px; /* Minimal padding */
+        gap: 1px; /* Minimal gap */
+        border-radius: 4px; /* Smaller border radius */
+    }
+    
+    .view-btn {
+        padding: 4px; /* Minimal padding */
+        width: 28px; /* Smaller buttons */
+        height: 28px; /* Smaller buttons */
+        font-size: 12px; /* Smaller icons */
+        border-radius: 2px; /* Minimal border radius */
+    }
+    
+    .search-results-info {
+        margin-bottom: 6px; /* Minimal margin */
+        font-size: 12px; /* Smaller font */
     }
 }
 
