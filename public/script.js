@@ -114,8 +114,8 @@ const api = {
 const ui = {
     // Form validation
     validateRecipeForm(title, instructions, ingredients) {
-        if (!title.trim() || !instructions.trim() || ingredients.length === 0) {
-            showNotification('Please fill in all required fields and add at least one ingredient.', 'error');
+        if (!title.trim() || ingredients.length === 0) {
+            showNotification('Please fill in the title and add at least one ingredient.', 'error');
             return false;
         }
         return true;

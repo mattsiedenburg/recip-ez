@@ -73,8 +73,8 @@ const fileOps = {
 
 const validation = {
     validateRecipe(title, ingredients, instructions) {
-        if (!title || !ingredients || !instructions) {
-            return { isValid: false, error: 'Title, ingredients, and instructions are required' };
+        if (!title || !ingredients) {
+            return { isValid: false, error: 'Title and ingredients are required' };
         }
         return { isValid: true };
     },
@@ -136,7 +136,7 @@ app.post('/api/recipes', (req, res) => {
             id: recipes.length > 0 ? Math.max(...recipes.map(r => r.id)) + 1 : 1,
             title,
             ingredients: validation.processIngredients(ingredients),
-            instructions,
+            instructions: instructions || '', // Make instructions optional with empty string default
             tags: tags || [], // Include tags with empty array as default
             createdAt: new Date().toISOString()
         };
@@ -205,7 +205,7 @@ app.put('/api/recipes/:id', (req, res) => {
             ...recipes[recipeIndex],
             title,
             ingredients: validation.processIngredients(ingredients),
-            instructions,
+            instructions: instructions || '', // Make instructions optional with empty string default
             tags: tags || [], // Include tags with empty array as default
             updatedAt: new Date().toISOString()
         };
