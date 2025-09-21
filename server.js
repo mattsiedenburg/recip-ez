@@ -150,6 +150,39 @@ app.post('/api/recipes', (req, res) => {
     }
 });
 
+// Reorder recipes
+app.put('/api/recipes/reorder', (req, res) => {
+    try {
+        const { recipeIds } = req.body;
+        
+        if (!recipeIds || !Array.isArray(recipeIds)) {
+            return res.status(400).json({ error: 'recipeIds array is required' });
+        }
+
+        const recipes = fileOps.readRecipes();
+        
+        // Create a map of recipes by ID for quick lookup
+        const recipeMap = new Map();
+        recipes.forEach(recipe => recipeMap.set(recipe.id, recipe));
+        
+        // Reorder recipes based on the provided ID array
+        const reorderedRecipes = recipeIds.map(id => recipeMap.get(id)).filter(recipe => recipe);
+        
+        // Add any recipes that weren't in the reorder list (safety check)
+        recipes.forEach(recipe => {
+            if (!recipeIds.includes(recipe.id)) {
+                reorderedRecipes.push(recipe);
+            }
+        });
+        
+        fileOps.writeRecipes(reorderedRecipes);
+        res.json(reorderedRecipes);
+    } catch (error) {
+        console.error('Recipe reorder error:', error);
+        res.status(500).json({ error: 'Failed to reorder recipes' });
+    }
+});
+
 // Update a recipe
 app.put('/api/recipes/:id', (req, res) => {
     const { title, ingredients, instructions, tags } = req.body;
@@ -255,38 +288,6 @@ app.post('/api/grocery-list', (req, res) => {
         res.json(groceryList);
     } catch (error) {
         res.status(500).json({ error: 'Failed to add ingredients to grocery list' });
-    }
-});
-
-// Reorder recipes
-app.put('/api/recipes/reorder', (req, res) => {
-    try {
-        const { recipeIds } = req.body;
-        
-        if (!recipeIds || !Array.isArray(recipeIds)) {
-            return res.status(400).json({ error: 'recipeIds array is required' });
-        }
-
-        const recipes = fileOps.readRecipes();
-        
-        // Create a map of recipes by ID for quick lookup
-        const recipeMap = new Map();
-        recipes.forEach(recipe => recipeMap.set(recipe.id, recipe));
-        
-        // Reorder recipes based on the provided ID array
-        const reorderedRecipes = recipeIds.map(id => recipeMap.get(id)).filter(recipe => recipe);
-        
-        // Add any recipes that weren't in the reorder list (safety check)
-        recipes.forEach(recipe => {
-            if (!recipeIds.includes(recipe.id)) {
-                reorderedRecipes.push(recipe);
-            }
-        });
-        
-        fileOps.writeRecipes(reorderedRecipes);
-        res.json(reorderedRecipes);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to reorder recipes' });
     }
 });
 
