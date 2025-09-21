@@ -1570,6 +1570,8 @@ async function updateRecipeOrder(recipeIds) {
             recipes = reorderedRecipes;
             showNotification('Recipes reordered successfully!', 'success');
         } else {
+            const errorData = await response.text();
+            console.error('Server error:', response.status, errorData);
             showNotification('Error reordering recipes. Please try again.', 'error');
             // Reload the recipes to restore original order
             loadRecipes();
