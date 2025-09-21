@@ -258,6 +258,38 @@ app.post('/api/grocery-list', (req, res) => {
     }
 });
 
+// Reorder grocery list
+app.put('/api/grocery-list/reorder', (req, res) => {
+    try {
+        const { itemIds } = req.body;
+        
+        if (!itemIds || !Array.isArray(itemIds)) {
+            return res.status(400).json({ error: 'itemIds array is required' });
+        }
+
+        const groceryList = fileOps.readGroceryList();
+        
+        // Create a map of items by ID for quick lookup
+        const itemMap = new Map();
+        groceryList.forEach(item => itemMap.set(item.id, item));
+        
+        // Reorder items based on the provided ID array
+        const reorderedList = itemIds.map(id => itemMap.get(id)).filter(item => item);
+        
+        // Add any items that weren't in the reorder list (safety check)
+        groceryList.forEach(item => {
+            if (!itemIds.includes(item.id)) {
+                reorderedList.push(item);
+            }
+        });
+        
+        fileOps.writeGroceryList(reorderedList);
+        res.json(reorderedList);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to reorder grocery list' });
+    }
+});
+
 // Update grocery list item (toggle checked status)
 app.put('/api/grocery-list/:id', (req, res) => {
     try {
@@ -296,6 +328,8 @@ app.put('/api/grocery-list/:id/toggle', (req, res) => {
         res.status(500).json({ error: 'Failed to toggle grocery item' });
     }
 });
+
+
 
 // Remove checked grocery items (must come before /:id route)
 app.delete('/api/grocery-list/checked', (req, res) => {

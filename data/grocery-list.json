@@ -1,19 +1,11 @@
 [
   {
-    "id": 1,
-    "name": "Spaghetti",
-    "amount": "400",
-    "unit": "grams",
+    "id": 6,
+    "name": "Romaine lettuce",
+    "amount": "1",
+    "unit": "head",
     "checked": false,
-    "addedAt": "2025-09-20T21:07:36.919Z"
-  },
-  {
-    "id": 2,
-    "name": "Eggs",
-    "amount": "2",
-    "unit": "pieces",
-    "checked": false,
-    "addedAt": "2025-09-20T21:07:36.919Z"
+    "addedAt": "2025-09-21T00:38:15.603Z"
   },
   {
     "id": 3,
@@ -21,7 +13,7 @@
     "amount": "50",
     "unit": "grams",
     "checked": false,
-    "addedAt": "2025-09-20T21:07:36.919Z"
+    "addedAt": "2025-09-21T00:38:15.164Z"
   },
   {
     "id": 4,
@@ -29,7 +21,7 @@
     "amount": "150",
     "unit": "grams",
     "checked": false,
-    "addedAt": "2025-09-20T21:07:36.919Z"
+    "addedAt": "2025-09-21T00:38:15.164Z"
   },
   {
     "id": 5,
@@ -37,15 +29,23 @@
     "amount": "2",
     "unit": "pieces",
     "checked": false,
-    "addedAt": "2025-09-20T21:07:37.315Z"
+    "addedAt": "2025-09-21T00:38:15.603Z"
   },
   {
-    "id": 6,
-    "name": "Romaine lettuce",
-    "amount": "1",
-    "unit": "head",
+    "id": 2,
+    "name": "Eggs",
+    "amount": "3",
+    "unit": "pieces",
     "checked": false,
-    "addedAt": "2025-09-20T21:07:37.315Z"
+    "addedAt": "2025-09-21T00:38:15.164Z"
+  },
+  {
+    "id": 1,
+    "name": "Spaghetti",
+    "amount": "400",
+    "unit": "grams",
+    "checked": false,
+    "addedAt": "2025-09-21T00:38:15.164Z"
   },
   {
     "id": 7,
@@ -53,7 +53,7 @@
     "amount": "4",
     "unit": "tbsp",
     "checked": false,
-    "addedAt": "2025-09-20T21:07:37.315Z"
+    "addedAt": "2025-09-21T00:38:15.603Z"
   },
   {
     "id": 8,
@@ -61,54 +61,6 @@
     "amount": "1",
     "unit": "cup",
     "checked": false,
-    "addedAt": "2025-09-20T21:07:37.315Z"
-  },
-  {
-    "id": 9,
-    "name": "Flour",
-    "amount": "2",
-    "unit": "cups",
-    "checked": false,
-    "addedAt": "2025-09-20T21:07:39.058Z"
-  },
-  {
-    "id": 10,
-    "name": "Butter",
-    "amount": "1",
-    "unit": "cup",
-    "checked": false,
-    "addedAt": "2025-09-20T21:07:39.058Z"
-  },
-  {
-    "id": 11,
-    "name": "Brown sugar",
-    "amount": "3/4",
-    "unit": "cup",
-    "checked": false,
-    "addedAt": "2025-09-20T21:07:39.058Z"
-  },
-  {
-    "id": 12,
-    "name": "White sugar",
-    "amount": "1/4",
-    "unit": "cup",
-    "checked": false,
-    "addedAt": "2025-09-20T21:07:39.058Z"
-  },
-  {
-    "id": 13,
-    "name": "Chocolate chips",
-    "amount": "1",
-    "unit": "cup",
-    "checked": false,
-    "addedAt": "2025-09-20T21:07:39.058Z"
-  },
-  {
-    "id": 14,
-    "name": "Vanilla extract",
-    "amount": "1",
-    "unit": "tsp",
-    "checked": false,
-    "addedAt": "2025-09-20T21:07:39.058Z"
+    "addedAt": "2025-09-21T00:38:15.603Z"
   }
 ]

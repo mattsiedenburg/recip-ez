@@ -163,13 +163,44 @@ const ui = {
     }
 };
 
+// Update navigation button text for mobile devices
+function updateNavigationForMobile() {
+    if (ui.isMobileDevice()) {
+        elements.showRecipesBtn.textContent = '📖';
+        elements.showAddRecipeBtn.textContent = '➕';
+        elements.showGroceryListBtn.textContent = '🛒';
+        
+        // Add titles for accessibility
+        elements.showRecipesBtn.title = 'View Recipes';
+        elements.showAddRecipeBtn.title = 'Add Recipe';
+        elements.showGroceryListBtn.title = 'Grocery List';
+    } else {
+        elements.showRecipesBtn.textContent = '📖 View Recipes';
+        elements.showAddRecipeBtn.textContent = '➕ Add Recipe';
+        elements.showGroceryListBtn.textContent = '🛒 Grocery List';
+        
+        // Remove titles as text is visible
+        elements.showRecipesBtn.removeAttribute('title');
+        elements.showAddRecipeBtn.removeAttribute('title');
+        elements.showGroceryListBtn.removeAttribute('title');
+    }
+}
+
+// Set default view based on device type
+function setDefaultView() {
+    if (ui.isMobileDevice()) {
+        setView('list'); // Default to list view on mobile
+    } else {
+        setView('grid'); // Default to grid view on desktop
+    }
+}
+
 // State
 let recipes = [];
 let groceryItems = [];
 let editingRecipeId = null;
 let filteredRecipes = [];
 let currentView = 'grid'; // 'grid' or 'list'
-let currentTheme = 'system'; // 'system', 'light', or 'dark'
 
 // API Base URL
 const API_BASE = '/api';
@@ -246,6 +277,8 @@ function showNotification(message, type = 'success') {
 // Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     themeManager.init();
+    updateNavigationForMobile();
+    setDefaultView();
     setupEventListeners();
     loadRecipes();
     loadGroceryList();
@@ -369,6 +402,11 @@ function setupEventListeners() {
     // Modal
     document.querySelector('.close').addEventListener('click', closeModal);
     
+    // Handle window resize/orientation changes for mobile navigation
+    window.addEventListener('resize', () => {
+        updateNavigationForMobile();
+    });
+    
     // Global event listeners with delegation
     setupGlobalEventListeners();
 }
@@ -475,7 +513,8 @@ async function loadRecipes() {
 }
 
 function displayRecipes() {
-    const recipesToShow = filteredRecipes.length > 0 || elements.searchInput.value.trim() ? filteredRecipes : recipes;
+    const searchValue = elements.searchInput.value.trim();
+    const recipesToShow = filteredRecipes.length > 0 || searchValue ? filteredRecipes : recipes;
     
     if (recipes.length === 0) {
         elements.recipesGrid.innerHTML = `
@@ -489,7 +528,7 @@ function displayRecipes() {
         return;
     }
 
-    if (recipesToShow.length === 0 && elements.searchInput.value.trim()) {
+    if (recipesToShow.length === 0 && searchValue) {
         elements.recipesGrid.innerHTML = `
             <div class="empty-state">
                 <h3>No recipes found</h3>
@@ -502,7 +541,7 @@ function displayRecipes() {
     }
 
     // Show search results info above the grid
-    if (elements.searchInput.value.trim()) {
+    if (searchValue) {
         elements.searchResultsInfo.innerHTML = `Showing ${recipesToShow.length} of ${recipes.length} recipes`;
     } else {
         elements.searchResultsInfo.innerHTML = '';
@@ -533,7 +572,7 @@ function displayRecipes() {
                 </div>
                 <div class="recipe-list-actions" onclick="event.stopPropagation()">
                     <button class="add-to-grocery-btn" onclick="addIngredientsToGroceryList(${recipe.id})">
-                        🛒 Add to Grocery List
+                        ${ui.isMobileDevice() ? '🛒' : '🛒 Add to Grocery List'}
                     </button>
                     <button class="delete-recipe-small" onclick="deleteRecipe(${recipe.id})" title="Delete recipe">✖</button>
                 </div>
@@ -866,6 +905,30 @@ function displayGroceryList(searchTerm = '') {
         );
     }
     
+    // Sort items: unchecked items first, checked items at the bottom
+    // When not searching, preserve the current order (user may have manually reordered)
+    if (!searchTerm) {
+        // Only sort by checked status, preserve existing order within each group
+        itemsToDisplay = itemsToDisplay.sort((a, b) => {
+            // If one is checked and the other isn't, prioritize unchecked
+            if (a.checked !== b.checked) {
+                return a.checked ? 1 : -1;
+            }
+            // If both have the same checked status, maintain current order
+            return 0;
+        });
+    } else {
+        // When searching, sort by checked status and then by ID for consistency
+        itemsToDisplay = itemsToDisplay.sort((a, b) => {
+            // If one is checked and the other isn't, prioritize unchecked
+            if (a.checked !== b.checked) {
+                return a.checked ? 1 : -1;
+            }
+            // If both have the same checked status, maintain original order by comparing IDs
+            return a.id - b.id;
+        });
+    }
+    
     if (groceryItems.length === 0) {
         elements.groceryList.innerHTML = `
             <div class="empty-state">
@@ -891,7 +954,14 @@ function displayGroceryList(searchTerm = '') {
     }
 
     elements.groceryList.innerHTML = itemsToDisplay.map(item => `
-        <div class="grocery-item ${item.checked ? 'checked' : ''}">
+        <div class="grocery-item ${item.checked ? 'checked' : ''}" 
+             ${!searchTerm ? 'draggable="true"' : ''} 
+             data-item-id="${item.id}"
+             ${!searchTerm ? `ondragstart="handleDragStart(event)"
+             ondragover="handleDragOver(event)"
+             ondrop="handleDrop(event)"
+             ondragend="handleDragEnd(event)"` : ''}>
+            ${!searchTerm ? '<div class="drag-handle" title="Drag to reorder">⋮⋮</div>' : ''}
             <input type="checkbox" ${item.checked ? 'checked' : ''} 
                    onchange="toggleGroceryItem(${item.id})">
             <div class="grocery-item-content">
@@ -1270,5 +1340,93 @@ async function saveCustomItem() {
     } catch (error) {
         console.error('Error adding custom item:', error);
         showNotification('Error adding item. Please try again.', 'error');
+    }
+}
+
+// Drag and Drop functionality for grocery list reordering
+let draggedElement = null;
+
+function handleDragStart(e) {
+    draggedElement = e.target;
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', e.target.outerHTML);
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    
+    if (e.target.classList.contains('grocery-item') && e.target !== draggedElement) {
+        const afterElement = getDragAfterElement(elements.groceryList, e.clientY);
+        
+        if (afterElement == null) {
+            elements.groceryList.appendChild(draggedElement);
+        } else {
+            elements.groceryList.insertBefore(draggedElement, afterElement);
+        }
+    }
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    
+    // Get the new order of items
+    const groceryItems = Array.from(elements.groceryList.children);
+    const newOrder = groceryItems
+        .filter(item => item.dataset.itemId && item.classList.contains('grocery-item'))
+        .map(item => parseInt(item.dataset.itemId));
+    
+    // Only update if the order actually changed
+    if (newOrder.length > 0) {
+        updateGroceryListOrder(newOrder);
+    }
+}
+
+function handleDragEnd(e) {
+    e.target.classList.remove('dragging');
+    draggedElement = null;
+}
+
+function getDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.grocery-item:not(.dragging)')];
+    
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+async function updateGroceryListOrder(itemIds) {
+    try {
+        const response = await fetch(`${API_BASE}/grocery-list/reorder`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ itemIds }),
+        });
+
+        if (response.ok) {
+            // Update the local groceryItems array to match the new order
+            const reorderedList = await response.json();
+            groceryItems = reorderedList;
+            showNotification('List reordered successfully!', 'success');
+        } else {
+            showNotification('Error reordering list. Please try again.', 'error');
+            // Reload the list to restore original order
+            loadGroceryList();
+        }
+    } catch (error) {
+        console.error('Error reordering grocery list:', error);
+        showNotification('Error reordering list. Please try again.', 'error');
+        // Reload the list to restore original order
+        loadGroceryList();
     }
 }

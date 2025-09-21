@@ -132,8 +132,6 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Future Enhancements 🎯
 
-- Recipe search and filtering
-- Recipe categories and tags
 - Recipe sharing functionality
 - Meal planning features
 - Mobile app version
@@ -142,3 +140,5 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - Recipe import from URLs
 - Nutrition information
 - Recipe photos
+- ~~Recipe search and filtering~~
+- ~~Recipe categories and tags~~

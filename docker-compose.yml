@@ -2,9 +2,9 @@ services:
   recip-ez:
     build: .
     ports:
-      - "3000:3000"
+      - "3000:${PORT}"
     volumes:
       - ./data:/app/data
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${ENVIRONMENT}
     restart: unless-stopped
