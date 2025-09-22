@@ -1006,7 +1006,7 @@ function displayGroceryList(searchTerm = '') {
              ondragover="handleDragOver(event)"
              ondrop="handleDrop(event)"
              ondragend="handleDragEnd(event)"` : ''}>
-            ${!searchTerm ? '<div class="drag-handle" title="Drag to reorder">⋮⋮</div>' : ''}
+            ${!searchTerm ? '<div class="drag-handle" title="Drag to reorder" ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="handleTouchEnd(event)">⋮⋮</div>' : ''}
             <input type="checkbox" ${item.checked ? 'checked' : ''} 
                    onchange="toggleGroceryItem(${item.id})">
             <div class="grocery-item-content">
@@ -1487,6 +1487,135 @@ async function updateGroceryListOrder(itemIds) {
         // Reload the list to restore original order
         loadGroceryList();
     }
+}
+
+// Touch-based drag and drop for mobile devices (grocery list)
+let touchDraggedElement = null;
+let touchStartY = 0;
+let touchCurrentY = 0;
+let isDragging = false;
+let dragPlaceholder = null;
+
+function handleTouchStart(e) {
+    // Only handle touch on the drag handle itself
+    if (!e.target.classList.contains('drag-handle')) return;
+    
+    e.preventDefault(); // Prevent default scrolling
+    
+    touchDraggedElement = e.target.closest('.grocery-item');
+    touchStartY = e.touches[0].clientY;
+    touchCurrentY = touchStartY;
+    isDragging = false;
+    
+    // Add touch class for visual feedback
+    touchDraggedElement.classList.add('touch-dragging');
+    
+    // Create a visual placeholder
+    createDragPlaceholder();
+}
+
+function handleTouchMove(e) {
+    if (!touchDraggedElement) return;
+    
+    e.preventDefault(); // Prevent scrolling while dragging
+    
+    touchCurrentY = e.touches[0].clientY;
+    const deltaY = Math.abs(touchCurrentY - touchStartY);
+    
+    // Start dragging if moved more than threshold
+    if (!isDragging && deltaY > 10) {
+        isDragging = true;
+        touchDraggedElement.classList.add('dragging');
+        
+        // Add haptic feedback if available
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    }
+    
+    if (isDragging) {
+        // Update visual position
+        const rect = touchDraggedElement.getBoundingClientRect();
+        const offset = touchCurrentY - touchStartY;
+        touchDraggedElement.style.transform = `translateY(${offset}px)`;
+        touchDraggedElement.style.zIndex = '1000';
+        
+        // Find insertion point
+        const afterElement = getTouchDragAfterElement(elements.groceryList, touchCurrentY);
+        
+        if (afterElement == null) {
+            elements.groceryList.appendChild(dragPlaceholder);
+        } else {
+            elements.groceryList.insertBefore(dragPlaceholder, afterElement);
+        }
+    }
+}
+
+function handleTouchEnd(e) {
+    if (!touchDraggedElement) return;
+    
+    e.preventDefault();
+    
+    if (isDragging) {
+        // Replace placeholder with actual element
+        if (dragPlaceholder && dragPlaceholder.parentNode) {
+            dragPlaceholder.parentNode.insertBefore(touchDraggedElement, dragPlaceholder);
+        }
+        
+        // Get the new order and update
+        const groceryItems = Array.from(elements.groceryList.children);
+        const newOrder = groceryItems
+            .filter(item => item.dataset.itemId && item.classList.contains('grocery-item'))
+            .map(item => parseInt(item.dataset.itemId));
+        
+        if (newOrder.length > 0) {
+            updateGroceryListOrder(newOrder);
+        }
+        
+        // Haptic feedback for successful drop
+        if (navigator.vibrate) {
+            navigator.vibrate([30, 10, 30]);
+        }
+    }
+    
+    // Clean up
+    if (touchDraggedElement) {
+        touchDraggedElement.classList.remove('touch-dragging', 'dragging');
+        touchDraggedElement.style.transform = '';
+        touchDraggedElement.style.zIndex = '';
+    }
+    
+    if (dragPlaceholder && dragPlaceholder.parentNode) {
+        dragPlaceholder.parentNode.removeChild(dragPlaceholder);
+    }
+    
+    touchDraggedElement = null;
+    isDragging = false;
+    dragPlaceholder = null;
+}
+
+function createDragPlaceholder() {
+    if (dragPlaceholder) return;
+    
+    dragPlaceholder = document.createElement('div');
+    dragPlaceholder.className = 'drag-placeholder';
+    dragPlaceholder.style.height = touchDraggedElement.offsetHeight + 'px';
+    dragPlaceholder.style.margin = getComputedStyle(touchDraggedElement).margin;
+}
+
+function getTouchDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.grocery-item:not(.dragging):not(.drag-placeholder)')];
+    
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 // Recipe Drag and Drop functionality for reordering

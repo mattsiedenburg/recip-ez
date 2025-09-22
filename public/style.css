@@ -1153,6 +1153,69 @@ input[type="text"]:focus, textarea:focus {
     transform: rotate(2deg);
 }
 
+/* Mobile touch drag styles for grocery items */
+.grocery-item.touch-dragging {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+    box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.grocery-item.touch-dragging .drag-handle {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.drag-placeholder {
+    background: linear-gradient(90deg, 
+        var(--accent-primary) 0%, 
+        transparent 20%, 
+        transparent 80%, 
+        var(--accent-primary) 100%);
+    border: 2px dashed var(--accent-primary);
+    border-radius: 6px;
+    opacity: 0.7;
+    margin: 4px 0;
+    min-height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.drag-placeholder::before {
+    content: "Drop here";
+    color: var(--accent-primary);
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+/* Enhanced mobile feedback */
+@media (hover: none) and (pointer: coarse) {
+    /* Mobile-only styles */
+    .grocery-item {
+        transition: all 0.2s ease;
+    }
+    
+    .drag-handle {
+        background: linear-gradient(135deg, var(--background-secondary), var(--border-color));
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .drag-handle:active {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Prevent text selection during drag */
+    .grocery-item.touch-dragging * {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+}
+
 /* Recipe drag and drop styles */
 .recipe-card.dragging,
 .recipe-list-item.dragging {
@@ -1701,17 +1764,42 @@ input[type="text"]:focus, textarea:focus {
     
     /* Mobile drag handle optimization */
     .drag-handle {
-        font-size: 14px; /* Larger for touch */
-        padding: 6px 4px; /* Larger touch target */
-        margin-right: 6px; /* Reduced margin */
+        font-size: 16px; /* Larger for better touch target */
+        padding: 8px 6px; /* Larger touch area */
+        margin-right: 8px;
+        min-width: 24px;
+        min-height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--background-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
+    }
+    
+    .drag-handle:active {
+        background-color: var(--accent-primary);
+        color: white;
+        transform: scale(1.1);
     }
     
     /* Improve grocery item spacing on mobile */
     .grocery-item {
-        padding: 8px 6px; /* Reduced from 12px 8px */
-        margin-bottom: 4px; /* Reduced from 8px */
-        font-size: 14px; /* Smaller font */
-        border-radius: 4px; /* Smaller border radius */
+        padding: 10px 8px; /* Slightly increased for better touch targets */
+        margin-bottom: 6px; /* Better spacing */
+        font-size: 14px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        min-height: 44px; /* iOS recommendation for touch targets */
+        touch-action: manipulation; /* Prevent double-tap zoom */
+    }
+    
+    .grocery-item.touch-dragging {
+        transform: scale(1.02);
+        transition: transform 0.2s ease;
     }
     
     .grocery-item input[type="checkbox"] {
