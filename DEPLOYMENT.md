@@ -41,12 +41,6 @@ docker compose up -d --build
 For production deployment, set up these environment variables:
 
 ```env
-# Required for SMS functionality
-TWILIO_ACCOUNT_SID=your_twilio_account_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=your_twilio_phone_number
-USER_PHONE_NUMBER=recipient_phone_number
-
 # Optional
 PORT=3000
 NODE_ENV=production
@@ -63,7 +57,6 @@ NODE_ENV=production
 ### Core Functionality
 - ✅ Recipe management (CRUD operations)
 - ✅ Grocery list management with drag-and-drop reordering
-- ✅ SMS integration with Twilio
 - ✅ Ingredient auto-add from recipes
 
 ### Mobile Experience
@@ -83,10 +76,9 @@ NODE_ENV=production
 
 After deployment:
 1. Test all major features on mobile and desktop
-2. Verify SMS functionality (if configured)
-3. Test drag-and-drop reordering
-4. Monitor application logs
-5. Set up monitoring/alerting if needed
+2. Test drag-and-drop reordering
+3. Monitor application logs
+4. Set up monitoring/alerting if needed
 
 ---
 

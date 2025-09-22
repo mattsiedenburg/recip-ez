@@ -549,60 +549,6 @@
     ]
   },
   {
-    "id": 12,
-    "title": "French Onion Soup",
-    "ingredients": [
-      {
-        "name": "Yellow onions",
-        "amount": "6",
-        "unit": "large"
-      },
-      {
-        "name": "Beef broth",
-        "amount": "6",
-        "unit": "cups"
-      },
-      {
-        "name": "Dry white wine",
-        "amount": "1/2",
-        "unit": "cup"
-      },
-      {
-        "name": "Gruyere cheese",
-        "amount": "200",
-        "unit": "grams"
-      },
-      {
-        "name": "French bread",
-        "amount": "6",
-        "unit": "slices"
-      },
-      {
-        "name": "Butter",
-        "amount": "4",
-        "unit": "tbsp"
-      },
-      {
-        "name": "Fresh thyme",
-        "amount": "1",
-        "unit": "tsp"
-      },
-      {
-        "name": "Bay leaf",
-        "amount": "1",
-        "unit": "piece"
-      }
-    ],
-    "instructions": "1. Slice onions thinly and caramelize in butter for 45 minutes.\n2. Add wine and cook until evaporated.\n3. Add broth, thyme, and bay leaf. Simmer 20 minutes.\n4. Toast bread slices and top with grated cheese.\n5. Ladle soup into oven-safe bowls.\n6. Float cheese toasts on top.\n7. Broil until cheese is bubbly and golden.",
-    "createdAt": "2025-09-17T03:10:00.000Z",
-    "tags": [
-      "French",
-      "Soup",
-      "Comfort Food",
-      "Cheese"
-    ]
-  },
-  {
     "id": 13,
     "title": "Chicken Tikka Masala",
     "ingredients": [
@@ -662,57 +608,111 @@
     ]
   },
   {
-    "id": 14,
-    "title": "Apple Pie",
+    "id": 16,
+    "title": "Fish Tacos",
     "ingredients": [
       {
-        "name": "Apples",
+        "name": "White fish fillets",
+        "amount": "500",
+        "unit": "grams"
+      },
+      {
+        "name": "Corn tortillas",
         "amount": "8",
-        "unit": "medium"
+        "unit": "pieces"
       },
       {
-        "name": "Pie crust",
+        "name": "Cabbage",
         "amount": "2",
-        "unit": "sheets"
+        "unit": "cups"
       },
       {
-        "name": "Sugar",
-        "amount": "3/4",
+        "name": "Lime",
+        "amount": "2",
+        "unit": "pieces"
+      },
+      {
+        "name": "Cilantro",
+        "amount": "1/2",
         "unit": "cup"
       },
       {
-        "name": "Cinnamon",
-        "amount": "2",
+        "name": "Cumin",
+        "amount": "1",
         "unit": "tsp"
       },
       {
-        "name": "Nutmeg",
-        "amount": "1/4",
+        "name": "Chili powder",
+        "amount": "1",
         "unit": "tsp"
       },
       {
-        "name": "Flour",
-        "amount": "2",
-        "unit": "tbsp"
+        "name": "Avocado",
+        "amount": "1",
+        "unit": "large"
+      }
+    ],
+    "instructions": "1. Season fish with cumin, chili powder, salt, and pepper.\n2. Grill fish until cooked through and flaky.\n3. Warm tortillas in a dry pan.\n4. Shred cabbage and slice avocado.\n5. Flake fish into chunks.\n6. Fill tortillas with fish, cabbage, and avocado.\n7. Top with cilantro and squeeze lime over tacos.",
+    "createdAt": "2025-09-17T03:30:00.000Z",
+    "tags": [
+      "Mexican",
+      "Seafood",
+      "Quick",
+      "Healthy"
+    ]
+  },
+  {
+    "id": 12,
+    "title": "French Onion Soup",
+    "ingredients": [
+      {
+        "name": "Yellow onions",
+        "amount": "6",
+        "unit": "large"
+      },
+      {
+        "name": "Beef broth",
+        "amount": "6",
+        "unit": "cups"
+      },
+      {
+        "name": "Dry white wine",
+        "amount": "1/2",
+        "unit": "cup"
+      },
+      {
+        "name": "Gruyere cheese",
+        "amount": "200",
+        "unit": "grams"
+      },
+      {
+        "name": "French bread",
+        "amount": "6",
+        "unit": "slices"
       },
       {
         "name": "Butter",
-        "amount": "2",
+        "amount": "4",
         "unit": "tbsp"
       },
       {
-        "name": "Lemon juice",
+        "name": "Fresh thyme",
         "amount": "1",
-        "unit": "tbsp"
+        "unit": "tsp"
+      },
+      {
+        "name": "Bay leaf",
+        "amount": "1",
+        "unit": "piece"
       }
     ],
-    "instructions": "1. Preheat oven to 425°F (220°C).\n2. Peel and slice apples thinly.\n3. Mix apples with sugar, cinnamon, nutmeg, flour, and lemon juice.\n4. Line pie dish with bottom crust.\n5. Fill with apple mixture and dot with butter.\n6. Cover with top crust and seal edges.\n7. Cut vents in top crust.\n8. Bake 45-50 minutes until golden brown.",
-    "createdAt": "2025-09-17T03:20:00.000Z",
+    "instructions": "1. Slice onions thinly and caramelize in butter for 45 minutes.\n2. Add wine and cook until evaporated.\n3. Add broth, thyme, and bay leaf. Simmer 20 minutes.\n4. Toast bread slices and top with grated cheese.\n5. Ladle soup into oven-safe bowls.\n6. Float cheese toasts on top.\n7. Broil until cheese is bubbly and golden.",
+    "createdAt": "2025-09-17T03:10:00.000Z",
     "tags": [
-      "Dessert",
-      "Baking",
-      "Sweet",
-      "American"
+      "French",
+      "Soup",
+      "Comfort Food",
+      "Cheese"
     ]
   },
   {
@@ -770,57 +770,57 @@
     ]
   },
   {
-    "id": 16,
-    "title": "Fish Tacos",
+    "id": 14,
+    "title": "Apple Pie",
     "ingredients": [
       {
-        "name": "White fish fillets",
-        "amount": "500",
-        "unit": "grams"
-      },
-      {
-        "name": "Corn tortillas",
+        "name": "Apples",
         "amount": "8",
-        "unit": "pieces"
+        "unit": "medium"
       },
       {
-        "name": "Cabbage",
+        "name": "Pie crust",
         "amount": "2",
-        "unit": "cups"
+        "unit": "sheets"
       },
       {
-        "name": "Lime",
-        "amount": "2",
-        "unit": "pieces"
-      },
-      {
-        "name": "Cilantro",
-        "amount": "1/2",
+        "name": "Sugar",
+        "amount": "3/4",
         "unit": "cup"
       },
       {
-        "name": "Cumin",
-        "amount": "1",
+        "name": "Cinnamon",
+        "amount": "2",
         "unit": "tsp"
       },
       {
-        "name": "Chili powder",
-        "amount": "1",
+        "name": "Nutmeg",
+        "amount": "1/4",
         "unit": "tsp"
       },
       {
-        "name": "Avocado",
+        "name": "Flour",
+        "amount": "2",
+        "unit": "tbsp"
+      },
+      {
+        "name": "Butter",
+        "amount": "2",
+        "unit": "tbsp"
+      },
+      {
+        "name": "Lemon juice",
         "amount": "1",
-        "unit": "large"
+        "unit": "tbsp"
       }
     ],
-    "instructions": "1. Season fish with cumin, chili powder, salt, and pepper.\n2. Grill fish until cooked through and flaky.\n3. Warm tortillas in a dry pan.\n4. Shred cabbage and slice avocado.\n5. Flake fish into chunks.\n6. Fill tortillas with fish, cabbage, and avocado.\n7. Top with cilantro and squeeze lime over tacos.",
-    "createdAt": "2025-09-17T03:30:00.000Z",
+    "instructions": "1. Preheat oven to 425°F (220°C).\n2. Peel and slice apples thinly.\n3. Mix apples with sugar, cinnamon, nutmeg, flour, and lemon juice.\n4. Line pie dish with bottom crust.\n5. Fill with apple mixture and dot with butter.\n6. Cover with top crust and seal edges.\n7. Cut vents in top crust.\n8. Bake 45-50 minutes until golden brown.",
+    "createdAt": "2025-09-17T03:20:00.000Z",
     "tags": [
-      "Mexican",
-      "Seafood",
-      "Quick",
-      "Healthy"
+      "Dessert",
+      "Baking",
+      "Sweet",
+      "American"
     ]
   },
   {

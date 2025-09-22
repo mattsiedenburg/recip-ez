@@ -1889,17 +1889,6 @@ input[type="text"]:focus, textarea:focus {
         min-height: 32px;
     }
     
-    /* Compact SMS section */
-    .sms-section {
-        padding: 12px; /* Reduced padding */
-        margin-top: 12px; /* Reduced margin */
-    }
-    
-    .sms-section button {
-        padding: 8px 14px; /* Compact SMS button */
-        font-size: 14px;
-    }
-    
     /* Recipe mobile touch optimizations */
     .recipe-card,
     .recipe-list-item {
