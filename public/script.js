@@ -586,7 +586,7 @@ function displayRecipes() {
                  ondragover="handleRecipeDragOver(event)"
                  ondrop="handleRecipeDrop(event)"
                  ondragend="handleRecipeDragEnd(event)"` : ''}>
-                ${!searchValue ? '<div class="drag-handle" title="Drag to reorder">⋮⋮</div>' : ''}
+                ${!searchValue ? '<div class="drag-handle" title="Drag to reorder" ontouchstart="handleRecipeTouchStart(event)" ontouchmove="handleRecipeTouchMove(event)" ontouchend="handleRecipeTouchEnd(event)">⋮⋮</div>' : ''}
                 <button class="delete-recipe-small" onclick="event.stopPropagation(); deleteRecipe(${recipe.id})" title="Delete recipe">✖</button>
                 <h3>${recipe.title}</h3>
                 <p class="ingredients-count">${recipe.ingredients.length} ingredients</p>
@@ -609,7 +609,7 @@ function displayRecipes() {
                  ondragover="handleRecipeDragOver(event)"
                  ondrop="handleRecipeDrop(event)"
                  ondragend="handleRecipeDragEnd(event)"` : ''}>
-                ${!searchValue ? '<div class="drag-handle" title="Drag to reorder">⋮⋮</div>' : ''}
+                ${!searchValue ? '<div class="drag-handle" title="Drag to reorder" ontouchstart="handleRecipeTouchStart(event)" ontouchmove="handleRecipeTouchMove(event)" ontouchend="handleRecipeTouchEnd(event)">⋮⋮</div>' : ''}
                 <div class="recipe-list-info">
                     <h3 class="recipe-list-name">${recipe.title}</h3>
                     <span class="recipe-list-ingredients">${recipe.ingredients.length} ingredients</span>
@@ -1711,6 +1711,141 @@ async function updateRecipeOrder(recipeIds) {
         // Reload the recipes to restore original order
         loadRecipes();
     }
+}
+
+// Touch-based drag and drop for mobile devices (recipes)
+let touchDraggedRecipe = null;
+let recipeTouchStartY = 0;
+let recipeTouchCurrentY = 0;
+let isRecipeDragging = false;
+let recipeDragPlaceholder = null;
+
+function handleRecipeTouchStart(e) {
+    // Only handle touch on the drag handle itself
+    if (!e.target.classList.contains('drag-handle')) return;
+    
+    e.preventDefault(); // Prevent default scrolling
+    
+    touchDraggedRecipe = e.target.closest('.recipe-card, .recipe-list-item');
+    recipeTouchStartY = e.touches[0].clientY;
+    recipeTouchCurrentY = recipeTouchStartY;
+    isRecipeDragging = false;
+    
+    // Add touch class for visual feedback
+    touchDraggedRecipe.classList.add('touch-dragging');
+    
+    // Create a visual placeholder
+    createRecipeDragPlaceholder();
+}
+
+function handleRecipeTouchMove(e) {
+    if (!touchDraggedRecipe) return;
+    
+    e.preventDefault(); // Prevent scrolling while dragging
+    
+    recipeTouchCurrentY = e.touches[0].clientY;
+    const deltaY = Math.abs(recipeTouchCurrentY - recipeTouchStartY);
+    
+    // Start dragging if moved more than threshold
+    if (!isRecipeDragging && deltaY > 10) {
+        isRecipeDragging = true;
+        touchDraggedRecipe.classList.add('dragging');
+        
+        // Add haptic feedback if available
+        if (navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+    }
+    
+    if (isRecipeDragging) {
+        // Update visual position
+        const offset = recipeTouchCurrentY - recipeTouchStartY;
+        touchDraggedRecipe.style.transform = `translateY(${offset}px)`;
+        touchDraggedRecipe.style.zIndex = '1000';
+        
+        // Find insertion point
+        const container = currentView === 'grid' ? elements.recipesGrid : elements.recipesList;
+        const afterElement = getRecipeTouchDragAfterElement(container, recipeTouchCurrentY);
+        
+        if (afterElement == null) {
+            container.appendChild(recipeDragPlaceholder);
+        } else {
+            container.insertBefore(recipeDragPlaceholder, afterElement);
+        }
+    }
+}
+
+function handleRecipeTouchEnd(e) {
+    if (!touchDraggedRecipe) return;
+    
+    e.preventDefault();
+    
+    if (isRecipeDragging) {
+        // Replace placeholder with actual element
+        if (recipeDragPlaceholder && recipeDragPlaceholder.parentNode) {
+            recipeDragPlaceholder.parentNode.insertBefore(touchDraggedRecipe, recipeDragPlaceholder);
+        }
+        
+        // Get the new order and update
+        const container = currentView === 'grid' ? elements.recipesGrid : elements.recipesList;
+        const recipeElements = Array.from(container.children);
+        const newOrder = recipeElements
+            .filter(item => item.dataset.recipeId && (item.classList.contains('recipe-card') || item.classList.contains('recipe-list-item')))
+            .map(item => parseInt(item.dataset.recipeId));
+        
+        if (newOrder.length > 0) {
+            updateRecipeOrder(newOrder);
+        }
+        
+        // Haptic feedback for successful drop
+        if (navigator.vibrate) {
+            navigator.vibrate([30, 10, 30]);
+        }
+    }
+    
+    // Clean up
+    if (touchDraggedRecipe) {
+        touchDraggedRecipe.classList.remove('touch-dragging', 'dragging');
+        touchDraggedRecipe.style.transform = '';
+        touchDraggedRecipe.style.zIndex = '';
+    }
+    
+    if (recipeDragPlaceholder && recipeDragPlaceholder.parentNode) {
+        recipeDragPlaceholder.parentNode.removeChild(recipeDragPlaceholder);
+    }
+    
+    touchDraggedRecipe = null;
+    isRecipeDragging = false;
+    recipeDragPlaceholder = null;
+}
+
+function createRecipeDragPlaceholder() {
+    if (recipeDragPlaceholder) return;
+    
+    recipeDragPlaceholder = document.createElement('div');
+    recipeDragPlaceholder.className = currentView === 'grid' ? 'recipe-drag-placeholder recipe-card-placeholder' : 'recipe-drag-placeholder recipe-list-placeholder';
+    recipeDragPlaceholder.style.height = touchDraggedRecipe.offsetHeight + 'px';
+    recipeDragPlaceholder.style.margin = getComputedStyle(touchDraggedRecipe).margin;
+    
+    // Add appropriate width for grid view
+    if (currentView === 'grid') {
+        recipeDragPlaceholder.style.width = touchDraggedRecipe.offsetWidth + 'px';
+    }
+}
+
+function getRecipeTouchDragAfterElement(container, y) {
+    const draggableElements = [...container.querySelectorAll('.recipe-card:not(.dragging):not(.recipe-drag-placeholder), .recipe-list-item:not(.dragging):not(.recipe-drag-placeholder)')];
+    
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+        } else {
+            return closest;
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
 
 // Seasonal Theme System

@@ -1282,6 +1282,66 @@ input[type="text"]:focus, textarea:focus {
     background-color: var(--border-color);
 }
 
+/* Mobile touch drag styles for recipes */
+.recipe-card.touch-dragging,
+.recipe-list-item.touch-dragging {
+    background-color: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+    box-shadow: 0 6px 20px var(--shadow-medium);
+    transform: scale(1.02);
+}
+
+.recipe-card.touch-dragging .drag-handle,
+.recipe-list-item.touch-dragging .drag-handle {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+}
+
+.recipe-card.touch-dragging h3,
+.recipe-card.touch-dragging p,
+.recipe-list-item.touch-dragging h3,
+.recipe-list-item.touch-dragging .recipe-list-ingredients {
+    color: white;
+}
+
+/* Recipe drag placeholders */
+.recipe-drag-placeholder {
+    background: linear-gradient(135deg, 
+        var(--accent-primary) 0%, 
+        transparent 20%, 
+        transparent 80%, 
+        var(--accent-primary) 100%);
+    border: 2px dashed var(--accent-primary);
+    border-radius: 8px;
+    opacity: 0.7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    min-height: 60px;
+}
+
+.recipe-card-placeholder {
+    margin: 16px;
+    min-height: 200px;
+}
+
+.recipe-list-placeholder {
+    margin: 8px 0;
+    min-height: 60px;
+}
+
+.recipe-drag-placeholder::before {
+    content: "Drop recipe here";
+    color: var(--accent-primary);
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
 .grocery-item.checked {
     opacity: 0.6;
     text-decoration: line-through;
@@ -1838,6 +1898,28 @@ input[type="text"]:focus, textarea:focus {
     .sms-section button {
         padding: 8px 14px; /* Compact SMS button */
         font-size: 14px;
+    }
+    
+    /* Recipe mobile touch optimizations */
+    .recipe-card,
+    .recipe-list-item {
+        touch-action: manipulation; /* Prevent double-tap zoom */
+        transition: all 0.2s ease;
+    }
+    
+    .recipe-card .drag-handle,
+    .recipe-list-item .drag-handle {
+        opacity: 0.7; /* Make more visible on mobile */
+        position: relative; /* Override absolute positioning for better mobile layout */
+        top: auto;
+        left: auto;
+        margin-right: 8px;
+    }
+    
+    .recipe-card.touch-dragging,
+    .recipe-list-item.touch-dragging {
+        transform: scale(1.02);
+        transition: transform 0.2s ease;
     }
     
     /* Hide delete buttons on mobile for cleaner interface */
